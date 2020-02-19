@@ -2,8 +2,18 @@ PROJECT_NAME     := nrf52_u2f_nrf52840_mdk_usb_dongle
 TARGETS          := nrf52840_xxaa
 OUTPUT_DIRECTORY := _build
 
-SDK_ROOT := ../../../nrf_sdks/nRF5_SDK_15.2.0_9412b96
+SDK_ROOT := ../../../nrf_sdks/nRF5_SDK_16.0.0_98a08e2
+#SDK_ROOT := /home/steffensky/SDKs/nRF5_SDK_16.0.0_98a08e2
+#nRF5_SDK_15.3.0_59ac345
 PROJ_DIR := ..
+
+ROOT_DIR := $(PROJ_DIR)/../..
+SRC_DIR := $(ROOT_DIR)/source
+INCL_DIR := $(ROOT_DIR)/include
+
+#directory for dependencies
+LIBDIR := $(PROJ_DIR)/../../library
+
 
 $(OUTPUT_DIRECTORY)/nrf52840_xxaa.out: \
   LINKER_SCRIPT  := nrf52_u2f_gcc_nrf52.ld
@@ -57,13 +67,11 @@ SRC_FILES += \
   $(SDK_ROOT)/integration/nrfx/legacy/nrf_drv_clock.c \
   $(SDK_ROOT)/integration/nrfx/legacy/nrf_drv_power.c \
   $(SDK_ROOT)/integration/nrfx/legacy/nrf_drv_uart.c \
-  $(SDK_ROOT)/components/drivers_nrf/usbd/nrf_drv_usbd.c \
   $(SDK_ROOT)/components/drivers_nrf/nrf_soc_nosd/nrf_nvic.c \
   $(SDK_ROOT)/components/drivers_nrf/nrf_soc_nosd/nrf_soc.c \
   $(SDK_ROOT)/modules/nrfx/drivers/src/nrfx_clock.c \
   $(SDK_ROOT)/modules/nrfx/drivers/src/nrfx_gpiote.c \
   $(SDK_ROOT)/modules/nrfx/drivers/src/nrfx_power.c \
-  $(SDK_ROOT)/modules/nrfx/drivers/src/nrfx_power_clock.c \
   $(SDK_ROOT)/modules/nrfx/drivers/src/prs/nrfx_prs.c \
   $(SDK_ROOT)/modules/nrfx/hal/nrf_nvmc.c \
   $(SDK_ROOT)/integration/nrfx/legacy/nrf_drv_rng.c \
@@ -72,15 +80,6 @@ SRC_FILES += \
   $(SDK_ROOT)/modules/nrfx/drivers/src/nrfx_uarte.c \
   $(SDK_ROOT)/components/libraries/bsp/bsp.c \
   $(SDK_ROOT)/components/libraries/bsp/bsp_cli.c \
-  $(PROJ_DIR)/../../certs/keys.c \
-  $(PROJ_DIR)/../../source/main.c \
-  $(PROJ_DIR)/../../source/timer.c \
-  $(PROJ_DIR)/../../source/u2f_hid.c \
-  $(PROJ_DIR)/../../source/u2f_hid_if.c \
-  $(PROJ_DIR)/../../source/u2f_impl.c \
-  $(SDK_ROOT)/external/segger_rtt/SEGGER_RTT.c \
-  $(SDK_ROOT)/external/segger_rtt/SEGGER_RTT_Syscalls_GCC.c \
-  $(SDK_ROOT)/external/segger_rtt/SEGGER_RTT_printf.c \
   $(SDK_ROOT)/modules/nrfx/mdk/system_nrf52840.c \
   $(SDK_ROOT)/external/utf_converter/utf.c \
   $(SDK_ROOT)/components/libraries/crypto/backend/nrf_hw/nrf_hw_backend_init.c \
@@ -204,6 +203,20 @@ SRC_FILES += \
   $(SDK_ROOT)/components/libraries/crypto/backend/oberon/oberon_backend_eddsa.c \
   $(SDK_ROOT)/components/libraries/crypto/backend/oberon/oberon_backend_hash.c \
   $(SDK_ROOT)/components/libraries/crypto/backend/oberon/oberon_backend_hmac.c \
+  $(ROOT_DIR)/certs/keys.c \
+  $(SRC_DIR)/main.c \
+  $(SRC_DIR)/timer.c \
+  $(SRC_DIR)/u2f_hid.c \
+  $(SRC_DIR)/u2f_hid_if.c \
+  $(SRC_DIR)/u2f_impl.c \
+  $(SRC_DIR)/crypto.c \
+
+# removed
+#   $(SDK_ROOT)/components/drivers_nrf/usbd/nrf_drv_usbd.c \
+#  $(SDK_ROOT)/external/segger_rtt/SEGGER_RTT.c \
+#  $(SDK_ROOT)/external/segger_rtt/SEGGER_RTT_Syscalls_GCC.c \
+#  $(SDK_ROOT)/external/segger_rtt/SEGGER_RTT_printf.c \
+
 
 # Include folders common to all targets
 INC_FOLDERS += \
@@ -225,6 +238,7 @@ INC_FOLDERS += \
   $(SDK_ROOT)/external/cifra_AES128-EAX \
   $(SDK_ROOT)/external/nrf_tls/mbedtls/nrf_crypto/config \
   $(SDK_ROOT)/components/libraries/crypto/backend/oberon \
+  $(SDK_ROOT)/components/libraries/crypto/backend/optiga \
   $(SDK_ROOT)/components \
   $(SDK_ROOT)/components/libraries/cli \
   $(SDK_ROOT)/modules/nrfx/mdk \
@@ -237,8 +251,6 @@ INC_FOLDERS += \
   $(SDK_ROOT)/components/libraries/timer \
   $(SDK_ROOT)/components/libraries/util \
   $(SDK_ROOT)/components/libraries/bsp \
-  $(PROJ_DIR)/config \
-  $(PROJ_DIR)/../../include \
   $(SDK_ROOT)/components/libraries/usbd/class/hid/generic \
   $(SDK_ROOT)/components/libraries/balloc \
   $(SDK_ROOT)/components/drivers_nrf/usbd \
@@ -256,9 +268,7 @@ INC_FOLDERS += \
   $(SDK_ROOT)/integration/nrfx/legacy \
   $(SDK_ROOT)/components/libraries/usbd \
   $(SDK_ROOT)/components/libraries/mutex \
-  $(PROJ_DIR) \
   $(SDK_ROOT)/components/libraries/delay \
-  $(SDK_ROOT)/external/segger_rtt \
   $(SDK_ROOT)/components/libraries/atomic_fifo \
   $(SDK_ROOT)/components/drivers_nrf/nrf_soc_nosd \
   $(SDK_ROOT)/components/libraries/atomic \
@@ -273,15 +283,26 @@ INC_FOLDERS += \
   $(SDK_ROOT)/modules/nrfx/hal \
   $(SDK_ROOT)/external/fprintf \
   $(SDK_ROOT)/components/libraries/log/src \
+  $(LIBDIR)/tinycbor/src \
+  $(PROJ_DIR)/config \
+  $(INCL_DIR) \
+  $(PROJ_DIR) \
+
+# removed
+#   $(SDK_ROOT)/external/segger_rtt \
 
 # Libraries common to all targets
 LIB_FILES += \
   $(SDK_ROOT)/external/nrf_cc310/lib/libnrf_cc310_0.9.10.a \
   $(SDK_ROOT)/external/micro-ecc/nrf52hf_armgcc/armgcc/micro_ecc_lib_nrf52.a \
   $(SDK_ROOT)/external/nrf_oberon/lib/nrf52/liboberon_2.0.5.a \
+  $(LIBDIR)/tinycbor/lib/libtinycbor.a \
+
+# DEFINITIONS
+DEFINES = -DAES256=1 -DUSE_APP_CONFIG
 
 # Optimization flags
-OPT = -O3 -g3
+OPT = $(DEFINES) -O3 -g3
 # Uncomment the line below to enable link time optimization
 #OPT += -flto
 
@@ -366,7 +387,11 @@ include $(TEMPLATE_PATH)/Makefile.common
 
 $(foreach target, $(TARGETS), $(call define_target, $(target)))
 
-.PHONY: flash erase
+.PHONY: flash erase tinycbor
+
+tinycbor:
+	cd $(CBOR_ROOT) && make clean
+	cd $(CBOR_ROOT) && make CC="$(CC)" AR="$(AR)" LDFLAGS="$(LDFRAGS)" CFLAGS="$(CFLAGS) -Os"
 
 # Flash the program
 flash: $(OUTPUT_DIRECTORY)/nrf52840_xxaa.hex
@@ -377,7 +402,8 @@ erase:
 	pyocd-flashtool -d debug -t nrf52 -ce
 
 
-SDK_CONFIG_FILE := $(PROJ_DIR)/config/sdk_config.h
+SDK_CONFIG_FILE := $(SDK_ROOT)config/nrf52840/config/sdk_config.h
+#SDK_CONFIG_FILE := $(PROJ_DIR)/config/sdk_config.h
 CMSIS_CONFIG_TOOL := $(SDK_ROOT)/external_tools/cmsisconfig/CMSIS_Configuration_Wizard.jar
 sdk_config:
 	java -jar $(CMSIS_CONFIG_TOOL) $(SDK_CONFIG_FILE)

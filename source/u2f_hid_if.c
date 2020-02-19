@@ -1,7 +1,7 @@
 /**
 * Copyright (c) 2018 makerdiary
 * All rights reserved.
-* 
+*
 * Redistribution and use in source and binary forms, with or without
 * modification, are permitted provided that the following conditions are
 * met:
@@ -85,6 +85,7 @@ APP_USBD_HID_GENERIC_GLOBAL_DEF(m_app_u2f_hid,
                                 reports,
                                 REPORT_IN_QUEUE_SIZE,
                                 REPORT_OUT_MAXSIZE,
+                                REPORT_FEATURE_MAXSIZE,
                                 APP_USBD_HID_SUBCLASS_NONE,
                                 APP_USBD_HID_PROTO_GENERIC);
 
@@ -94,7 +95,7 @@ APP_USBD_HID_GENERIC_GLOBAL_DEF(m_app_u2f_hid,
 /**
  * @brief Mark the ongoing transmission
  *
- * Marks that the report buffer is busy and cannot be used until 
+ * Marks that the report buffer is busy and cannot be used until
  * transmission finishes or invalidates (by USB reset or suspend event).
  */
 static bool m_report_pending = false;
@@ -108,7 +109,7 @@ static bool m_report_received = false;
 
 
 /**
- * \brief send one HID frame. 
+ * \brief send one HID frame.
  */
 static uint8_t u2f_hid_if_frame_send(U2FHID_FRAME * p_frame)
 {
@@ -152,7 +153,7 @@ uint8_t u2f_hid_if_send(uint32_t cid, uint8_t cmd, uint8_t *p_data, size_t size)
     memset(frame.init.data, 0, sizeof(frame.init.data));
     memcpy(frame.init.data, p_data, frameLen);
 
-    do 
+    do
     {
         ret = u2f_hid_if_frame_send(&frame);
         if(ret != ERR_NONE) return ret;
@@ -171,7 +172,7 @@ uint8_t u2f_hid_if_send(uint32_t cid, uint8_t cmd, uint8_t *p_data, size_t size)
 
 
 
-uint8_t u2f_hid_if_recv(uint32_t * p_cid, uint8_t * p_cmd, 
+uint8_t u2f_hid_if_recv(uint32_t * p_cid, uint8_t * p_cmd,
                     uint8_t * p_data, size_t * p_size,
                     uint32_t timeout)
 {
@@ -186,7 +187,7 @@ uint8_t u2f_hid_if_recv(uint32_t * p_cid, uint8_t * p_cmd,
     if(!m_report_received) return ERR_OTHER+1;
     m_report_received = false;
 
-    p_recv_buf = (uint8_t *)app_usbd_hid_generic_out_report_get(&m_app_u2f_hid, 
+    p_recv_buf = (uint8_t *)app_usbd_hid_generic_out_report_get(&m_app_u2f_hid,
                                                                 &recv_size);
 
     if(recv_size != sizeof(U2FHID_FRAME)) return ERR_OTHER;
@@ -220,7 +221,7 @@ uint8_t u2f_hid_if_recv(uint32_t * p_cid, uint8_t * p_cmd,
         m_report_received = false;
 
         p_recv_buf = (uint8_t *)app_usbd_hid_generic_out_report_get(
-                                                                &m_app_u2f_hid, 
+                                                                &m_app_u2f_hid,
                                                                 &recv_size);
 
         if(recv_size != sizeof(U2FHID_FRAME)) continue;
@@ -298,7 +299,7 @@ static void usbd_user_ev_handler(app_usbd_event_type_t event)
         case APP_USBD_EVT_DRV_SUSPEND:
             m_report_pending = false;
             // Allow the library to put the peripheral into sleep mode
-            app_usbd_suspend_req(); 
+            app_usbd_suspend_req();
             bsp_board_leds_off();
             break;
         case APP_USBD_EVT_DRV_RESUME:
@@ -340,7 +341,7 @@ static void usbd_user_ev_handler(app_usbd_event_type_t event)
  * @param p_inst      Class instance.
  * @param report_id   Number of report ID that needs idle transfer.
  * */
-static ret_code_t idle_handle(app_usbd_class_inst_t const * p_inst, 
+static ret_code_t idle_handle(app_usbd_class_inst_t const * p_inst,
                               uint8_t report_id)
 {
     switch (report_id)

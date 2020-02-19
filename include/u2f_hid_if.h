@@ -1,7 +1,7 @@
 /**
 * Copyright (c) 2018 makerdiary
 * All rights reserved.
-* 
+*
 * Redistribution and use in source and binary forms, with or without
 * modification, are permitted provided that the following conditions are
 * met:
@@ -64,13 +64,15 @@ extern "C" {
 
 /**
  * @brief Size of maximum output report. HID generic class will reserve
- *        this buffer size + 1 memory space. 
+ *        this buffer size + 1 memory space.
  *
  * Maximum value of this define is 63 bytes. Library automatically adds
  * one byte for report ID. This means that output report size is limited
  * to 64 bytes.
  */
 #define REPORT_OUT_MAXSIZE  63
+
+#define REPORT_FEATURE_MAXSIZE  31
 
 /**
  * @brief HID generic class endpoints count.
@@ -129,7 +131,7 @@ uint32_t u2f_hid_if_init(void);
  *
  * @return Standard error code.
  */
-uint8_t u2f_hid_if_send(uint32_t cid, uint8_t cmd, 
+uint8_t u2f_hid_if_send(uint32_t cid, uint8_t cmd,
                         uint8_t * p_data, size_t size);
 
 
@@ -142,11 +144,11 @@ uint8_t u2f_hid_if_send(uint32_t cid, uint8_t cmd,
  * @param[out] p_cmd       Frame command.
  * @param[out] p_data      Frame Data packet.
  * @param[out] p_size      Data length
- * @param[in]  timeout     message timeout in ms 
+ * @param[in]  timeout     message timeout in ms
  *
  * @return Standard error code.
  */
-uint8_t u2f_hid_if_recv(uint32_t * p_cid, uint8_t * p_cmd, 
+uint8_t u2f_hid_if_recv(uint32_t * p_cid, uint8_t * p_cmd,
                     uint8_t * p_data, size_t * p_size,
                     uint32_t timeout);
 

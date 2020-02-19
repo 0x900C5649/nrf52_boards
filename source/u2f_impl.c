@@ -1,7 +1,7 @@
 /**
 * Copyright (c) 2018 makerdiary
 * All rights reserved.
-* 
+*
 * Redistribution and use in source and binary forms, with or without
 * modification, are permitted provided that the following conditions are
 * met:
@@ -124,7 +124,7 @@ static void fds_evt_handler(fds_evt_t const * p_evt)
     switch (p_evt->id)
     {
         case FDS_EVT_INIT:
-            if (p_evt->result == FDS_SUCCESS)
+            if (p_evt->result == NRF_SUCCESS)
             {
                 m_fds_initialized = true;
             }
@@ -132,7 +132,7 @@ static void fds_evt_handler(fds_evt_t const * p_evt)
 
         case FDS_EVT_WRITE:
         {
-            if (p_evt->result == FDS_SUCCESS)
+            if (p_evt->result == NRF_SUCCESS)
             {
                 NRF_LOG_INFO("Record ID:\t0x%04x",  p_evt->write.record_id);
                 NRF_LOG_INFO("File ID:\t0x%04x",    p_evt->write.file_id);
@@ -142,7 +142,7 @@ static void fds_evt_handler(fds_evt_t const * p_evt)
 
         case FDS_EVT_DEL_RECORD:
         {
-            if (p_evt->result == FDS_SUCCESS)
+            if (p_evt->result == NRF_SUCCESS)
             {
                 NRF_LOG_INFO("Record ID:\t0x%04x",  p_evt->del.record_id);
                 NRF_LOG_INFO("File ID:\t0x%04x",    p_evt->del.file_id);
@@ -182,13 +182,13 @@ uint32_t u2f_impl_init(void)
     wait_for_fds_ready();
 
     /* update m_auth_counter */
-    ret = fds_record_find(CONFIG_COUNTER_FILE, CONFIG_COUNTER_REC_KEY, 
+    ret = fds_record_find(CONFIG_COUNTER_FILE, CONFIG_COUNTER_REC_KEY,
                           &m_counter_record_desc, &tok);
     if(ret == NRF_SUCCESS)
     {
         /* A counter is in flash. Let's update it. */
         fds_flash_record_t config = {0};
-        
+
         /* Open the record and read its contents. */
         ret = fds_record_open(&m_counter_record_desc, &config);
         if(ret != NRF_SUCCESS) return ret;
@@ -218,7 +218,7 @@ uint32_t u2f_impl_init(void)
 
     memset(&tok, 0, sizeof(fds_find_token_t));
 
-    ret = fds_record_find(CONFIG_AES_KEY_FILE, CONFIG_AES_KEY_REC_KEY, 
+    ret = fds_record_find(CONFIG_AES_KEY_FILE, CONFIG_AES_KEY_REC_KEY,
                           &aes_key_record_desc, &tok);
     if(ret == NRF_SUCCESS)
     {
@@ -227,7 +227,7 @@ uint32_t u2f_impl_init(void)
         /* Open the record and read its contents. */
         ret = fds_record_open(&aes_key_record_desc, &config);
         if(ret != NRF_SUCCESS) return ret;
-        
+
         /* Copy the counter value from flash into aes_key. */
         memcpy(aes_key, config.p_data, AES_KEY_SIZE);
 
@@ -252,7 +252,7 @@ uint32_t u2f_impl_init(void)
 }
 
 
-uint16_t u2f_register(U2F_REGISTER_REQ * p_req, U2F_REGISTER_RESP * p_resp, 
+uint16_t u2f_register(U2F_REGISTER_REQ * p_req, U2F_REGISTER_RESP * p_resp,
                       int flags, uint16_t * p_resp_len)
 {
     NRF_LOG_INFO("u2f_register starting...");
@@ -274,8 +274,8 @@ uint16_t u2f_register(U2F_REGISTER_REQ * p_req, U2F_REGISTER_RESP * p_resp,
     /* Generate a key pair */
     nrf_crypto_ecc_private_key_t privkey;
     nrf_crypto_ecc_public_key_t pubkey;
-    
-    ret = nrf_crypto_ecc_key_pair_generate(NULL, 
+
+    ret = nrf_crypto_ecc_key_pair_generate(NULL,
           &g_nrf_crypto_ecc_secp256r1_curve_info, &privkey, &pubkey);
     if(ret != NRF_SUCCESS)
     {
@@ -314,7 +314,7 @@ uint16_t u2f_register(U2F_REGISTER_REQ * p_req, U2F_REGISTER_RESP * p_resp,
                               &g_nrf_crypto_aes_ecb_128_info,
                               NRF_CRYPTO_ENCRYPT);
 
-    /* Convert EC private key to a key handle -> encrypt it and the appId 
+    /* Convert EC private key to a key handle -> encrypt it and the appId
      * using an AES private key */
     len = U2F_MAX_KH_SIZE;
     ret += nrf_crypto_aes_crypt(&ecb_encr_128_ctx,
@@ -337,7 +337,7 @@ uint16_t u2f_register(U2F_REGISTER_REQ * p_req, U2F_REGISTER_RESP * p_resp,
     }
 
     /* Copy x509 attestation public key certificate */
-    memcpy(&p_resp->keyHandleCertSig[p_resp->keyHandleLen], attestation_cert, 
+    memcpy(&p_resp->keyHandleCertSig[p_resp->keyHandleLen], attestation_cert,
            attestation_cert_size);
 
     /* Compute SHA256 hash of appId & chal & keyhandle & pubkey */
@@ -352,20 +352,20 @@ uint16_t u2f_register(U2F_REGISTER_REQ * p_req, U2F_REGISTER_RESP * p_resp,
     /* hash update buf[0] = 0x00 */
     ret += nrf_crypto_hash_update(&hash_context, buf, 1);
 
-    /* The application parameter [32 bytes] from 
+    /* The application parameter [32 bytes] from
      * the registration request message. */
     ret += nrf_crypto_hash_update(&hash_context, p_req->appId, U2F_APPID_SIZE);
 
-    /* The challenge parameter [32 bytes] from 
+    /* The challenge parameter [32 bytes] from
      * the registration request message. */
     ret += nrf_crypto_hash_update(&hash_context, p_req->chal, U2F_CHAL_SIZE);
 
     /* The key handle [variable length] */
-    ret += nrf_crypto_hash_update(&hash_context, p_resp->keyHandleCertSig, 
+    ret += nrf_crypto_hash_update(&hash_context, p_resp->keyHandleCertSig,
                                   p_resp->keyHandleLen);
 
     /* The user public key [65 bytes]. */
-    ret += nrf_crypto_hash_update(&hash_context, (uint8_t *)&p_resp->pubKey, 
+    ret += nrf_crypto_hash_update(&hash_context, (uint8_t *)&p_resp->pubKey,
                                   U2F_EC_POINT_SIZE);
 
     len = 32;
@@ -402,11 +402,11 @@ uint16_t u2f_register(U2F_REGISTER_REQ * p_req, U2F_REGISTER_RESP * p_resp,
     }
 
     m_signature_size = signature_convert(
-        &p_resp->keyHandleCertSig[p_resp->keyHandleLen + attestation_cert_size], 
+        &p_resp->keyHandleCertSig[p_resp->keyHandleLen + attestation_cert_size],
         m_signature);
 
-    *p_resp_len = p_resp->keyHandleCertSig - (uint8_t *)p_resp 
-                  + p_resp->keyHandleLen + attestation_cert_size 
+    *p_resp_len = p_resp->keyHandleCertSig - (uint8_t *)p_resp
+                  + p_resp->keyHandleLen + attestation_cert_size
                   + m_signature_size;
 
     return U2F_SW_NO_ERROR;
@@ -414,8 +414,8 @@ uint16_t u2f_register(U2F_REGISTER_REQ * p_req, U2F_REGISTER_RESP * p_resp,
 
 
 
-uint16_t u2f_authenticate(U2F_AUTHENTICATE_REQ * p_req, 
-                          U2F_AUTHENTICATE_RESP * p_resp, 
+uint16_t u2f_authenticate(U2F_AUTHENTICATE_REQ * p_req,
+                          U2F_AUTHENTICATE_RESP * p_resp,
                           int flags, uint16_t * p_resp_len)
 {
     NRF_LOG_INFO("u2f_authenticate starting...");
@@ -433,7 +433,7 @@ uint16_t u2f_authenticate(U2F_AUTHENTICATE_REQ * p_req,
 
     bsp_board_led_on(LED_U2F_WINK);
 
-    /* Convert key handle to EC private key -> 
+    /* Convert key handle to EC private key ->
      * decrypt it using AES private key */
     nrf_crypto_aes_context_t ecb_decr_128_ctx; // AES ECB decryption context
 
@@ -456,7 +456,7 @@ uint16_t u2f_authenticate(U2F_AUTHENTICATE_REQ * p_req,
     if(ret != NRF_SUCCESS)
     {
         NRF_LOG_ERROR("AES decryption failed! [code = %d]", ret);
-        return U2F_SW_INS_NOT_SUPPORTED;        
+        return U2F_SW_INS_NOT_SUPPORTED;
     }
 
     if(memcmp(&buf[U2F_EC_KEY_SIZE], p_req->appId, U2F_APPID_SIZE) != 0)
@@ -491,7 +491,7 @@ uint16_t u2f_authenticate(U2F_AUTHENTICATE_REQ * p_req,
 
     // Initialize the hash context
     ret = nrf_crypto_hash_init(&hash_context, &g_nrf_crypto_hash_sha256_info);
-    
+
     /* hash update appId */
     ret += nrf_crypto_hash_update(&hash_context, p_req->appId, U2F_APPID_SIZE);
 
@@ -558,7 +558,7 @@ static uint16_t signature_convert(uint8_t * p_dest_sig, uint8_t * p_src_sig)
     uint8_t *p_len = &p_dest_sig[idx];
 
     p_dest_sig[idx++] = 0x44; //total length (32 + 32 + 2 + 2) at least
-    
+
     p_dest_sig[idx++] = 0x02; //header: integer
 
     if(p_src_sig[0] > 0x7f)
