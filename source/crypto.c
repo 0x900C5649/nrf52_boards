@@ -13,6 +13,14 @@
  * */
 #ifndef EXTERNAL_SOLO_CRYPTO
 
+/*  LOG INIT  */
+#define NRF_LOG_MODULE_NAME crypto
+
+#include "nrf_log.h"
+
+NRF_LOG_MODULE_REGISTER();
+/*            */
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>

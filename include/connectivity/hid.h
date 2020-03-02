@@ -1,0 +1,170 @@
+#ifndef _CONNECTIVITY_HID_H
+#define _CONNECTIVITY_HID_H
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+#include "util.h"
+#include "nrf_drv_usbd.h"
+#include "app_usbd_hid_generic.h"
+
+// Size of HID reports 
+
+#define HID_RPT_SIZE            64      // Default size of raw HID report
+    
+// Frame layout - command- and continuation frames
+
+#define CID_BROADCAST           0xffffffff // Broadcast channel id
+
+#define TYPE_MASK               0x80    // Frame type mask 
+#define TYPE_INIT               0x80    // Initial frame identifier
+#define TYPE_CONT               0x00    // Continuation frame identifier
+
+// HID usage- and usage-page definitions
+
+#define FIDO_USAGE_PAGE         0xf1d0  // FIDO alliance HID usage page
+#define FIDO_USAGE_CTAPHID      0x01    // U2FHID usage for top-level collection
+#define FIDO_USAGE_DATA_IN      0x20    // Raw IN data report
+#define FIDO_USAGE_DATA_OUT     0x21    // Raw OUT data report
+
+// General constants    
+
+#define HID_IF_VERSION       2       // Current interface implementation version
+#define HID_TRANS_TIMEOUT    3000    // Default message timeout in ms
+
+#define HID_FW_VERSION_MAJOR 1       // Major version number
+#define HID_FW_VERSION_MINOR 0       // Minor version number
+#define HID_FW_VERSION_BUILD 0       // Build version number
+
+// U2FHID native commands
+
+#define HID_PING         (TYPE_INIT | 0x01)  // Echo data through local processor only
+#define HID_MSG          (TYPE_INIT | 0x03)  // Send U2F message frame
+#define HID_LOCK         (TYPE_INIT | 0x04)  // Send lock channel command
+#define HID_INIT         (TYPE_INIT | 0x06)  // Channel initialization
+#define HID_WINK         (TYPE_INIT | 0x08)  // Send device identification wink
+#define HID_SYNC         (TYPE_INIT | 0x3c)  // Protocol resync command
+#define HID_ERROR        (TYPE_INIT | 0x3f)  // Error response
+
+#define HID_VENDOR_FIRST (TYPE_INIT | 0x40)  // First vendor defined command
+#define HID_VENDOR_LAST  (TYPE_INIT | 0x7f)  // Last vendor defined command
+    
+// U2FHID_INIT command defines
+
+#define INIT_NONCE_SIZE         8       // Size of channel initialization challenge
+#define CAPFLAG_WINK            0x01    // Device supports WINK command
+
+typedef struct __attribute__ ((__packed__)) {
+  uint8_t nonce[INIT_NONCE_SIZE];       // Client application nonce
+} HID_INIT_REQ;
+
+typedef struct __attribute__ ((__packed__)) {
+  uint8_t nonce[INIT_NONCE_SIZE];       // Client application nonce
+  uint32_t cid;                         // Channel identifier  
+  uint8_t versionInterface;             // Interface version
+  uint8_t versionMajor;                 // Major version number
+  uint8_t versionMinor;                 // Minor version number
+  uint8_t versionBuild;                 // Build version number
+  uint8_t capFlags;                     // Capabilities flags  
+} HID_INIT_RESP;
+
+// HID_SYNC command defines
+
+typedef struct __attribute__ ((__packed__)) {
+  uint8_t nonce;                        // Client application nonce
+} HID_SYNC_REQ;
+
+typedef struct __attribute__ ((__packed__)) {
+  uint8_t nonce;                        // Client application nonce
+} HID_SYNC_RESP;
+
+// Low-level error codes. Return as negatives.
+
+#define ERR_NONE                0x00    // No error
+#define ERR_INVALID_CMD         0x01    // Invalid command
+#define ERR_INVALID_PAR         0x02    // Invalid parameter
+#define ERR_INVALID_LEN         0x03    // Invalid message length
+#define ERR_INVALID_SEQ         0x04    // Invalid message sequencing
+#define ERR_MSG_TIMEOUT         0x05    // Message has timed out
+#define ERR_CHANNEL_BUSY        0x06    // Channel busy
+#define ERR_LOCK_REQUIRED       0x0a    // Command requires channel lock
+#define ERR_SYNC_FAIL           0x0b    // SYNC command failed
+#define ERR_OTHER               0x7f    // Other unspecified error
+
+/**
+ * @brief HID generic class interface number.
+ * */
+#define FIDO_HID_INTERFACE  0
+
+/**
+ * @brief HID generic class endpoint number.
+ * */
+#define U2F_HID_EPIN       NRF_DRV_USBD_EPIN1
+#define U2F_HID_EPOUT      NRF_DRV_USBD_EPOUT1
+
+/**
+ * @brief Number of reports defined in report descriptor.
+ */
+#define REPORT_IN_QUEUE_SIZE    1
+
+/**
+ * @brief Size of maximum output report. HID generic class will reserve
+ *        this buffer size + 1 memory space.
+ *
+ * Maximum value of this define is 63 bytes. Library automatically adds
+ * one byte for report ID. This means that output report size is limited
+ * to 64 bytes.
+ */
+#define REPORT_OUT_MAXSIZE  63
+
+#define REPORT_FEATURE_MAXSIZE  31
+
+/**
+ * @brief HID generic class endpoints count.
+ * */
+#define HID_GENERIC_EP_COUNT  2
+
+/**
+ * @brief List of HID generic class endpoints.
+ * */
+#define ENDPOINT_LIST()                                  \
+(                                                        \
+        U2F_HID_EPIN,                                    \
+        U2F_HID_EPOUT                                    \
+)
+
+/**
+ * @brief FIDO U2F HID report descriptor.
+ *
+ */
+#define APP_USBD_CTAP_HID_REPORT_DSC {                                     \
+    0x06, 0xd0, 0xf1, /*     Usage Page (FIDO Alliance),           */     \
+    0x09, 0x01,       /*     Usage (FIDO HID Authenticator Device), */     \
+    0xa1, 0x01,       /*     Collection (Application),             */     \
+    0x09, 0x20,       /*     Usage (Input Report Data),            */     \
+    0x15, 0x00,       /*     Logical Minimum (0),                  */     \
+    0x26, 0xff, 0x00, /*     Logical Maximum (255),                */     \
+    0x75, 0x08,       /*     Report Size (8),                      */     \
+    0x95, 0x40,       /*     Report Count (64),                    */     \
+    0x81, 0x02,       /*     Input (Data, Variable, Absolute)      */     \
+    0x09, 0x21,       /*     Usage (Output Report Data),           */     \
+    0x15, 0x00,       /*     Logical Minimum (0),                  */     \
+    0x26, 0xff, 0x00, /*     Logical Maximum (255),                */     \
+    0x75, 0x08,       /*     Report Size (8),                      */     \
+    0x95, 0x40,       /*     Report Count (64),                    */     \
+    0x91, 0x02,       /*     Output (Data, Variable, Absolute)     */     \
+    0xc0,             /*     End Collection,                       */     \
+}
+
+retvalue hid_init    (void);
+retvalue hid_process (void);
+
+
+
+#ifdef __cplusplus
+} //extern c
+#endif
+
+#endif //define _connectivity_hid_h
+

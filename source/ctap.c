@@ -8,6 +8,14 @@
 #include <stdlib.h>
 #include <string.h>
 
+/*  LOG INIT  */
+#define NRF_LOG_MODULE_NAME ctap
+
+#include "nrf_log.h"
+
+NRF_LOG_MODULE_REGISTER();
+/*            */
+
 #include "cbor.h"
 
 #include "ctap.h"
