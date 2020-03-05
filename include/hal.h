@@ -49,7 +49,7 @@ void init_cli(void);
 void bsp_event_callback(bsp_event_t ev);
 bool is_user_button_pressed(void);
 void SysTick_Handler(void);
-
+void board_wink(void);
 
 #ifdef __cplusplus
 }

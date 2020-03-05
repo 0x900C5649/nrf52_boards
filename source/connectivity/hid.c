@@ -113,7 +113,7 @@ static void channel_process(void);
  * @param[in]  p_ch  Pointer to U2F Channel.
  * 
  */
-static void channel_cmd_process(u2f_channel_t * p_ch);
+static void channel_cmd_process(hid_channel_t * p_ch);
 
 
 /**@brief Handle a U2FHID LOCK response
@@ -121,28 +121,28 @@ static void channel_cmd_process(u2f_channel_t * p_ch);
  * @param[in]  p_ch  Pointer to U2F Channel.
  * 
  */
-static void hid_lock_response(u2f_channel_t *p_ch);
+static void hid_lock_response(hid_channel_t *p_ch);
 
 /**@brief Handle a U2FHID SYNC response
  *
  * @param[in]  p_ch  Pointer to U2F Channel.
  * 
  */
-static void hid_sync_response(u2f_channel_t *p_ch);
+static void hid_sync_response(hid_channel_t *p_ch);
 
 /**@brief Handle a U2FHID PING response
  *
  * @param[in]  p_ch  Pointer to U2F Channel.
  * 
  */
-static void hid_ping_response(u2f_channel_t *p_ch);
+static void hid_ping_response(hid_channel_t *p_ch);
 
 /**@brief Handle a U2FHID MESSAGE response
  *
  * @param[in]  p_ch  Pointer to U2F Channel.
  * 
  */
-static void hid_msg_response(u2f_channel_t * p_ch);
+static void hid_msg_response(hid_channel_t * p_ch);
 
 /**@brief Send a U2F HID status code only
  *
@@ -150,7 +150,7 @@ static void hid_msg_response(u2f_channel_t * p_ch);
  * @param[in]  status  U2F HID status code.
  *
  */
-static void hid_status_response(u2f_channel_t * p_ch, uint16_t status);
+static void hid_status_response(hid_channel_t * p_ch, uint16_t status);
 
 
 /**@brief Handle a U2FHID WINK response
@@ -158,14 +158,21 @@ static void hid_status_response(u2f_channel_t * p_ch, uint16_t status);
  * @param[in]  p_ch  Pointer to U2F Channel.
  * 
  */
-static void hid_wink_response(u2f_channel_t *p_ch);
+static void hid_wink_response(hid_channel_t *p_ch);
 
 /**@brief Handle a U2FHID INIT response
  *
  * @param[in]  p_ch  Pointer to U2F Channel.
  * 
  */
-static void hid_init_response(u2f_channel_t *p_ch);
+static void hid_init_response(hid_channel_t *p_ch);
+
+/**@brief Handle a CTAPHID CBOR response
+ *
+ * @param[in]  p_ch  Pointer to Channel.
+ * 
+ */
+static void hid_cbor_response(hid_channel_t *p_ch);
 
 /**@brief Send a U2FHID_ERROR response
  *
@@ -188,14 +195,14 @@ static uint32_t generate_new_cid(void);
  *
  * @retval     Valid U2F Channel if the procedure was successful, else, NULL.
  */
-static u2f_channel_t * channel_find(uint32_t cid);
+static hid_channel_t * channel_find(uint32_t cid);
 
 /**@brief Uninitialize U2F Channel.
  *
  * @param[in]  p_ch  Pointer to U2F Channel.
  *
  */
-static void channel_deinit(u2f_channel_t * p_ch);
+static void channel_deinit(hid_channel_t * p_ch);
 
 /**@brief Initialize U2F Channel.
  *
@@ -203,47 +210,22 @@ static void channel_deinit(u2f_channel_t * p_ch);
  * @param[in]  cid   Channel identifier.
  *
  */
-static void channel_init(u2f_channel_t * p_ch, uint32_t cid);
+static void channel_init(hid_channel_t * p_ch, uint32_t cid);
+
+/**@brief Resets Channel. Keeps cid;
+ *
+ * @param[in]  p_ch  Pointer to Channel.
+ *
+ */
+static void channel_reset(hid_channel_t * p_ch, uint32_t cid);
 
 /**@brief U2F Channel allocation function.
  *
  *
  * @retval    Valid memory location if the procedure was successful, else, NULL.
  */
-static u2f_channel_t * channel_alloc(void);
+static hid_channel_t * channel_alloc(void);
 
-
-
-#define MAX_U2F_CHANNELS    5
-
-#define CID_STATE_IDLE      1
-#define CID_STATE_READY     2
-
-
-typedef struct { struct channel *pFirst, *pLast; } channel_list_t;
-
-typedef structc hannel {
-    struct channel * pPrev;
-    struct channel * pNext;
-    uint32_t cid;
-    uint8_t cmd;
-    uint8_t state;
-    Timer timer;
-    uint16_t bcnt;
-    uint8_t req[U2F_MAX_REQ_SIZE];
-    uint8_t resp[U2F_MAX_RESP_SIZE];
-} channel_t;
-
-typedef struct __attribute__ ((__packed__))
-{
-    uint8_t cla;
-    uint8_t ins;
-    uint8_t p1;
-    uint8_t p2;
-    uint8_t lc1;
-    uint8_t lc2;
-    uint8_t lc3;
-} u2f_req_apdu_header_t;
 
 
 extern bool is_user_button_pressed(void);
@@ -619,14 +601,14 @@ static uint8_t m_channel_used_cnt = 0;
  *
  * @retval    Valid memory location if the procedure was successful, else, NULL.
  */
-static channel_t * channel_alloc(void)
+static hid_channel_t * channel_alloc(void)
 {
-    channel_t * p_ch;
-    size_t size = sizeof(channel_t);
+    hid_channel_t * p_ch;
+    size_t size = sizeof(hid_channel_t);
 
-    if(m_channel_used_cnt > MAX_U2F_CHANNELS)
+    if(m_channel_used_cnt > MAX_HID_CHANNELS)
     {
-        NRF_LOG_WARNING("MAX_U2F_CHANNELS.");
+        NRF_LOG_WARNING("MAX_HID_CHANNELS.");
         return NULL;
     }
 
@@ -650,9 +632,9 @@ static channel_t * channel_alloc(void)
  * @param[in]  cid   Channel identifier.
  *
  */
-static void channel_init(channel_t * p_ch, uint32_t cid)
+static void channel_init(hid_channel_t * p_ch, uint32_t cid)
 {
-    size_t size = sizeof(channel_t);
+    size_t size = sizeof(hid_channel_t);
 
     memset(p_ch, 0, size);
 
@@ -674,12 +656,23 @@ static void channel_init(channel_t * p_ch, uint32_t cid)
 }
 
 
+/**@brief Resets Channel. Keeps cid;
+ *
+ * @param[in]  p_ch  Pointer to Channel.
+ *
+ */
+static void channel_reset(hid_channel_t * p_ch)
+{
+    p_ch->state = CID_STATE_IDLE;
+}
+
+
 /**@brief Uninitialize U2F Channel.
  *
  * @param[in]  p_ch  Pointer to U2F Channel.
  *
  */
-static void channel_deinit(channel_t * p_ch)
+static void channel_deinit(hid_channel_t * p_ch)
 {
     if(p_ch->pPrev == NULL && p_ch->pNext == NULL)  //only one item in the list
     {
@@ -711,10 +704,10 @@ static void channel_deinit(channel_t * p_ch)
  *
  * @retval     Valid U2F Channel if the procedure was successful, else, NULL.
  */
-static channel_t * channel_find(uint32_t cid)
+static hid_channel_t * channel_find(uint32_t cid)
 {
     
-    channel_t *p_ch;
+    hid_channel_t *p_ch;
 
     for(p_ch = m_ctap_ch_list.pFirst; p_ch != NULL; p_ch = p_ch->pNext)
     {
@@ -744,7 +737,7 @@ static uint32_t generate_new_cid(void)
 }
 
 
-/**@brief Send a U2FHID_ERROR response
+/**@brief Send a HID_ERROR response
  *
  * @param[in]  cid   Channel identifier.
  * @param[in]  code  Error code.
@@ -752,47 +745,56 @@ static uint32_t generate_new_cid(void)
  */
 static void hid_error_response(uint32_t cid, uint8_t error)
 {
-    hid_if_send(cid, U2FHID_ERROR, &error, 1);
+    hid_if_send(cid, HID_ERROR, &error, 1);
 }
 
 
-/**@brief Handle a U2FHID INIT response
+/**@brief Handle a HID INIT response
  *
  * @param[in]  p_ch  Pointer to U2F Channel.
  * 
  */
-static void hid_init_response(channel_t *p_ch)
+static void hid_init_response(hid_channel_t *p_ch)
 {
-    U2FHID_INIT_RESP *p_resp_init = (U2FHID_INIT_RESP *)p_ch->resp;
-    
+    HID_INIT_RESP *p_resp_init = (HID_INIT_RESP *) p_ch->resp;
     channel_t *p_new_ch;
 
-    if (p_ch->cid != CID_BROADCAST) {
-         hid_error_response(p_ch->cid, ERR_INVALID_CMD);
-         return;
+    //if send on broadcast -> create new channel
+    if (p_ch->cid == CID_BROADCAST) {
+
+        //allocate mem for new channel
+        p_new_ch = channel_alloc();
+        if (p_new_ch == NULL) {
+             hid_error_response(p_ch->cid, ERR_CHANNEL_BUSY);
+             return;
+        }
+    
+        //get new cid and init channel data
+        channel_init(p_new_ch, generate_new_cid());
     }
-
-    p_new_ch = channel_alloc();
-    if (p_new_ch == NULL) {
-         hid_error_response(p_ch->cid, ERR_CHANNEL_BUSY);
-         return;
+    //else reset existing channel
+    {
+        channel_reset(p_ch);
+        p_new_ch = p_ch;
     }
+        
+        //copy init nonce
+        memcpy(p_resp_init->nonce, p_ch_req, INIT_NONCE_SIZE);
 
-    channel_init(p_new_ch, generate_new_cid());
-
-    memcpy(p_resp_init->nonce, p_ch->req, INIT_NONCE_SIZE);
-
-    p_resp_init->cid = p_new_ch->cid;                    // Channel identifier 
-    p_resp_init->versionInterface = U2FHID_IF_VERSION;   // Interface version
-    p_resp_init->versionMajor = U2FHID_FW_VERSION_MAJOR; // Major version number
-    p_resp_init->versionMinor = U2FHID_FW_VERSION_MINOR; // Minor version number
-    p_resp_init->versionBuild = U2FHID_FW_VERSION_BUILD; // Build version number
-    p_resp_init->capFlags = CAPFLAG_WINK;                // Capabilities flags
-
-    UNUSED_RETURN_VALUE(is_user_button_pressed());    // clear user button state
-
-    hid_if_send(p_ch->cid, p_ch->cmd, (uint8_t *)p_resp_init, 
-                    sizeof(U2FHID_INIT_RESP));
+        p_resp_init->cid = p_new_ch->cid;                    // Channel identifier 
+        p_resp_init->versionInterface = HID_IF_VERSION;   // Interface version
+        p_resp_init->versionMajor = HID_FW_VERSION_MAJOR; // Major version number
+        p_resp_init->versionMinor = HID_FW_VERSION_MINOR; // Minor version number
+        p_resp_init->versionBuild = HID_FW_VERSION_BUILD; // Build version number
+        p_resp_init->capFlags =   CAPABILITY_WINK
+                                | CAPABILITY_CBOR
+                                | CAPABILITY_NMSG; // Capabilities flags
+        
+        //clear user button state
+        UNUSED_RETURN_VALUE(is_user_button_pressed());
+        
+        //send response
+        hid_if_send(p_ch->cid, p_ch->cmd, (uint8_t *)p_resp_init, sizeof(HID_INIT_RESP) );
 }
 
 
@@ -801,161 +803,57 @@ static void hid_init_response(channel_t *p_ch)
  * @param[in]  p_ch  Pointer to U2F Channel.
  * 
  */
-static void hid_wink_response(channel_t *p_ch)
+static void hid_wink_response(hid_channel_t *p_ch)
 {
-    bsp_board_led_invert(LED_U2F_WINK); //TODO
+    //board specific action (see hal.h/hal.c)
+    board_wink();
     hid_if_send(p_ch->cid, p_ch->cmd, NULL, 0);
 }
 
 
-/**@brief Send a U2F HID status code only
+/**@brief Send a HID status code only
  *
  * @param[in]  p_ch    Pointer to U2F Channel.
- * @param[in]  status  U2F HID status code.
+ * @param[in]  status  HID status code.
  *
  */
-static void hid_status_response(channel_t * p_ch, uint16_t status)
+static void hid_status_response(hid_channel_t * p_ch, uint8_t status)
 {
-    uint8_t be_status[2];
-    uint8_t size = uint16_big_encode(status, be_status);
-
-    hid_if_send(p_ch->cid, p_ch->cmd, be_status, size);
+    //send status code (in FIDO2 only single byte)
+    hid_if_send(p_ch->cid, p_ch->cmd, status, 1);
 }
 
 
-/**@brief Handle a U2FHID MESSAGE response
+/**@brief Handle a CTAPHID CBOR response
+ *
+ * @param[in]  p_ch  Pointer to Channel.
+ * 
+ */
+static void hid_cbor_response(hid_channel_t *p_ch)
+{
+    CTAP_RESPONSE resp;
+    uint8_t status;
+    status = ctap_request(p_ch->req, bcnt, &resp);
+
+    //set response status code
+    memcpy(p_ch->resp, status, 1);
+    
+    //copy over response
+    memcpy(p_ch->resp+1, resp.data, MIN(resp.length, CTAP_RESPONSE_BUFFER_SIZE));
+
+    hid_if_send(p_ch->cid, p_ch->cmd, p_ch->resp, resp.length + 1);
+}
+
+
+/**@brief Handle a U2FHID MESSAGE response UNIMPLEMETED AND UNSUPPORTED
  *
  * @param[in]  p_ch  Pointer to U2F Channel.
  * 
  */
-static void hid_msg_response(channel_t * p_ch) //TODO decode and set to ctap;
+static void hid_msg_response(hid_channel_t * p_ch)
 {
-    u2f_req_apdu_header_t * p_req_apdu_hdr = (u2f_req_apdu_header_t *)p_ch->req;
-
-    uint32_t req_size;
-
-    if(p_req_apdu_hdr->cla != 0)
-    {
-        hid_status_response(p_ch, U2F_SW_CLA_NOT_SUPPORTED);
-        return;
-    }
-
-    req_size = (((uint32_t)p_req_apdu_hdr->lc1) << 16) |
-               (((uint32_t)p_req_apdu_hdr->lc2) << 8)  |
-               (((uint32_t)p_req_apdu_hdr->lc3) << 0);
-
-    switch(p_req_apdu_hdr->ins)
-    {
-        case U2F_REGISTER:
-        {
-            U2F_REGISTER_REQ *p_req = (U2F_REGISTER_REQ *)(p_req_apdu_hdr + 1);
-            U2F_REGISTER_RESP *p_resp = (U2F_REGISTER_RESP *)p_ch->resp;
-
-            if(req_size != sizeof(U2F_REGISTER_REQ))
-            {
-                NRF_LOG_ERROR("U2F_SW_WRONG_LENGTH.");
-                hid_status_response(p_ch, U2F_SW_WRONG_LENGTH);
-                return;                 
-            }
-
-            uint16_t status, len = 0;
-            uint8_t be_status[2];
-
-            status = u2f_register(p_req, p_resp, p_req_apdu_hdr->p1, &len);
-
-            if(status == U2F_SW_CONDITIONS_NOT_SATISFIED)
-            {
-                NRF_LOG_WARNING("Press to register the device now...");
-            }
-            else if(status != U2F_SW_NO_ERROR)
-            {
-                NRF_LOG_ERROR("Fail to register your device! [status = %d]", status);
-            }
-            else
-            {
-                NRF_LOG_INFO("Register your device successfully!");
-            }
-
-            uint8_t size = uint16_big_encode(status, be_status);
-
-            memcpy(p_ch->resp + len, be_status, size);
-
-            hid_if_send(p_ch->cid, p_ch->cmd, p_ch->resp, len + size);
-
-        }
-        break;
-
-        case U2F_AUTHENTICATE:
-        {
-            U2F_AUTHENTICATE_REQ *p_req = (U2F_AUTHENTICATE_REQ *)(p_req_apdu_hdr + 1);
-            U2F_AUTHENTICATE_RESP *p_resp = (U2F_AUTHENTICATE_RESP *)p_ch->resp;
-
-            if(req_size > sizeof(U2F_AUTHENTICATE_REQ))
-            {
-                NRF_LOG_ERROR("Invalid request size: %d", req_size);
-                hid_status_response(p_ch, U2F_SW_WRONG_LENGTH);
-                return;                 
-            }
-
-            uint16_t status, len = 0;
-            uint8_t be_status[2];
-
-            status = u2f_authenticate(p_req, p_resp, p_req_apdu_hdr->p1, &len);
-
-            if(status == U2F_SW_CONDITIONS_NOT_SATISFIED)
-            {
-                NRF_LOG_WARNING("Press to authenticate your device now...");
-            }
-            else if(status != U2F_SW_NO_ERROR)
-            {
-                NRF_LOG_ERROR("Fail to authenticate your device! [status = %d]", status);
-            }
-            else
-            {
-                NRF_LOG_INFO("Authenticate your device successfully!");
-            }
-
-            uint8_t size = uint16_big_encode(status, be_status);
-            
-            memcpy(p_ch->resp + len, be_status, size);
-
-            hid_if_send(p_ch->cid, p_ch->cmd, p_ch->resp, len + size);    
-        }
-        break;
-
-        case U2F_VERSION:
-        {
-            const char *ver_str = VENDOR_U2F_VERSION;
-            uint8_t len = strlen(ver_str);
-
-            NRF_LOG_INFO("U2F_VERSION.");
-
-            if(req_size > 0)
-            {
-                hid_status_response(p_ch, U2F_SW_WRONG_LENGTH);
-               return;                 
-            }
-
-            uint8_t be_status[2];
-            uint8_t size = uint16_big_encode(U2F_SW_NO_ERROR, be_status);
-            memcpy(p_ch->resp, ver_str, len);
-            memcpy(p_ch->resp + len, be_status, size);
-
-            hid_if_send(p_ch->cid, p_ch->cmd, p_ch->resp, len + size);
-        }
-        break;
-
-        case U2F_CHECK_REGISTER:
-            break;
-
-        case U2F_AUTHENTICATE_BATCH:
-            break;
-
-        default:
-            NRF_LOG_ERROR("U2F_SW_INS_NOT_SUPPORTED.");
-            hid_status_response(p_ch, U2F_SW_INS_NOT_SUPPORTED);
-            break;
-    }
+    // by flag indicated to not be implemented -> invalid CMD
+    hid_status_response(p_ch, ERR_INVALID_CMD);
 }
 
 /**@brief Handle a U2FHID PING response
@@ -963,8 +861,9 @@ static void hid_msg_response(channel_t * p_ch) //TODO decode and set to ctap;
  * @param[in]  p_ch  Pointer to U2F Channel.
  * 
  */
-static void hid_ping_response(channel_t *p_ch)
+static void hid_ping_response(hid_channel_t *p_ch)
 {
+    //PONG (echo)
     hid_if_send(p_ch->cid, p_ch->cmd, p_ch->req, p_ch->bcnt);
 }
 
@@ -974,20 +873,21 @@ static void hid_ping_response(channel_t *p_ch)
  * @param[in]  p_ch  Pointer to U2F Channel.
  * 
  */
-static void hid_sync_response(channel_t *p_ch)
+static void hid_sync_response(hid_channel_t *p_ch)
 {
-	return;
+    return;
 }
 
 
-/**@brief Handle a U2FHID LOCK response
+/**@brief Handle a HID LOCK response
  *
  * @param[in]  p_ch  Pointer to U2F Channel.
  * 
  */
-static void hid_lock_response(channel_t *p_ch)
+static void hid_lock_response(hid_channel_t *p_ch)
 {
-	return;
+    //unimplemented
+    hid_status_respondse(p_ch, ERR_INVALID_CMD);
 }
 
 
@@ -996,7 +896,7 @@ static void hid_lock_response(channel_t *p_ch)
  * @param[in]  p_ch  Pointer to U2F Channel.
  * 
  */
-static void channel_cmd_process(channel_t * p_ch)
+static void channel_cmd_process(hid_channel_t * p_ch)
 {
 
     countdown_ms(&p_ch->timer, U2FHID_TRANS_TIMEOUT);
@@ -1023,6 +923,11 @@ static void channel_cmd_process(channel_t * p_ch)
         case HID_INIT:
             NRF_LOG_INFO("HID_INIT.");
             hid_init_response(p_ch);
+            break;
+       
+        case HID_CBOR:
+            NRF_LOG_INFO("HID_CBOR.");
+            hid_CBOR_response(p_ch);
             break;
 
         case HID_WINK:
@@ -1056,7 +961,7 @@ static void channel_cmd_process(channel_t * p_ch)
  */
 static void channel_process(void)
 {
-    channel_t *p_ch;
+    hid_channel_t *p_ch;
 
     for(p_ch = m_ctap_ch_list.pFirst; p_ch != NULL;)
     {
@@ -1066,7 +971,7 @@ static void channel_process(void)
         {
             if(p_ch->cid != CID_BROADCAST)
             {
-                channel_t * p_free_ch = p_ch;
+                hid_channel_t * p_free_ch = p_ch;
                 p_ch = p_ch->pNext;
                 channel_deinit(p_free_ch);
                 continue;
@@ -1086,7 +991,7 @@ static void channel_process(void)
 static ret_code_t internal_hid_init(void)
 {
     ret_code_t ret;
-    channel_t *p_ch;
+    hid_channel_t *p_ch;
 
     ret = nrf_mem_init();
     if(ret != NRF_SUCCESS)
@@ -1137,7 +1042,7 @@ static void internal_hid_process(void)
 
     if(ret == ERR_NONE)
     {
-        channel_t * p_ch;
+        hid_channel_t * p_ch;
 
         p_ch = channel_find(cid);
 

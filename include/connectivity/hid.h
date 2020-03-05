@@ -24,7 +24,7 @@ extern "C" {
 // HID usage- and usage-page definitions
 
 #define FIDO_USAGE_PAGE         0xf1d0  // FIDO alliance HID usage page
-#define FIDO_USAGE_CTAPHID      0x01    // U2FHID usage for top-level collection
+#define FIDO_USAGE_CTAPHID      0x01    // HID usage for top-level collection
 #define FIDO_USAGE_DATA_IN      0x20    // Raw IN data report
 #define FIDO_USAGE_DATA_OUT     0x21    // Raw OUT data report
 
@@ -41,6 +41,7 @@ extern "C" {
 
 #define HID_PING         (TYPE_INIT | 0x01)  // Echo data through local processor only
 #define HID_MSG          (TYPE_INIT | 0x03)  // Send U2F message frame
+#define HID_CBOR         (TYPE_INIT | 0x10)  // FIDO2 CBOR encoded command
 #define HID_LOCK         (TYPE_INIT | 0x04)  // Send lock channel command
 #define HID_INIT         (TYPE_INIT | 0x06)  // Channel initialization
 #define HID_WINK         (TYPE_INIT | 0x08)  // Send device identification wink
@@ -53,7 +54,9 @@ extern "C" {
 // U2FHID_INIT command defines
 
 #define INIT_NONCE_SIZE         8       // Size of channel initialization challenge
-#define CAPFLAG_WINK            0x01    // Device supports WINK command
+#define CAPABILITY_WINK         0x01    // If set to 1, authenticator implements CTAPHID_WINK function 
+#define CAPCAPABILITY_CBOR      0x04    // If set to 1, authenticator implements CTAPHID_CBOR function 
+#define CAPABILITY_NMSG         0x08    // If set to 1, authenticator DOES NOT implement CTAPHID_MSG function 
 
 typedef struct __attribute__ ((__packed__)) {
   uint8_t nonce[INIT_NONCE_SIZE];       // Client application nonce
@@ -61,8 +64,8 @@ typedef struct __attribute__ ((__packed__)) {
 
 typedef struct __attribute__ ((__packed__)) {
   uint8_t nonce[INIT_NONCE_SIZE];       // Client application nonce
-  uint32_t cid;                         // Channel identifier  
-  uint8_t versionInterface;             // Interface version
+  uint32_t cid;                         // Channel identifier
+  uint8_t versionInterface;             // Interface version // CTAPHID protocol version
   uint8_t versionMajor;                 // Major version number
   uint8_t versionMinor;                 // Minor version number
   uint8_t versionBuild;                 // Build version number
@@ -92,6 +95,8 @@ typedef struct __attribute__ ((__packed__)) {
 #define ERR_SYNC_FAIL           0x0b    // SYNC command failed
 #define ERR_OTHER               0x7f    // Other unspecified error
 
+
+
 /**
  * @brief HID generic class interface number.
  * */
@@ -118,7 +123,9 @@ typedef struct __attribute__ ((__packed__)) {
  */
 #define REPORT_OUT_MAXSIZE  63
 
-#define REPORT_FEATURE_MAXSIZE  31
+
+
+#define REPORT_FEATURE_MAXSIZE  255
 
 /**
  * @brief HID generic class endpoints count.
@@ -126,7 +133,7 @@ typedef struct __attribute__ ((__packed__)) {
 #define HID_GENERIC_EP_COUNT  2
 
 /**
- * @brief List of HID generic class endpoints.
+ * @brief List of HID generic class endpoints. TODO
  * */
 #define ENDPOINT_LIST()                                  \
 (                                                        \
@@ -135,7 +142,7 @@ typedef struct __attribute__ ((__packed__)) {
 )
 
 /**
- * @brief FIDO U2F HID report descriptor.
+ * @brief FIDO CTAP HID report descriptor.
  *
  */
 #define APP_USBD_CTAP_HID_REPORT_DSC {                                     \
@@ -156,6 +163,39 @@ typedef struct __attribute__ ((__packed__)) {
     0x91, 0x02,       /*     Output (Data, Variable, Absolute)     */     \
     0xc0,             /*     End Collection,                       */     \
 }
+
+
+#define MAX_HID_CHANNELS    5
+
+#define CID_STATE_IDLE      1
+#define CID_STATE_READY     2
+
+
+typedef struct { struct channel *pFirst, *pLast; } channel_list_t;
+
+typedef struct channel {
+    struct channel * pPrev;
+    struct channel * pNext;
+    uint32_t cid;
+    uint8_t cmd;
+    uint8_t state;
+    Timer timer;
+    uint16_t bcnt;
+    uint8_t req[CTAP_MAX_MESSAGE_SIZE]; // TODO
+    uint8_t resp[CTAP_RESPONSE_BUFFER_SIZE+1]; //TODO
+} hid_channel_t;
+
+typedef struct __attribute__ ((__packed__))
+{
+    uint8_t cla;
+    uint8_t ins;
+    uint8_t p1;
+    uint8_t p2;
+    uint8_t lc1;
+    uint8_t lc2;
+    uint8_t lc3;
+} hid_req_apdu_header_t;
+
 
 retvalue hid_init    (void);
 retvalue hid_process (void);
