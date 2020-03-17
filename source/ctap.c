@@ -28,7 +28,7 @@ NRF_LOG_MODULE_REGISTER();
 #include "util.h"
 #include "log.h"
 #include "device.h"
-#include APP_CONFIG
+#include "app_config.h"
 #include "wallet.h"
 #include "extensions.h"
 
@@ -180,7 +180,7 @@ uint8_t ctap_get_info(CborEncoder * encoder)
         }
 
         ret = cbor_encode_uint(&map, RESP_pinProtocols);
-        check_ret(ret);
+        gheck_ret(ret);
         {
             ret = cbor_encoder_create_array(&map, &pins, 1);
             check_ret(ret);

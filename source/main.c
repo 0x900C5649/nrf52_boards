@@ -43,7 +43,8 @@
 #include "app_error.h"
 #include "bsp.h"
 
-#include "u2f_hid.h"
+#include "app_config.h"
+#include "hal.h"
 
 #include "bsp_cli.h"
 #include "nrf_cli.h"
@@ -57,138 +58,35 @@
 
 NRF_LOG_MODULE_REGISTER();
 
+#include "log.h"
+
 /**
  * @brief CLI interface over UART
  */
-NRF_CLI_UART_DEF(m_cli_uart_transport, 0, 64, 16);
-NRF_CLI_DEF(m_cli_uart,
-            "u2f_cli:~$ ",
-            &m_cli_uart_transport.transport,
-            '\r',
-            8);
+//NRF_CLI_UART_DEF(m_cli_uart_transport, 0, 64, 16);
+//NRF_CLI_DEF(m_cli_uart,
+//            "ctap_cli:~$ ",
+//            &m_cli_uart_transport.transport,
+//           '\r',
+//            8);
 
-
-/**
- * @brief Additional key release events
- *
- * This example needs to process release events of used buttons
- */
-enum {
-    BSP_USER_EVENT_RELEASE_0 = BSP_EVENT_KEY_LAST + 1, /**< Button 0 released */
-    BSP_USER_EVENT_RELEASE_1,                          /**< Button 1 released */
-    BSP_USER_EVENT_RELEASE_2,                          /**< Button 2 released */
-    BSP_USER_EVENT_RELEASE_3,                          /**< Button 3 released */
-    BSP_USER_EVENT_RELEASE_4,                          /**< Button 4 released */
-    BSP_USER_EVENT_RELEASE_5,                          /**< Button 5 released */
-    BSP_USER_EVENT_RELEASE_6,                          /**< Button 6 released */
-    BSP_USER_EVENT_RELEASE_7,                          /**< Button 7 released */
-};
-
-
-/** SysTick counter to avoid busy wait delay. */
-volatile uint32_t ms_ticks = 0;
-
-/** U2F user button state. */
-static bool m_user_button_pressed = false;
-
-/**
- * \brief SysTick handler used to measure precise delay. 
- */
-void SysTick_Handler(void)
-{
-    ms_ticks++;
-}
-
-
-/**
- * \brief Check user button state. 
- */
-bool is_user_button_pressed(void)
-{
-    if(m_user_button_pressed)
-    {
-        m_user_button_pressed = false;
-        return true;
-    }
-    return false;
-}
-
-
-static void bsp_event_callback(bsp_event_t ev)
-{
-    switch ((unsigned int)ev)
-    {
-        case CONCAT_2(BSP_EVENT_KEY_, BTN_U2F_USER):
-            //NRF_LOG_INFO("BTN_U2F_USER pressed!");
-            break;
-        case CONCAT_2(BSP_USER_EVENT_RELEASE_, BTN_U2F_USER):
-            m_user_button_pressed = true;
-            //NRF_LOG_INFO("BTN_U2F_USER released!");
-            break;
-        default:
-            return; // no implementation needed
-    }
-}
-
-
-/**
- * @brief Auxiliary internal macro
- *
- * Macro used only in @ref init_bsp to simplify the configuration
- */
-#define INIT_BSP_ASSIGN_RELEASE_ACTION(btn)                      \
-    APP_ERROR_CHECK(                                             \
-        bsp_event_to_button_action_assign(                       \
-            btn,                                                 \
-            BSP_BUTTON_ACTION_RELEASE,                           \
-            (bsp_event_t)CONCAT_2(BSP_USER_EVENT_RELEASE_, btn)) \
-    )
-
-static void init_bsp(void)
-{
-    
-    ret_code_t ret;
-    ret = bsp_init(BSP_INIT_BUTTONS, bsp_event_callback);
-    APP_ERROR_CHECK(ret);
-    
-    INIT_BSP_ASSIGN_RELEASE_ACTION(BTN_U2F_USER);
-    
-    /* Configure LEDs */
-    bsp_board_init(BSP_INIT_LEDS);
-
-    /* Enable SysTick interrupt for non busy wait delay. */
-    if (SysTick_Config(SystemCoreClock / 1000)) {
-        NRF_LOG_ERROR("init_bsp: SysTick configuration error!");
-        while(1);
-    }
-}
-
-static void init_cli(void)
-{
-    ret_code_t ret;
-    ret = bsp_cli_init(bsp_event_callback);
-    APP_ERROR_CHECK(ret);
-    nrf_drv_uart_config_t uart_config = NRF_DRV_UART_DEFAULT_CONFIG;
-    uart_config.pseltxd = TX_PIN_NUMBER;
-    uart_config.pselrxd = RX_PIN_NUMBER;
-    uart_config.hwfc    = NRF_UART_HWFC_DISABLED;
-    ret = nrf_cli_init(&m_cli_uart, &uart_config, true, true, 
-                       NRF_LOG_SEVERITY_INFO);
-    APP_ERROR_CHECK(ret);
-    ret = nrf_cli_start(&m_cli_uart);
-    APP_ERROR_CHECK(ret);
-}
 
 
 int main(void)
 {
     ret_code_t ret;
 
-    ret = NRF_LOG_INIT(NULL);
+#if APP_MODULE_ENABLED(LOGGING) || NRF_MODULE_ENABLED(NRF_LOG)
+    ret = init_log();
     APP_ERROR_CHECK(ret);
+#endif // APP_MODULE_ENABLED(LOGGING)
+    
+    NRF_LOG_DEBUG("log initialised");
 
     ret = nrf_drv_clock_init();
     APP_ERROR_CHECK(ret);
+    
+    NRF_LOG_DEBUG("drv_clock_init");
 
     nrf_drv_clock_lfclk_request(NULL);
 
@@ -196,28 +94,38 @@ int main(void)
     {
         /* Just waiting */
     }
+    NRF_LOG_DEBUG("lfclk_is_running");
 
     ret = app_timer_init();
     APP_ERROR_CHECK(ret);
+    
+    NRF_LOG_DEBUG("timer_init");
 
     init_bsp();
     init_cli();
 
+    NRF_LOG_DEBUG("init bsp + cli");
+
+
     NRF_LOG_INFO("Hello FIDO U2F Security Key!");
 
-    ret = u2f_hid_init();
-    if(ret != NRF_SUCCESS)
-    {
-        NRF_LOG_ERROR("Fail to initialize U2F HID![%d]", ret);
-    }
-    APP_ERROR_CHECK(ret);
+//    ret = u2f_hid_init();
+//    if(ret != NRF_SUCCESS)
+//    {
+//        NRF_LOG_ERROR("Fail to initialize U2F HID![%d]", ret);
+//    }
+//    APP_ERROR_CHECK(ret);
 
     while (true)
     {
 
-        u2f_hid_process();
+//        u2f_hid_process();
 
-        nrf_cli_process(&m_cli_uart);
+//        nrf_cli_process(&m_cli_uart);
+//        NRF_LOG_INFO("THIS IS A TEST")
+        if (is_user_button_pressed()){
+            NRF_LOG_INFO("button pressed");
+        }
 
         UNUSED_RETURN_VALUE(NRF_LOG_PROCESS());
         

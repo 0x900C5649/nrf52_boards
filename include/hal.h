@@ -8,6 +8,7 @@ extern "C" {
 #endif
 
 #include "util.h"
+#include "bsp.h"
 
 /**
  * @brief Auxiliary internal macro
@@ -46,7 +47,7 @@ volatile uint32_t ms_ticks;
 //FUNCTIONS
 void init_bsp(void);
 void init_cli(void);
-void bsp_event_callback(bsp_event_t ev);
+//static void bsp_event_callback(bsp_event_t ev);
 bool is_user_button_pressed(void);
 void SysTick_Handler(void);
 void board_wink(void);

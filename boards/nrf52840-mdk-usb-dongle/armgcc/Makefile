@@ -23,10 +23,11 @@ SRC_FILES += \
   $(SDK_ROOT)/modules/nrfx/mdk/gcc_startup_nrf52840.S \
   $(SDK_ROOT)/components/libraries/log/src/nrf_log_backend_rtt.c \
   $(SDK_ROOT)/components/libraries/log/src/nrf_log_backend_serial.c \
-  $(SDK_ROOT)/components/libraries/log/src/nrf_log_backend_uart.c \
   $(SDK_ROOT)/components/libraries/log/src/nrf_log_default_backends.c \
   $(SDK_ROOT)/components/libraries/log/src/nrf_log_frontend.c \
   $(SDK_ROOT)/components/libraries/log/src/nrf_log_str_formatter.c \
+  $(SDK_ROOT)/components/libraries/log/src/nrf_log_backend_uart.c \
+  $(SDK_ROOT)/modules/nrfx/drivers/src/nrfx_uarte.c \
   $(SDK_ROOT)/components/boards/boards.c \
   $(SDK_ROOT)/components/libraries/button/app_button.c \
   $(SDK_ROOT)/components/libraries/util/app_error.c \
@@ -77,8 +78,8 @@ SRC_FILES += \
   $(SDK_ROOT)/integration/nrfx/legacy/nrf_drv_rng.c \
   $(SDK_ROOT)/modules/nrfx/drivers/src/nrfx_rng.c \
   $(SDK_ROOT)/modules/nrfx/drivers/src/nrfx_uart.c \
-  $(SDK_ROOT)/modules/nrfx/drivers/src/nrfx_uarte.c \
   $(SDK_ROOT)/components/libraries/bsp/bsp.c \
+  $(SDK_ROOT)/components/libraries/gpiote/app_gpiote.c \
   $(SDK_ROOT)/components/libraries/bsp/bsp_cli.c \
   $(SDK_ROOT)/modules/nrfx/mdk/system_nrf52840.c \
   $(SDK_ROOT)/external/utf_converter/utf.c \
@@ -206,10 +207,12 @@ SRC_FILES += \
   $(ROOT_DIR)/certs/keys.c \
   $(SRC_DIR)/main.c \
   $(SRC_DIR)/timer.c \
-  $(SRC_DIR)/u2f_hid.c \
-  $(SRC_DIR)/u2f_hid_if.c \
-  $(SRC_DIR)/u2f_impl.c \
-  $(SRC_DIR)/crypto.c \
+  $(SRC_DIR)/hal.c \
+  $(SRC_DIR)/log.c \
+#  $(SRC_DIR)/u2f_hid.c \
+#  $(SRC_DIR)/u2f_hid_if.c \
+#  $(SRC_DIR)/u2f_impl.c \
+#  $(SRC_DIR)/crypto.c \
 
 # removed
 #   $(SDK_ROOT)/components/drivers_nrf/usbd/nrf_drv_usbd.c \
@@ -251,9 +254,9 @@ INC_FOLDERS += \
   $(SDK_ROOT)/components/libraries/timer \
   $(SDK_ROOT)/components/libraries/util \
   $(SDK_ROOT)/components/libraries/bsp \
+  $(SDK_ROOT)/components/libraries/gpiote \
   $(SDK_ROOT)/components/libraries/usbd/class/hid/generic \
   $(SDK_ROOT)/components/libraries/balloc \
-  $(SDK_ROOT)/components/drivers_nrf/usbd \
   $(SDK_ROOT)/components/libraries/ringbuf \
   $(SDK_ROOT)/components/libraries/usbd/class/hid \
   $(SDK_ROOT)/components/libraries/hardfault/nrf52 \
@@ -283,20 +286,22 @@ INC_FOLDERS += \
   $(SDK_ROOT)/modules/nrfx/hal \
   $(SDK_ROOT)/external/fprintf \
   $(SDK_ROOT)/components/libraries/log/src \
+  $(SDK_ROOT)/external/segger_rtt \
+  $(SDK_ROOT)/modules/nrfx/drivers \
+  $(SDK_ROOT)/config/nrf52840/config \
   $(LIBDIR)/tinycbor/src \
   $(PROJ_DIR)/config \
   $(INCL_DIR) \
   $(PROJ_DIR) \
 
-# removed
-#   $(SDK_ROOT)/external/segger_rtt \
 
 # Libraries common to all targets
 LIB_FILES += \
-  $(SDK_ROOT)/external/nrf_cc310/lib/libnrf_cc310_0.9.10.a \
+  $(SDK_ROOT)/external/nrf_cc310/lib/cortex-m4/hard-float/libnrf_cc310_0.9.12.a \
   $(SDK_ROOT)/external/micro-ecc/nrf52hf_armgcc/armgcc/micro_ecc_lib_nrf52.a \
-  $(SDK_ROOT)/external/nrf_oberon/lib/nrf52/liboberon_2.0.5.a \
+  $(SDK_ROOT)/external/nrf_oberon/lib/cortex-m4/hard-float/liboberon_3.0.1.a \
   $(LIBDIR)/tinycbor/lib/libtinycbor.a \
+
 
 # DEFINITIONS
 DEFINES = -DAES256=1 -DUSE_APP_CONFIG
@@ -390,8 +395,8 @@ $(foreach target, $(TARGETS), $(call define_target, $(target)))
 .PHONY: flash erase tinycbor
 
 tinycbor:
-	cd $(CBOR_ROOT) && make clean
-	cd $(CBOR_ROOT) && make CC="$(CC)" AR="$(AR)" LDFLAGS="$(LDFRAGS)" CFLAGS="$(CFLAGS) -Os"
+	cd $(LIBDIR)/tinycbor/ && make clean
+	cd $(LIBDIR)/tinycbor/ && make CC="$(CC)" AR="$(AR)" LDFLAGS="$(LDFLAGS)" CFLAGS="$(CFLAGS) -Os" lib/libtinycbor.a
 
 # Flash the program
 flash: $(OUTPUT_DIRECTORY)/nrf52840_xxaa.hex
@@ -402,7 +407,7 @@ erase:
 	pyocd-flashtool -d debug -t nrf52 -ce
 
 
-SDK_CONFIG_FILE := $(SDK_ROOT)config/nrf52840/config/sdk_config.h
+SDK_CONFIG_FILE := $(SDK_ROOT)/config/nrf52840/config/sdk_config.h
 #SDK_CONFIG_FILE := $(PROJ_DIR)/config/sdk_config.h
 CMSIS_CONFIG_TOOL := $(SDK_ROOT)/external_tools/cmsisconfig/CMSIS_Configuration_Wizard.jar
 sdk_config:

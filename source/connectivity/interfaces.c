@@ -12,26 +12,26 @@ NRF_LOG_MODULE_REGISTER();
 
 //shoud return returncode (0 -> ok)
 static retvalue (*initHooks[])() = {
-    #if MODULE_ENABLED(APP_HID)
+    #if APP_MODULE_ENABLED(HID)
         &hid_init,
     #endif
-    #if MODULE_ENABLED(APP_BLE)
+    #if APP_MODULE_ENABLED(BLE)
         &ble_init,
     #endif
-    #if MODULE_ENABLED(APP_NFC)
+    #if APP_MODULE_ENABLED(NFC)
         &nfc_init
     #endif
 };
 
 //shoud return amount of data processed ?
 static retvalue (*processHooks[])() = {
-    #if MODULE_ENABLED(APP_HID)
+    #if APP_MODULE_ENABLED(HID)
         &hid_process,
     #endif
-    #if MODULE_ENABLED(APP_BLE)
+    #if APP_MODULE_ENABLED(BLE)
         &ble_process,
     #endif
-    #if MODULE_ENABLED(APP_NFC)
+    #if APP_MODULE_ENABLED(NFC)
         &nfc_process
     #endif
 };

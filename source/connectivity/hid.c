@@ -11,7 +11,7 @@ NRF_LOG_MODULE_REGISTER();
 /*            */
 
 
-#if MODULE_ENABLED(APP_HID)
+#if APP_MODULE_ENABLED(HID)
 
 // static declaration
 
@@ -87,82 +87,82 @@ static ret_code_t idle_handle(app_usbd_class_inst_t const * p_inst,
 /**
  * \brief send one HID frame.
  */
-static uint8_t hid_if_frame_send(U2FHID_FRAME * p_frame);
+static uint8_t hid_if_frame_send(HID_FRAME * p_frame);
 
 /**
- * @brief U2FHID process function, which should be executed when data is ready.
+ * @brief HID process function, which should be executed when data is ready.
  *
  */
 static void internal_hid_process(void); //TODO
 
 /**
- * @brief Function for initializing the U2F HID.
+ * @brief Function for initializing the HID.
  *
  * @return Error status.
  *
  */
 static ret_code_t internal_hid_init(void); //TODO
 
-/**@brief Process U2FHID command of every ready channel.
+/**@brief Process HID command of every ready channel.
  * 
  */
 static void channel_process(void);
 
-/**@brief Process U2FHID command
+/**@brief Process HID command
  *
- * @param[in]  p_ch  Pointer to U2F Channel.
+ * @param[in]  p_ch  Pointer to Channel.
  * 
  */
 static void channel_cmd_process(hid_channel_t * p_ch);
 
 
-/**@brief Handle a U2FHID LOCK response
+/**@brief Handle a HID LOCK response
  *
- * @param[in]  p_ch  Pointer to U2F Channel.
+ * @param[in]  p_ch  Pointer to Channel.
  * 
  */
 static void hid_lock_response(hid_channel_t *p_ch);
 
-/**@brief Handle a U2FHID SYNC response
+/**@brief Handle a HID SYNC response
  *
- * @param[in]  p_ch  Pointer to U2F Channel.
+ * @param[in]  p_ch  Pointer to Channel.
  * 
  */
 static void hid_sync_response(hid_channel_t *p_ch);
 
-/**@brief Handle a U2FHID PING response
+/**@brief Handle a HID PING response
  *
- * @param[in]  p_ch  Pointer to U2F Channel.
+ * @param[in]  p_ch  Pointer to Channel.
  * 
  */
 static void hid_ping_response(hid_channel_t *p_ch);
 
-/**@brief Handle a U2FHID MESSAGE response
+/**@brief Handle a HID MESSAGE response
  *
- * @param[in]  p_ch  Pointer to U2F Channel.
+ * @param[in]  p_ch  Pointer to Channel.
  * 
  */
 static void hid_msg_response(hid_channel_t * p_ch);
 
-/**@brief Send a U2F HID status code only
+/**@brief Send a HID status code only
  *
- * @param[in]  p_ch    Pointer to U2F Channel.
- * @param[in]  status  U2F HID status code.
+ * @param[in]  p_ch    Pointer to Channel.
+ * @param[in]  status  HID status code.
  *
  */
 static void hid_status_response(hid_channel_t * p_ch, uint16_t status);
 
 
-/**@brief Handle a U2FHID WINK response
+/**@brief Handle a HID WINK response
  *
- * @param[in]  p_ch  Pointer to U2F Channel.
+ * @param[in]  p_ch  Pointer to Channel.
  * 
  */
 static void hid_wink_response(hid_channel_t *p_ch);
 
-/**@brief Handle a U2FHID INIT response
+/**@brief Handle a HID INIT response
  *
- * @param[in]  p_ch  Pointer to U2F Channel.
+ * @param[in]  p_ch  Pointer to Channel.
  * 
  */
 static void hid_init_response(hid_channel_t *p_ch);
@@ -174,7 +174,7 @@ static void hid_init_response(hid_channel_t *p_ch);
  */
 static void hid_cbor_response(hid_channel_t *p_ch);
 
-/**@brief Send a U2FHID_ERROR response
+/**@brief Send a HID_ERROR response
  *
  * @param[in]  cid   Channel identifier.
  * @param[in]  code  Error code.
@@ -182,31 +182,31 @@ static void hid_cbor_response(hid_channel_t *p_ch);
  */
 static void hid_error_response(uint32_t cid, uint8_t error);
 
-/**@brief Generate new U2F Channel identifier.
+/**@brief Generate new Channel identifier.
  *
  *
  * @retval     New Channel identifier.
  */
 static uint32_t generate_new_cid(void);
 
-/**@brief Find the U2F Channel by cid.
+/**@brief Find the Channel by cid.
  *
  * @param[in]  cid  Channel identifier.
  *
- * @retval     Valid U2F Channel if the procedure was successful, else, NULL.
+ * @retval     Valid Channel if the procedure was successful, else, NULL.
  */
 static hid_channel_t * channel_find(uint32_t cid);
 
-/**@brief Uninitialize U2F Channel.
+/**@brief Uninitialize Channel.
  *
- * @param[in]  p_ch  Pointer to U2F Channel.
+ * @param[in]  p_ch  Pointer to Channel.
  *
  */
 static void channel_deinit(hid_channel_t * p_ch);
 
-/**@brief Initialize U2F Channel.
+/**@brief Initialize Channel.
  *
- * @param[in]  p_ch  Pointer to U2F Channel.
+ * @param[in]  p_ch  Pointer to Channel.
  * @param[in]  cid   Channel identifier.
  *
  */
@@ -219,7 +219,7 @@ static void channel_init(hid_channel_t * p_ch, uint32_t cid);
  */
 static void channel_reset(hid_channel_t * p_ch, uint32_t cid);
 
-/**@brief U2F Channel allocation function.
+/**@brief Channel allocation function.
  *
  *
  * @retval    Valid memory location if the procedure was successful, else, NULL.
@@ -235,7 +235,7 @@ extern bool is_user_button_pressed(void);
  * @brief Reuse HID mouse report descriptor for HID generic class
  */
 APP_USBD_HID_GENERIC_SUBCLASS_REPORT_DESC(ctap_hid_desc,
-                                          APP_USBD_U2F_HID_REPORT_DSC);
+                                          APP_USBD_CTAP_HID_REPORT_DSC);
 
 static const app_usbd_hid_subclass_desc_t * reports[] = {&ctap_hid_desc};
 
@@ -278,13 +278,19 @@ static bool m_report_received = false;
 retvalue hid_init(void)
 {
     NRF_LOG_INFO("init hid");
+    
+    internal_hid_process();
 
     NRF_LOG_INFO("init hid done");
 }
 
 retvalue hid_process(void)
 {
-
+    NRF_LOG_INFO("init hid");
+   
+    internal_hid_process();
+   
+    NRF_LOG_INFO("init hid done");
 }
 
 
@@ -306,11 +312,11 @@ static void usbd_user_ev_handler(app_usbd_event_type_t event)
             break;
         case APP_USBD_EVT_DRV_RESUME:
             m_report_pending = false;
-            bsp_board_led_on(LED_U2F_WINK);
+            bsp_board_led_on(LED_U2F_WINK); //TODO
             break;
         case APP_USBD_EVT_STARTED:
             m_report_pending = false;
-            bsp_board_led_on(LED_U2F_WINK);
+            bsp_board_led_on(LED_U2F_WINK); //TODO
             break;
         case APP_USBD_EVT_STOPPED:
             app_usbd_disable();
@@ -339,7 +345,7 @@ static void usbd_user_ev_handler(app_usbd_event_type_t event)
 /**
  * \brief send one HID frame.
  */
-static uint8_t hid_if_frame_send(U2FHID_FRAME * p_frame)
+static uint8_t hid_if_frame_send(HID_FRAME * p_frame)
 {
     ret_code_t ret;
 
@@ -367,7 +373,7 @@ static uint8_t hid_if_frame_send(U2FHID_FRAME * p_frame)
 
 static uint8_t hid_if_send(uint32_t cid, uint8_t cmd, uint8_t *p_data, size_t size)
 {
-    U2FHID_FRAME frame;
+    HID_FRAME frame;
     int ret;
     size_t frameLen;
     uint8_t seq = 0;
@@ -406,7 +412,7 @@ static uint8_t hid_if_recv(uint32_t * p_cid, uint8_t * p_cmd,
 {
     uint8_t * p_recv_buf;
     size_t recv_size, totalLen, frameLen;
-    U2FHID_FRAME * p_frame;
+    HID_FRAME * p_frame;
     uint8_t seq = 0;
 
     Timer timer;
@@ -418,9 +424,9 @@ static uint8_t hid_if_recv(uint32_t * p_cid, uint8_t * p_cmd,
     p_recv_buf = (uint8_t *)app_usbd_hid_generic_out_report_get(&m_app_ctap_hid,
                                                                 &recv_size);
 
-    if(recv_size != sizeof(U2FHID_FRAME)) return ERR_OTHER;
+    if(recv_size != sizeof(HID_FRAME)) return ERR_OTHER;
 
-    p_frame = (U2FHID_FRAME *)p_recv_buf;
+    p_frame = (HID_FRAME *)p_recv_buf;
 
     if(FRAME_TYPE(*p_frame) != TYPE_INIT) return ERR_INVALID_CMD;
 
@@ -452,9 +458,9 @@ static uint8_t hid_if_recv(uint32_t * p_cid, uint8_t * p_cmd,
                                                                 &m_app_ctap_hid,
                                                                 &recv_size);
 
-        if(recv_size != sizeof(U2FHID_FRAME)) continue;
+        if(recv_size != sizeof(HID_FRAME)) continue;
 
-        p_frame = (U2FHID_FRAME *)p_recv_buf;
+        p_frame = (HID_FRAME *)p_recv_buf;
 
         if(p_frame->cid != *p_cid) continue;
         if(FRAME_TYPE(*p_frame) != TYPE_CONT) return ERR_INVALID_SEQ;
@@ -596,7 +602,7 @@ channel_list_t m_ctap_ch_list = {NULL, NULL};
 static uint8_t m_channel_used_cnt = 0;
 
 
-/**@brief U2F Channel allocation function.
+/**@brief Channel allocation function.
  *
  *
  * @retval    Valid memory location if the procedure was successful, else, NULL.
@@ -626,9 +632,9 @@ static hid_channel_t * channel_alloc(void)
 }
 
 
-/**@brief Initialize U2F Channel.
+/**@brief Initialize Channel.
  *
- * @param[in]  p_ch  Pointer to U2F Channel.
+ * @param[in]  p_ch  Pointer to Channel.
  * @param[in]  cid   Channel identifier.
  *
  */
@@ -667,9 +673,9 @@ static void channel_reset(hid_channel_t * p_ch)
 }
 
 
-/**@brief Uninitialize U2F Channel.
+/**@brief Uninitialize Channel.
  *
- * @param[in]  p_ch  Pointer to U2F Channel.
+ * @param[in]  p_ch  Pointer to Channel.
  *
  */
 static void channel_deinit(hid_channel_t * p_ch)
@@ -698,11 +704,11 @@ static void channel_deinit(hid_channel_t * p_ch)
 }
 
 
-/**@brief Find the U2F Channel by cid.
+/**@brief Find the Channel by cid.
  *
  * @param[in]  cid  Channel identifier.
  *
- * @retval     Valid U2F Channel if the procedure was successful, else, NULL.
+ * @retval     Valid Channel if the procedure was successful, else, NULL.
  */
 static hid_channel_t * channel_find(uint32_t cid)
 {
@@ -721,7 +727,7 @@ static hid_channel_t * channel_find(uint32_t cid)
 }
 
 
-/**@brief Generate new U2F Channel identifier.
+/**@brief Generate new Channel identifier.
  *
  *
  * @retval     New Channel identifier.
@@ -751,7 +757,7 @@ static void hid_error_response(uint32_t cid, uint8_t error)
 
 /**@brief Handle a HID INIT response
  *
- * @param[in]  p_ch  Pointer to U2F Channel.
+ * @param[in]  p_ch  Pointer to Channel.
  * 
  */
 static void hid_init_response(hid_channel_t *p_ch)
@@ -798,9 +804,9 @@ static void hid_init_response(hid_channel_t *p_ch)
 }
 
 
-/**@brief Handle a U2FHID WINK response
+/**@brief Handle a HID WINK response
  *
- * @param[in]  p_ch  Pointer to U2F Channel.
+ * @param[in]  p_ch  Pointer to Channel.
  * 
  */
 static void hid_wink_response(hid_channel_t *p_ch)
@@ -813,7 +819,7 @@ static void hid_wink_response(hid_channel_t *p_ch)
 
 /**@brief Send a HID status code only
  *
- * @param[in]  p_ch    Pointer to U2F Channel.
+ * @param[in]  p_ch    Pointer to Channel.
  * @param[in]  status  HID status code.
  *
  */
@@ -845,9 +851,9 @@ static void hid_cbor_response(hid_channel_t *p_ch)
 }
 
 
-/**@brief Handle a U2FHID MESSAGE response UNIMPLEMETED AND UNSUPPORTED
+/**@brief Handle a HID MESSAGE response UNIMPLEMETED AND UNSUPPORTED
  *
- * @param[in]  p_ch  Pointer to U2F Channel.
+ * @param[in]  p_ch  Pointer to Channel.
  * 
  */
 static void hid_msg_response(hid_channel_t * p_ch)
@@ -856,9 +862,9 @@ static void hid_msg_response(hid_channel_t * p_ch)
     hid_status_response(p_ch, ERR_INVALID_CMD);
 }
 
-/**@brief Handle a U2FHID PING response
+/**@brief Handle a HID PING response
  *
- * @param[in]  p_ch  Pointer to U2F Channel.
+ * @param[in]  p_ch  Pointer to Channel.
  * 
  */
 static void hid_ping_response(hid_channel_t *p_ch)
@@ -868,9 +874,9 @@ static void hid_ping_response(hid_channel_t *p_ch)
 }
 
 
-/**@brief Handle a U2FHID SYNC response
+/**@brief Handle a HID SYNC response
  *
- * @param[in]  p_ch  Pointer to U2F Channel.
+ * @param[in]  p_ch  Pointer to Channel.
  * 
  */
 static void hid_sync_response(hid_channel_t *p_ch)
@@ -881,7 +887,7 @@ static void hid_sync_response(hid_channel_t *p_ch)
 
 /**@brief Handle a HID LOCK response
  *
- * @param[in]  p_ch  Pointer to U2F Channel.
+ * @param[in]  p_ch  Pointer to Channel.
  * 
  */
 static void hid_lock_response(hid_channel_t *p_ch)
@@ -891,15 +897,15 @@ static void hid_lock_response(hid_channel_t *p_ch)
 }
 
 
-/**@brief Process U2FHID command
+/**@brief Process HID command
  *
- * @param[in]  p_ch  Pointer to U2F Channel.
+ * @param[in]  p_ch  Pointer to Channel.
  * 
  */
 static void channel_cmd_process(hid_channel_t * p_ch)
 {
 
-    countdown_ms(&p_ch->timer, U2FHID_TRANS_TIMEOUT);
+    countdown_ms(&p_ch->timer, HID_TRANS_TIMEOUT);
 
     if(p_ch->state != CID_STATE_READY) return;
 
@@ -956,7 +962,7 @@ static void channel_cmd_process(hid_channel_t * p_ch)
     p_ch->state = CID_STATE_IDLE;
 }
 
-/**@brief Process U2FHID command of every ready channel.
+/**@brief Process HID command of every ready channel.
  * 
  */
 static void channel_process(void)
@@ -983,7 +989,7 @@ static void channel_process(void)
 
 
 /**
- * @brief Function for initializing the U2F HID.
+ * @brief Function for initializing the HID.
  *
  * @return Error status.
  *
@@ -1025,7 +1031,7 @@ static ret_code_t internal_hid_init(void)
 
 
 /**
- * @brief U2FHID process function, which should be executed when data is ready.
+ * @brief HID process function, which should be executed when data is ready.
  *
  */
 static void internal_hid_process(void)
@@ -1034,7 +1040,7 @@ static void internal_hid_process(void)
     uint32_t cid;
     uint8_t cmd;
     size_t size;
-    uint8_t buf[U2F_MAX_REQ_SIZE];
+    uint8_t buf[CTAP_MAX_MESSAGE_SIZE]; //TODO
 
     hid_if_process();
 
@@ -1065,5 +1071,5 @@ static void internal_hid_process(void)
 }
 
 
-#endif //MODULE_ENABLED(APP_HID)
+#endif //MODULE_ENABLED(HID)
 

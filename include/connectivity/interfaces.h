@@ -7,15 +7,15 @@ extern "C" {
 
 #include "util.h"
 
-#if MODULE_ENABLED(APP_BLE)
+#if APP_MODULE_ENABLED(BLE)
 #include "ble.h"
 #endif
 
-#if MODULE_ENABLED(APP_NFC)
+#if APP_MODULE_ENABLED(NFC)
 #include "nfc.h"
 #endif
 
-#if MODULE_ENABLED(APP_USB)
+#if APP_MODULE_ENABLED(USB)
 #include "usb.h"
 #endif
 

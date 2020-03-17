@@ -30,36 +30,18 @@ NRF_LOG_MODULE_REGISTER();
 
 //#include "sha256.h"
 #include "uECC.h"
-#include "aes.h"
+//#include "aes.h"
 #include "ctap.h"
-#include "device.h"
+#include "hal.h"
 // stuff for SHA512
 //#include "sha2.h"
 #include "blockwise.h"
-#include APP_CONFIG
-#include "log.h"
+#include "app_config.h"
 
 // SDK headers
 #include "nrf_crypto.h"
 #include "nrf_crypto_aes.h"
 #include "nrf_crypto_error.h"
-
-typedef enum
-{
-    MBEDTLS_ECP_DP_NONE = 0,
-    MBEDTLS_ECP_DP_SECP192R1,      /*!< 192-bits NIST curve  */
-    MBEDTLS_ECP_DP_SECP224R1,      /*!< 224-bits NIST curve  */
-    MBEDTLS_ECP_DP_SECP256R1,      /*!< 256-bits NIST curve  */
-    MBEDTLS_ECP_DP_SECP384R1,      /*!< 384-bits NIST curve  */
-    MBEDTLS_ECP_DP_SECP521R1,      /*!< 521-bits NIST curve  */
-    MBEDTLS_ECP_DP_BP256R1,        /*!< 256-bits Brainpool curve */
-    MBEDTLS_ECP_DP_BP384R1,        /*!< 384-bits Brainpool curve */
-    MBEDTLS_ECP_DP_BP512R1,        /*!< 512-bits Brainpool curve */
-    MBEDTLS_ECP_DP_CURVE25519,           /*!< Curve25519               */
-    MBEDTLS_ECP_DP_SECP192K1,      /*!< 192-bits "Koblitz" curve */
-    MBEDTLS_ECP_DP_SECP224K1,      /*!< 224-bits "Koblitz" curve */
-    MBEDTLS_ECP_DP_SECP256K1,      /*!< 256-bits "Koblitz" curve */
-} mbedtls_ecp_group_id;
 
 //ret values
 static ret_code_t                           err_code;
@@ -92,7 +74,7 @@ void crypto_init(void)
     // Initialize nrf_crypto
     memset(NULLS, 0, 32);
     err_code = nrf_crypto_init();
-    VERIFY_SUCCESS(err_code);
+    //VERIFY_SUCCESS(err_code); //TODO
 }
 
 void crypto_sha256_init(void)

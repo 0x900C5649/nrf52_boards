@@ -8,8 +8,8 @@
 #include <string.h>
 
 // see nrf_sdk ./components/libraries/util/nordic_common.h (TODO licence)
-#define MODULE_ENABLED( module ) \
-    ((defined(module ## _ENABLED) && (module ## _ENABLED)) ? 1 : 0)
+#define APP_MODULE_ENABLED( module ) \
+    ((defined(APP_ ## module ## _ENABLED) && (module ## _ENABLED)) ? 1 : 0)
 
 
 typedef uint8_t retvalue;

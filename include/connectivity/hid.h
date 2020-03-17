@@ -21,6 +21,24 @@ extern "C" {
 #define TYPE_INIT               0x80    // Initial frame identifier
 #define TYPE_CONT               0x00    // Continuation frame identifier
 
+typedef struct {
+  uint32_t cid;                        // Channel identifier
+  union {
+    uint8_t type;                      // Frame type - b7 defines type
+    struct {
+      uint8_t cmd;                     // Command - b7 set
+      uint8_t bcnth;                   // Message byte count - high part
+      uint8_t bcntl;                   // Message byte count - low part
+      uint8_t data[HID_RPT_SIZE - 7];  // Data payload
+    } init;
+    struct {
+      uint8_t seq;                     // Sequence number - b7 cleared
+      uint8_t data[HID_RPT_SIZE - 5];  // Data payload
+    } cont;
+  };
+} HID_FRAME;
+
+
 // HID usage- and usage-page definitions
 
 #define FIDO_USAGE_PAGE         0xf1d0  // FIDO alliance HID usage page
@@ -37,7 +55,7 @@ extern "C" {
 #define HID_FW_VERSION_MINOR 0       // Minor version number
 #define HID_FW_VERSION_BUILD 0       // Build version number
 
-// U2FHID native commands
+// HID native commands
 
 #define HID_PING         (TYPE_INIT | 0x01)  // Echo data through local processor only
 #define HID_MSG          (TYPE_INIT | 0x03)  // Send U2F message frame
@@ -51,7 +69,7 @@ extern "C" {
 #define HID_VENDOR_FIRST (TYPE_INIT | 0x40)  // First vendor defined command
 #define HID_VENDOR_LAST  (TYPE_INIT | 0x7f)  // Last vendor defined command
     
-// U2FHID_INIT command defines
+// HID_INIT command defines
 
 #define INIT_NONCE_SIZE         8       // Size of channel initialization challenge
 #define CAPABILITY_WINK         0x01    // If set to 1, authenticator implements CTAPHID_WINK function 
@@ -105,8 +123,8 @@ typedef struct __attribute__ ((__packed__)) {
 /**
  * @brief HID generic class endpoint number.
  * */
-#define U2F_HID_EPIN       NRF_DRV_USBD_EPIN1
-#define U2F_HID_EPOUT      NRF_DRV_USBD_EPOUT1
+#define HID_EPIN       NRF_DRV_USBD_EPIN1
+#define HID_EPOUT      NRF_DRV_USBD_EPOUT1
 
 /**
  * @brief Number of reports defined in report descriptor.
@@ -137,8 +155,8 @@ typedef struct __attribute__ ((__packed__)) {
  * */
 #define ENDPOINT_LIST()                                  \
 (                                                        \
-        U2F_HID_EPIN,                                    \
-        U2F_HID_EPOUT                                    \
+        HID_EPIN,                                        \
+        HID_EPOUT                                        \
 )
 
 /**
@@ -185,7 +203,7 @@ typedef struct channel {
     uint8_t resp[CTAP_RESPONSE_BUFFER_SIZE+1]; //TODO
 } hid_channel_t;
 
-typedef struct __attribute__ ((__packed__))
+typedef struct __attribute__ ((__packed__)) //TODO REMOVE
 {
     uint8_t cla;
     uint8_t ins;
@@ -194,7 +212,7 @@ typedef struct __attribute__ ((__packed__))
     uint8_t lc1;
     uint8_t lc2;
     uint8_t lc3;
-} hid_req_apdu_header_t;
+} hid_req_apdu_header_t; 
 
 
 retvalue hid_init    (void);

@@ -78,7 +78,7 @@ extern "C" {
 #define BSP_BUTTON_0   BUTTON_1
 */
 
-#define BUTTONS_NUMBER 4
+#define BUTTONS_NUMBER 1
 
 #define BUTTON_1       NRF_GPIO_PIN_MAP(0,18)
 #define BUTTON_2       12
@@ -88,12 +88,13 @@ extern "C" {
 
 #define BUTTONS_ACTIVE_STATE 0
 
-#define BUTTONS_LIST { BUTTON_1, BUTTON_2, BUTTON_3, BUTTON_4 }
+//#define BUTTONS_LIST { BUTTON_1, BUTTON_2, BUTTON_3, BUTTON_4 }
+#define BUTTONS_LIST { BUTTON_1 }
 
 #define BSP_BUTTON_0   BUTTON_1
-#define BSP_BUTTON_1   BUTTON_2
+/*#define BSP_BUTTON_1   BUTTON_2
 #define BSP_BUTTON_2   BUTTON_3
-#define BSP_BUTTON_3   BUTTON_4
+#define BSP_BUTTON_3   BUTTON_4*/
 
 #define LED_U2F_WINK   2  // BLUE LED
 
