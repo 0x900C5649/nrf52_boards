@@ -26,6 +26,7 @@
 
 /* LOG settings*/
 #define NRF_LOG_ENABLED 1
+#define NRF_LOG_DEFERRED 0
 #define NRF_LOG_DEFAULT_LEVEL 4
 
 /* LOG backend */
@@ -44,10 +45,28 @@
 #define NRFX_TIMER_ENABLED 1
 #define NRFX_TIMER0_ENABLED 1
 #define NRFX_TIMER1_ENABLED 1
-#define NRFX_TIMER2_ENABLED 1
-#define NRFX_TIMER3_ENABLED 1
-#define NRFX_TIMER4_ENABLED 1
+//#define NRFX_TIMER2_ENABLED 1
+//#define NRFX_TIMER3_ENABLED 1
+//#define NRFX_TIMER4_ENABLED 1
 
+/* softdevice */
+#define NRF_SDH_ENABLED 1
+#define NRF_SDH_SOC_ENABLED 1
+
+/* FDS */
+#define FDS_ENABLED 1
+#define FDS_BACKEND 2
+#define FDS_VIRTUAL_PAGES 8
+#define FDS_CRC_CHECK_ON_READ 0
+#define FDS_CRC_CHECK_ON_WRITE 0
+#define CRC16_ENABLED 0
+#define FDS_OP_QUEUE_SIZE 20
+#define APP_SCHEDULER_ENABLED 1
+// probably wrong
+//#define DFU_APP_DATA_RESERVED 1
+
+/* FSTORAGE */
+#define NRF_FSTORAGE_ENABLED 1
 
 /* other */
 #define APP_TIMER_ENABLED 1

@@ -11,7 +11,4 @@
 #define APP_MODULE_ENABLED( module ) \
     ((defined(APP_ ## module ## _ENABLED) && (module ## _ENABLED)) ? 1 : 0)
 
-
-typedef uint8_t retvalue;
-
 #endif // _util_h

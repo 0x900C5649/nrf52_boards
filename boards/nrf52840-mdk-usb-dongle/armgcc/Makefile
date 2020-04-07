@@ -1,6 +1,7 @@
 PROJECT_NAME     := nrf52_u2f_nrf52840_mdk_usb_dongle
 TARGETS          := nrf52840_xxaa
 OUTPUT_DIRECTORY := _build
+VERSION          := 2
 
 SDK_ROOT := ../../../nrf_sdks/nRF5_SDK_16.0.0_98a08e2
 #SDK_ROOT := /home/steffensky/SDKs/nRF5_SDK_16.0.0_98a08e2
@@ -16,7 +17,7 @@ LIBDIR := $(PROJ_DIR)/../../library
 
 
 $(OUTPUT_DIRECTORY)/nrf52840_xxaa.out: \
-  LINKER_SCRIPT  := nrf52_u2f_gcc_nrf52.ld
+  LINKER_SCRIPT  := nrf52_fido2_gcc_nrf52.ld
 
 # Source files common to all targets
 SRC_FILES += \
@@ -35,6 +36,8 @@ SRC_FILES += \
   $(SDK_ROOT)/components/libraries/util/app_error_weak.c \
   $(SDK_ROOT)/components/libraries/crc16/crc16.c \
   $(SDK_ROOT)/components/libraries/fds/fds.c \
+  $(SDK_ROOT)/components/libraries/fstorage/nrf_fstorage_sd.c \
+  $(SDK_ROOT)/components/libraries/crc16/crc16.c \
   $(SDK_ROOT)/components/libraries/fifo/app_fifo.c \
   $(SDK_ROOT)/components/libraries/scheduler/app_scheduler.c \
   $(SDK_ROOT)/components/libraries/timer/app_timer.c \
@@ -57,7 +60,6 @@ SRC_FILES += \
   $(SDK_ROOT)/external/fprintf/nrf_fprintf.c \
   $(SDK_ROOT)/external/fprintf/nrf_fprintf_format.c \
   $(SDK_ROOT)/components/libraries/fstorage/nrf_fstorage.c \
-  $(SDK_ROOT)/components/libraries/fstorage/nrf_fstorage_nvmc.c \
   $(SDK_ROOT)/components/libraries/mem_manager/mem_manager.c \
   $(SDK_ROOT)/components/libraries/memobj/nrf_memobj.c \
   $(SDK_ROOT)/components/libraries/pwr_mgmt/nrf_pwr_mgmt.c \
@@ -68,8 +70,6 @@ SRC_FILES += \
   $(SDK_ROOT)/integration/nrfx/legacy/nrf_drv_clock.c \
   $(SDK_ROOT)/integration/nrfx/legacy/nrf_drv_power.c \
   $(SDK_ROOT)/integration/nrfx/legacy/nrf_drv_uart.c \
-  $(SDK_ROOT)/components/drivers_nrf/nrf_soc_nosd/nrf_nvic.c \
-  $(SDK_ROOT)/components/drivers_nrf/nrf_soc_nosd/nrf_soc.c \
   $(SDK_ROOT)/modules/nrfx/drivers/src/nrfx_clock.c \
   $(SDK_ROOT)/modules/nrfx/drivers/src/nrfx_gpiote.c \
   $(SDK_ROOT)/modules/nrfx/drivers/src/nrfx_power.c \
@@ -184,6 +184,8 @@ SRC_FILES += \
   $(SDK_ROOT)/external/mbedtls/library/x509_crt.c \
   $(SDK_ROOT)/external/mbedtls/library/x509_csr.c \
   $(SDK_ROOT)/external/mbedtls/library/xtea.c \
+  $(SDK_ROOT)/components/softdevice/common/nrf_sdh.c \
+  $(SDK_ROOT)/components/softdevice/common/nrf_sdh_soc.c \
   $(SDK_ROOT)/components/libraries/crypto/backend/cc310/cc310_backend_aes.c \
   $(SDK_ROOT)/components/libraries/crypto/backend/cc310/cc310_backend_aes_aead.c \
   $(SDK_ROOT)/components/libraries/crypto/backend/cc310/cc310_backend_chacha_poly_aead.c \
@@ -209,6 +211,8 @@ SRC_FILES += \
   $(SRC_DIR)/timer.c \
   $(SRC_DIR)/hal.c \
   $(SRC_DIR)/log.c \
+  $(SRC_DIR)/storage.c \
+
 #  $(SRC_DIR)/u2f_hid.c \
 #  $(SRC_DIR)/u2f_hid_if.c \
 #  $(SRC_DIR)/u2f_impl.c \
@@ -219,6 +223,8 @@ SRC_FILES += \
 #  $(SDK_ROOT)/external/segger_rtt/SEGGER_RTT.c \
 #  $(SDK_ROOT)/external/segger_rtt/SEGGER_RTT_Syscalls_GCC.c \
 #  $(SDK_ROOT)/external/segger_rtt/SEGGER_RTT_printf.c \
+#  $(SDK_ROOT)/components/drivers_nrf/nrf_soc_nosd/nrf_nvic.c \
+#  $(SDK_ROOT)/components/drivers_nrf/nrf_soc_nosd/nrf_soc.c \
 
 
 # Include folders common to all targets
@@ -273,7 +279,6 @@ INC_FOLDERS += \
   $(SDK_ROOT)/components/libraries/mutex \
   $(SDK_ROOT)/components/libraries/delay \
   $(SDK_ROOT)/components/libraries/atomic_fifo \
-  $(SDK_ROOT)/components/drivers_nrf/nrf_soc_nosd \
   $(SDK_ROOT)/components/libraries/atomic \
   $(SDK_ROOT)/components/boards \
   $(SDK_ROOT)/components/libraries/mem_manager \
@@ -288,12 +293,18 @@ INC_FOLDERS += \
   $(SDK_ROOT)/components/libraries/log/src \
   $(SDK_ROOT)/external/segger_rtt \
   $(SDK_ROOT)/modules/nrfx/drivers \
+  $(SDK_ROOT)/components/softdevice/s140/headers/nrf52 \
+  $(SDK_ROOT)/components/softdevice/s140/headers \
+  $(SDK_ROOT)/components/softdevice/common \
   $(SDK_ROOT)/config/nrf52840/config \
   $(LIBDIR)/tinycbor/src \
   $(PROJ_DIR)/config \
   $(INCL_DIR) \
   $(PROJ_DIR) \
 
+
+# Removed
+#  $(SDK_ROOT)/components/drivers_nrf/nrf_soc_nosd \
 
 # Libraries common to all targets
 LIB_FILES += \
@@ -304,26 +315,32 @@ LIB_FILES += \
 
 
 # DEFINITIONS
-DEFINES = -DAES256=1 -DUSE_APP_CONFIG
+DEFINES = -DAES256=1 \
+          -DUSE_APP_CONFIG \
+		  -DSOFTDEVICE_PRESENT \
+		  -DNRF_SD_BLE_API_VERSION=7 \
+		  -DS140 \
+          -DCONFIG_RANDOM_AES_KEY_ENABLED \
+		  -DBOARD_CUSTOM \
+          -DFLOAT_ABI_HARD \
+          -DMBEDTLS_CONFIG_FILE=\"nrf_crypto_mbedtls_config.h\" \
+          -DNRF52840_XXAA \
+          -DNRF_CRYPTO_MAX_INSTANCE_COUNT=1 \
+          -DuECC_ENABLE_VLI_API=0 \
+          -DuECC_OPTIMIZATION_LEVEL=3 \
+          -DuECC_SQUARE_FUNC=0 \
+          -DuECC_SUPPORT_COMPRESSED_POINT=0 \
+          -DuECC_VLI_NATIVE_LITTLE_ENDIAN=1 \
+
 
 # Optimization flags
-OPT = $(DEFINES) -O3 -g3
+OPT = $(DEFINES) -O0 -g3
+#-O3 -g3
 # Uncomment the line below to enable link time optimization
 #OPT += -flto
 
 # C flags common to all targets
 CFLAGS += $(OPT)
-CFLAGS += -DCONFIG_RANDOM_AES_KEY_ENABLED
-CFLAGS += -DBOARD_CUSTOM
-CFLAGS += -DFLOAT_ABI_HARD
-CFLAGS += -DMBEDTLS_CONFIG_FILE=\"nrf_crypto_mbedtls_config.h\"
-CFLAGS += -DNRF52840_XXAA
-CFLAGS += -DNRF_CRYPTO_MAX_INSTANCE_COUNT=1
-CFLAGS += -DuECC_ENABLE_VLI_API=0
-CFLAGS += -DuECC_OPTIMIZATION_LEVEL=3
-CFLAGS += -DuECC_SQUARE_FUNC=0
-CFLAGS += -DuECC_SUPPORT_COMPRESSED_POINT=0
-CFLAGS += -DuECC_VLI_NATIVE_LITTLE_ENDIAN=1
 CFLAGS += -mcpu=cortex-m4
 CFLAGS += -mthumb -mabi=aapcs
 CFLAGS += -Wall -Werror -Wno-unused-function
@@ -336,6 +353,7 @@ CFLAGS += -fno-builtin -fshort-enums
 CXXFLAGS += $(OPT)
 
 # Assembler flags common to all targets
+ASMFLAGS += $(OPT)
 ASMFLAGS += -g3
 ASMFLAGS += -mcpu=cortex-m4
 ASMFLAGS += -mthumb -mabi=aapcs
@@ -382,6 +400,7 @@ default: nrf52840_xxaa
 help:
 	@echo following targets are available:
 	@echo		nrf52840_xxaa
+	@echo       flash_softdevice
 	@echo		sdk_config - starting external tool for editing sdk_config.h
 	@echo		flash      - flashing binary
 
@@ -392,19 +411,24 @@ include $(TEMPLATE_PATH)/Makefile.common
 
 $(foreach target, $(TARGETS), $(call define_target, $(target)))
 
-.PHONY: flash erase tinycbor
+.PHONY: erase tinycbor pkg flash
 
 tinycbor:
 	cd $(LIBDIR)/tinycbor/ && make clean
 	cd $(LIBDIR)/tinycbor/ && make CC="$(CC)" AR="$(AR)" LDFLAGS="$(LDFLAGS)" CFLAGS="$(CFLAGS) -Os" lib/libtinycbor.a
 
-# Flash the program
-flash: $(OUTPUT_DIRECTORY)/nrf52840_xxaa.hex
-	@echo Flashing: $<
-	pyocd-flashtool -t nrf52 -ce $<
+merge: default
+	@echo "Merging program and softdevice"
+	mergehex -m $(OUTPUT_DIRECTORY)/nrf52840_xxaa.hex $(SDK_ROOT)/components/softdevice/s140/hex/s140_nrf52_7.0.1_softdevice.hex -o $(OUTPUT_DIRECTORY)/nrf52-fido2_softdevice.hex
 
-erase:
-	pyocd-flashtool -d debug -t nrf52 -ce
+pkg: default
+	@echo "creating dfu package"
+	nrfutil pkg generate --hw-version 52 --application-version $(VERSION) --application $(OUTPUT_DIRECTORY)/nrf52840_xxaa.hex --sd-req 0xCA _build/nrf52-fido2_app_$(VERSION).zip
+
+flash: pkg
+	@echo "flashing application"
+	nrfutil dfu usb-serial -p /dev/ttyACM0 -pkg $(OUTPUT_DIRECTORY)/nrf52-fido2_app_$(VERSION).zip
+
 
 
 SDK_CONFIG_FILE := $(SDK_ROOT)/config/nrf52840/config/sdk_config.h

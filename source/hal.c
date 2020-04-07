@@ -1,10 +1,13 @@
 #include "hal.h"
+//#include "storage.h"
 
 #include "nrf.h"
 #include "app_util_platform.h"
 #include "nrf_drv_clock.h"
 #include "nrf_gpio.h"
 #include "nrf_drv_power.h"
+
+#include "nrf_sdh.h"
 
 #include "bsp_cli.h"
 #include "nrf_cli.h"
@@ -74,13 +77,13 @@ static void bsp_event_callback(bsp_event_t ev)
 }
 
 
-void init_bsp(void)
+ret_code_t init_bsp(void)
 {
     APP_GPIOTE_INIT(4); 
     NRF_LOG_DEBUG("init_bsp start");
     NRF_LOG_DEBUG("timers: %d", TIMER_COUNT)
     ret_code_t ret;
-    ret = bsp_init(BSP_INIT_LED | BSP_INIT_BUTTONS, bsp_event_callback);
+    ret = bsp_init(BSP_INIT_BUTTONS, bsp_event_callback);
     NRF_LOG_DEBUG("bsp_init returned: %d", ret)
     //APP_ERROR_CHECK(ret);
     //if VERIFY_MODULE_INITIALIZED_BOOL(BSP)
@@ -102,6 +105,7 @@ void init_bsp(void)
         NRF_LOG_ERROR("init_bsp: SysTick configuration error!");
         while(1);
     }
+    return ret;
 }
 
 void init_cli(void)
@@ -118,5 +122,52 @@ void init_cli(void)
     /**APP_ERROR_CHECK(ret);*/
     /**ret = nrf_cli_start(&m_cli_uart);*/
     /**APP_ERROR_CHECK(ret);*/
+}
+
+ret_code_t init_device(void)
+{
+    NRF_LOG_DEBUG("init_device");
+    ret_code_t ret;
+    
+    NRF_LOG_DEBUG("init bsp");
+    NRF_LOG_FLUSH();
+    ret = init_bsp();
+    APP_ERROR_CHECK(ret);
+    
+/*    NRF_LOG_DEBUG("init sd");
+    NRF_LOG_FLUSH();
+    ret = init_softdevice();
+    APP_ERROR_CHECK(ret); */
+    
+    NRF_LOG_DEBUG("init device done");
+    NRF_LOG_FLUSH();
+
+    //init_cli();
+    return ret;
+}
+
+void board_reboot(void)
+{
+
+}
+
+
+void power_manage(void)
+{
+#ifdef SOFTDEVICE_PRESENT
+    (void) sd_app_evt_wait();
+#else
+    __WFE();
+#endif
+}
+
+ret_code_t init_softdevice(void)
+{
+    ret_code_t err_code;
+    // Attempt to enable the SoftDevice
+    err_code = nrf_sdh_enable_request();
+    APP_ERROR_CHECK(err_code);
+    
+    return err_code;
 }
 
