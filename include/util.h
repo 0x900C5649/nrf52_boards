@@ -9,6 +9,6 @@
 
 // see nrf_sdk ./components/libraries/util/nordic_common.h (TODO licence)
 #define APP_MODULE_ENABLED( module ) \
-    ((defined(APP_ ## module ## _ENABLED) && (module ## _ENABLED)) ? 1 : 0)
+    ((defined(APP_ ## module ## _ENABLED) && (APP_ ## module ## _ENABLED)) ? 1 : 0)
 
 #endif // _util_h

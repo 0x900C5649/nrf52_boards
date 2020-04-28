@@ -46,6 +46,12 @@
 #include "app_config.h"
 #include "hal.h"
 #include "storage.h"
+#include "crypto.h"
+#include "tests.h"
+#include "interfaces.h"
+#include "ctap.h"
+#include "timer_platform.h"
+#include "timer_interface.h"
 
 #include "bsp_cli.h"
 #include "nrf_cli.h"
@@ -71,8 +77,6 @@ NRF_LOG_MODULE_REGISTER();
 //           '\r',
 //            8);
 
-
-
 int main(void)
 {
     ret_code_t ret;
@@ -81,110 +85,41 @@ int main(void)
     APP_ERROR_CHECK(ret);
     
     NRF_LOG_DEBUG("log initialised");
-/*
-    ret = nrf_drv_clock_init();
-    APP_ERROR_CHECK(ret);
     
-    NRF_LOG_DEBUG("drv_clock_init");
-    NRF_LOG_FLUSH();
-
-    nrf_drv_clock_lfclk_request(NULL);
-
-    while(!nrf_drv_clock_lfclk_is_running())
-    {
-        // Just waiting 
-    }
-    NRF_LOG_DEBUG("lfclk_is_running");
-    NRF_LOG_FLUSH();
-*/ 
-    ret = init_softdevice();
-    APP_ERROR_CHECK(ret);
-    NRF_LOG_DEBUG("sd inited");
-
-    ret = app_timer_init();
-    APP_ERROR_CHECK(ret);
-    
-    NRF_LOG_DEBUG("timer_init");
-    NRF_LOG_FLUSH();
-
     ret = init_device();
     APP_ERROR_CHECK(ret);
     
-    NRF_LOG_DEBUG("initing storage");
-    NRF_LOG_FLUSH();
+    NRF_LOG_INFO("initializing crypto");
+    crypto_init(); //TODO unify return values
 
-    ret = init_storage();
-    APP_ERROR_CHECK(ret);
+    resetStorage();
+    
+    NRF_LOG_INFO("init ctap");
+    ctap_init();
 
-    NRF_LOG_DEBUG("init bsp + cli");
-    NRF_LOG_FLUSH();
+    NRF_LOG_INFO("init interfaces");
+    initIfaces();
+
+//    test_flash();
+//    test_crypto();
+
+    /**Timer timer;*/
+    /**countdown_ms(&timer, 3000);*/
     
     NRF_LOG_INFO("Hello FIDO U2F Security Key!");
-
-//    ret = u2f_hid_init();
-//    if(ret != NRF_SUCCESS)
-//    {
-//        NRF_LOG_ERROR("Fail to initialize U2F HID![%d]", ret);
-//    }
-//    APP_ERROR_CHECK(ret);
     
-    NRF_LOG_DEBUG("testing storage now");
-    NRF_LOG_FLUSH();
-    
-    // delete it
-    reset_ctap_rk();
-    NRF_LOG_DEBUG("delete rks")
-    NRF_LOG_FLUSH();
-    
-    // initialize test data
-    uint8_t testdata1[] = {0x81, 0x18, 0xF1, 0xD0};
-    uint8_t testdata2[] = {0x18, 0x81, 0xF1, 0xD0};
-    CTAP_residentKey input;
-    CTAP_residentKey output;
-    NRF_LOG_DEBUG("memcpy");
-    NRF_LOG_FLUSH();
-    memcpy(&input, &testdata1, 4);
-    
-    // write it to flash
-    store_ctap_rk(1, &input);
-    NRF_LOG_DEBUG("write test rk");
-    NRF_LOG_FLUSH();
-
-    // read it again
-    load_ctap_rk(1, &output);
-    NRF_LOG_DEBUG("load test rk");
-    NRF_LOG_FLUSH();
-
-    // print read data
-    NRF_LOG_HEXDUMP_DEBUG(&output,4)
-    NRF_LOG_FLUSH();
-
-    // update entry
-    memcpy(&input, &testdata2, 4);
-    overwrite_ctap_rk(1, &input);
-
-    // read it
-    load_ctap_rk(1, &output);
-    NRF_LOG_DEBUG("load test rk");
-    NRF_LOG_FLUSH();
-
-    // print it
-    NRF_LOG_HEXDUMP_DEBUG(&output,4)
-
-    // delete it
-    void reset_ctap_rk();
-    NRF_LOG_DEBUG("delete rks")
-    NRF_LOG_FLUSH();
-
     while (true)
     {
-
+        processIfaces();
 //        u2f_hid_process();
-
 //        nrf_cli_process(&m_cli_uart);
-//        NRF_LOG_INFO("THIS IS A TEST")
+        /**if(has_timer_expired(&timer)){*/
+
+            /**NRF_LOG_INFO("THIS IS A TEST");*/
+        /**}*/
         if (is_user_button_pressed()){
             NRF_LOG_INFO("button pressed");
+            NRF_LOG_DEBUG("current %d, %d", app_timer_cnt_get(), app_timer_cnt_diff_compute(app_timer_cnt_get(), 76920));
         }
 
         UNUSED_RETURN_VALUE(NRF_LOG_PROCESS());

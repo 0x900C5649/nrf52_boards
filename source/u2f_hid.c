@@ -484,7 +484,7 @@ static void u2f_hid_lock_response(u2f_channel_t *p_ch)
 static void u2f_channel_cmd_process(u2f_channel_t * p_ch)
 {
 
-    countdown_ms(&p_ch->timer, U2FHID_TRANS_TIMEOUT);
+    countdown_ms(&p_ch->timer, HID_TRANS_TIMEOUT);
 
     if(p_ch->state != CID_STATE_READY) return;
 

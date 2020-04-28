@@ -7,23 +7,21 @@ extern "C" {
 
 #include "util.h"
 
-#if APP_MODULE_ENABLED(BLE)
-#include "ble.h"
-#endif
 
-#if APP_MODULE_ENABLED(NFC)
-#include "nfc.h"
-#endif
+enum
+{
+    CTAP_STATUS_IDLE = 0,
+    CTAP_STATUS_PROCESSING,
+    CTAP_STATUS_UPNEEDED
+};
 
-#if APP_MODULE_ENABLED(USB)
-#include "usb.h"
-#endif
+void initIfaces();
+void processIfaces();
+void shutdownIfaces();
 
-
-retvalue initIfaces();
-retvalue processIfaces();
-retvalue shutdownIfaces();
-
+//status for interfaces (e.g. hid keepalive)
+void device_set_status(uint32_t status);
+//void ctaphid_update_status(int8_t status)
 
 #ifdef __cplusplus
 } //extern c

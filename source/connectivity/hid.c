@@ -2,16 +2,21 @@
 #include "util.h"
 #include "hal.h"
 
+#include "timer_interface.h"
+#include "ctap.h"
+
+#include "mem_manager.h"
+#include "app_timer.h"
+
 /*  LOG INIT  */
 #define NRF_LOG_MODULE_NAME hid
 
 #include "nrf_log.h"
+#include "nrf_log_ctrl.h"
 
 NRF_LOG_MODULE_REGISTER();
 /*            */
 
-
-#if APP_MODULE_ENABLED(HID)
 
 // static declaration
 
@@ -150,7 +155,7 @@ static void hid_msg_response(hid_channel_t * p_ch);
  * @param[in]  status  HID status code.
  *
  */
-static void hid_status_response(hid_channel_t * p_ch, uint16_t status);
+static void hid_status_response(hid_channel_t * p_ch, uint8_t status);
 
 
 /**@brief Handle a HID WINK response
@@ -217,7 +222,7 @@ static void channel_init(hid_channel_t * p_ch, uint32_t cid);
  * @param[in]  p_ch  Pointer to Channel.
  *
  */
-static void channel_reset(hid_channel_t * p_ch, uint32_t cid);
+static void channel_reset(hid_channel_t * p_ch);
 
 /**@brief Channel allocation function.
  *
@@ -275,22 +280,18 @@ static bool m_report_received = false;
 
 
 
-retvalue hid_init(void)
+void hid_init(void)
 {
     NRF_LOG_INFO("init hid");
     
-    internal_hid_process();
+    internal_hid_init();
 
     NRF_LOG_INFO("init hid done");
 }
 
-retvalue hid_process(void)
+void hid_process(void)
 {
-    NRF_LOG_INFO("init hid");
-   
     internal_hid_process();
-   
-    NRF_LOG_INFO("init hid done");
 }
 
 
@@ -420,7 +421,6 @@ static uint8_t hid_if_recv(uint32_t * p_cid, uint8_t * p_cmd,
 
     if(!m_report_received) return ERR_OTHER+1;
     m_report_received = false;
-
     p_recv_buf = (uint8_t *)app_usbd_hid_generic_out_report_get(&m_app_ctap_hid,
                                                                 &recv_size);
 
@@ -437,13 +437,15 @@ static uint8_t hid_if_recv(uint32_t * p_cid, uint8_t * p_cmd,
     frameLen = MIN(sizeof(p_frame->init.data), totalLen);
 
     *p_size = totalLen;
-
+    
     memcpy(p_data, p_frame->init.data, frameLen);
     totalLen -= frameLen;
     p_data += frameLen;
+    NRF_LOG_DEBUG("hid_if_recv");
 
     while(totalLen)
     {
+        NRF_LOG_INFO("received and processing something");
         while(!m_report_received)
         {
             while (app_usbd_event_queue_process())
@@ -486,16 +488,18 @@ static uint8_t hid_if_recv(uint32_t * p_cid, uint8_t * p_cmd,
 static void hid_user_ev_handler(app_usbd_class_inst_t const * p_inst,
                                 app_usbd_hid_user_event_t event)
 {
-
     switch (event)
     {
         case APP_USBD_HID_USER_EVT_OUT_REPORT_READY:
         {
+            /**NRF_LOG_DEBUG("APP_USBD_...OUT_REPORT_READY");*/
             m_report_received = true;
             break;
         }
         case APP_USBD_HID_USER_EVT_IN_REPORT_DONE:
         {
+            /**NRF_LOG_DEBUG("APP_USBD_...IN_REPORT_DONE");*/
+            //m_report_received = true;
             m_report_pending = false;
             break;
         }
@@ -526,6 +530,8 @@ static void hid_user_ev_handler(app_usbd_class_inst_t const * p_inst,
 static ret_code_t idle_handle(app_usbd_class_inst_t const * p_inst,
                               uint8_t report_id)
 {
+    NRF_LOG_INFO("idle handle");
+    
     switch (report_id)
     {
         case 0:
@@ -549,21 +555,27 @@ static uint32_t hid_if_init(void)
 	static const app_usbd_config_t usbd_config = {
 	    .ev_state_proc = usbd_user_ev_handler
 	};
-
+    
+    NRF_LOG_INFO("USBD inited");
+    NRF_LOG_INFO("HID_EPIN: %x", HID_EPIN);
+    NRF_LOG_INFO("HID_EPOUT: %x", HID_EPOUT);
 	ret = app_usbd_init(&usbd_config);
     APP_ERROR_CHECK(ret);
 
     app_usbd_class_inst_t const * class_inst;
     class_inst = app_usbd_hid_generic_class_inst_get(&m_app_ctap_hid);
-
+    
+    NRF_LOG_DEBUG("set idle handler");
     ret = hid_generic_idle_handler_set(class_inst, idle_handle);
     APP_ERROR_CHECK(ret);
 
+    NRF_LOG_DEBUG("class append");
     ret = app_usbd_class_append(class_inst);
     APP_ERROR_CHECK(ret);
-
+    
     if (USBD_POWER_DETECTION)
     {
+        NRF_LOG_DEBUG("power events enable");
         ret = app_usbd_power_events_enable();
         APP_ERROR_CHECK(ret);
     }
@@ -574,7 +586,7 @@ static uint32_t hid_if_init(void)
         app_usbd_enable();
         app_usbd_start();
     }
-
+    
     return ret;
 }
 
@@ -582,6 +594,7 @@ static void hid_if_process(void)
 {
     while (app_usbd_event_queue_process())
     {
+//        NRF_LOG_INFO("if_process something");
         /* Nothing to do */
     }
 }
@@ -617,11 +630,13 @@ static hid_channel_t * channel_alloc(void)
         NRF_LOG_WARNING("MAX_HID_CHANNELS.");
         return NULL;
     }
-
+    
+    NRF_LOG_DEBUG("allocating %d bytes", size);
     p_ch = nrf_malloc(size);
     if(p_ch == NULL)
     {
         NRF_LOG_ERROR("nrf_malloc: Invalid memory location!");
+//        nrf_mem_diagnose();
     }
     else
     {
@@ -645,11 +660,12 @@ static void channel_init(hid_channel_t * p_ch, uint32_t cid)
     memset(p_ch, 0, size);
 
     p_ch->cid = cid;
+    NRF_LOG_DEBUG("new channel %d", cid);
     p_ch->state = CID_STATE_IDLE;
     p_ch->pPrev = NULL;
     p_ch->pNext = NULL;
 
-    if(m_catp_ch_list.pFirst == NULL)
+    if(m_ctap_ch_list.pFirst == NULL)
     {
         m_ctap_ch_list.pFirst = m_ctap_ch_list.pLast = p_ch;
     }
@@ -670,6 +686,7 @@ static void channel_init(hid_channel_t * p_ch, uint32_t cid)
 static void channel_reset(hid_channel_t * p_ch)
 {
     p_ch->state = CID_STATE_IDLE;
+    init_timer(&p_ch->timer);
 }
 
 
@@ -763,7 +780,8 @@ static void hid_error_response(uint32_t cid, uint8_t error)
 static void hid_init_response(hid_channel_t *p_ch)
 {
     HID_INIT_RESP *p_resp_init = (HID_INIT_RESP *) p_ch->resp;
-    channel_t *p_new_ch;
+    hid_channel_t * p_new_ch;
+    NRF_LOG_INFO("ctap_hid_init"); 
 
     //if send on broadcast -> create new channel
     if (p_ch->cid == CID_BROADCAST) {
@@ -778,16 +796,15 @@ static void hid_init_response(hid_channel_t *p_ch)
         //get new cid and init channel data
         channel_init(p_new_ch, generate_new_cid());
     }
-    //else reset existing channel
+    else //else reset existing channel
     {
         channel_reset(p_ch);
         p_new_ch = p_ch;
     }
-        
         //copy init nonce
-        memcpy(p_resp_init->nonce, p_ch_req, INIT_NONCE_SIZE);
+        memcpy(p_resp_init->nonce, p_ch->req, INIT_NONCE_SIZE);
 
-        p_resp_init->cid = p_new_ch->cid;                    // Channel identifier 
+        p_resp_init->cid = p_new_ch->cid;                 // Channel identifier 
         p_resp_init->versionInterface = HID_IF_VERSION;   // Interface version
         p_resp_init->versionMajor = HID_FW_VERSION_MAJOR; // Major version number
         p_resp_init->versionMinor = HID_FW_VERSION_MINOR; // Minor version number
@@ -826,7 +843,7 @@ static void hid_wink_response(hid_channel_t *p_ch)
 static void hid_status_response(hid_channel_t * p_ch, uint8_t status)
 {
     //send status code (in FIDO2 only single byte)
-    hid_if_send(p_ch->cid, p_ch->cmd, status, 1);
+    hid_if_send(p_ch->cid, p_ch->cmd, &status, 1);
 }
 
 
@@ -838,11 +855,12 @@ static void hid_status_response(hid_channel_t * p_ch, uint8_t status)
 static void hid_cbor_response(hid_channel_t *p_ch)
 {
     CTAP_RESPONSE resp;
+    ctap_response_init(&resp);
     uint8_t status;
-    status = ctap_request(p_ch->req, bcnt, &resp);
+    status = ctap_request(p_ch->req, p_ch->bcnt, &resp);
 
     //set response status code
-    memcpy(p_ch->resp, status, 1);
+    memcpy(p_ch->resp, &status, 1);
     
     //copy over response
     memcpy(p_ch->resp+1, resp.data, MIN(resp.length, CTAP_RESPONSE_BUFFER_SIZE));
@@ -893,7 +911,7 @@ static void hid_sync_response(hid_channel_t *p_ch)
 static void hid_lock_response(hid_channel_t *p_ch)
 {
     //unimplemented
-    hid_status_respondse(p_ch, ERR_INVALID_CMD);
+    hid_status_response(p_ch, ERR_INVALID_CMD);
 }
 
 
@@ -904,9 +922,11 @@ static void hid_lock_response(hid_channel_t *p_ch)
  */
 static void channel_cmd_process(hid_channel_t * p_ch)
 {
-
+    NRF_LOG_INFO("channel_cmd_process ");
     countdown_ms(&p_ch->timer, HID_TRANS_TIMEOUT);
+    assert(p_ch->timer.timeout != 0);
 
+    
     if(p_ch->state != CID_STATE_READY) return;
 
     switch(p_ch->cmd)
@@ -933,7 +953,7 @@ static void channel_cmd_process(hid_channel_t * p_ch)
        
         case HID_CBOR:
             NRF_LOG_INFO("HID_CBOR.");
-            hid_CBOR_response(p_ch);
+            hid_cbor_response(p_ch);
             break;
 
         case HID_WINK:
@@ -948,20 +968,25 @@ static void channel_cmd_process(hid_channel_t * p_ch)
 
         case HID_VENDOR_FIRST:
             NRF_LOG_INFO("HID_VENDOR_FIRST.");
+            hid_error_response(p_ch->cid, ERR_INVALID_CMD);
             break;
 
         case HID_VENDOR_LAST:
             NRF_LOG_INFO("HID_VENDOR_LAST.");
+            hid_error_response(p_ch->cid, ERR_INVALID_CMD);
             break;
 
         default:
             NRF_LOG_WARNING("Unknown Command: %d", p_ch->cmd);
+            hid_error_response(p_ch->cid, ERR_INVALID_CMD);
             break;
     }
 
     p_ch->state = CID_STATE_IDLE;
 }
 
+
+extern volatile uint32_t ms_ticks;
 /**@brief Process HID command of every ready channel.
  * 
  */
@@ -971,12 +996,18 @@ static void channel_process(void)
 
     for(p_ch = m_ctap_ch_list.pFirst; p_ch != NULL;)
     {
-        
+//        if(p_ch->cid != CID_BROADCAST)
+ //       {
+           // NRF_LOG_DEBUG("channel: %d, t[s: %d, to:%d], c: %d, d: %d", p_ch->cid, p_ch->timer.start_time, p_ch->timer.timeout, app_timer_cnt_get(), app_timer_cnt_diff_compute(app_timer_cnt_get(), p_ch->timer.start_time));
+/**            NRF_LOG_DEBUG("processing channel %d", p_ch->cid);*/
+          /**NRF_LOG_DEBUG("timer[start:%d, timeout:%d] | current %d",p_ch->timer.start_time, p_ch->timer.timeout, app_timer_cnt_get());*/
+//        }
         // Transaction timeout, free the channel
-        if(has_timer_expired(&p_ch->timer) && p_ch->state == CID_STATE_IDLE)
+        if(has_timer_expired(&p_ch->timer))// && p_ch->state == CID_STATE_IDLE)
         {
             if(p_ch->cid != CID_BROADCAST)
             {
+                NRF_LOG_DEBUG("channel %d timer has expired", p_ch->cid); 
                 hid_channel_t * p_free_ch = p_ch;
                 p_ch = p_ch->pNext;
                 channel_deinit(p_free_ch);
@@ -999,11 +1030,11 @@ static ret_code_t internal_hid_init(void)
     ret_code_t ret;
     hid_channel_t *p_ch;
 
-    ret = nrf_mem_init();
-    if(ret != NRF_SUCCESS)
-    {
-        return ret;
-    }
+    /**ret = nrf_mem_init();*/
+    /**if(ret != NRF_SUCCESS)*/
+    /**{*/
+        /**return ret;*/
+    /**}*/
 
     ret = hid_if_init();
     if(ret != NRF_SUCCESS)
@@ -1011,11 +1042,11 @@ static ret_code_t internal_hid_init(void)
     	return ret;
     }
 
-    ret = u2f_impl_init(); //TODO
-    if(ret != NRF_SUCCESS)
-    {
-    	return ret;
-    }
+    /**ret = u2f_impl_init(); //TODO*/
+    /**if(ret != NRF_SUCCESS)*/
+    /**{*/
+        /**return ret;*/
+    /**}*/
 
     p_ch = channel_alloc();
     if(p_ch == NULL)
@@ -1045,7 +1076,7 @@ static void internal_hid_process(void)
     hid_if_process();
 
     ret = hid_if_recv(&cid, &cmd, buf, &size, 1000);
-
+    
     if(ret == ERR_NONE)
     {
         hid_channel_t * p_ch;
@@ -1069,7 +1100,4 @@ static void internal_hid_process(void)
 
     channel_process();
 }
-
-
-#endif //MODULE_ENABLED(HID)
 

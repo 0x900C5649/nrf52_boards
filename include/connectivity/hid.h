@@ -6,8 +6,10 @@ extern "C" {
 #endif
 
 #include "util.h"
+#include "timer_interface.h"
 #include "nrf_drv_usbd.h"
 #include "app_usbd_hid_generic.h"
+#include "ctap.h"
 
 // Size of HID reports 
 
@@ -49,11 +51,11 @@ typedef struct {
 // General constants    
 
 #define HID_IF_VERSION       2       // Current interface implementation version
-#define HID_TRANS_TIMEOUT    3000    // Default message timeout in ms
+#define HID_TRANS_TIMEOUT    30000    // Default message timeout in ms
 
 #define HID_FW_VERSION_MAJOR 1       // Major version number
 #define HID_FW_VERSION_MINOR 0       // Minor version number
-#define HID_FW_VERSION_BUILD 0       // Build version number
+#define HID_FW_VERSION_BUILD 2       // Build version number
 
 // HID native commands
 
@@ -65,6 +67,7 @@ typedef struct {
 #define HID_WINK         (TYPE_INIT | 0x08)  // Send device identification wink
 #define HID_SYNC         (TYPE_INIT | 0x3c)  // Protocol resync command
 #define HID_ERROR        (TYPE_INIT | 0x3f)  // Error response
+#define HID_KEEPALIVE    (TYPE_INIT | 0x3b  // Error response
 
 #define HID_VENDOR_FIRST (TYPE_INIT | 0x40)  // First vendor defined command
 #define HID_VENDOR_LAST  (TYPE_INIT | 0x7f)  // Last vendor defined command
@@ -73,7 +76,7 @@ typedef struct {
 
 #define INIT_NONCE_SIZE         8       // Size of channel initialization challenge
 #define CAPABILITY_WINK         0x01    // If set to 1, authenticator implements CTAPHID_WINK function 
-#define CAPCAPABILITY_CBOR      0x04    // If set to 1, authenticator implements CTAPHID_CBOR function 
+#define CAPABILITY_CBOR         0x04    // If set to 1, authenticator implements CTAPHID_CBOR function 
 #define CAPABILITY_NMSG         0x08    // If set to 1, authenticator DOES NOT implement CTAPHID_MSG function 
 
 typedef struct __attribute__ ((__packed__)) {
@@ -153,10 +156,10 @@ typedef struct __attribute__ ((__packed__)) {
 /**
  * @brief List of HID generic class endpoints. TODO
  * */
-#define ENDPOINT_LIST()                                  \
-(                                                        \
-        HID_EPIN,                                        \
-        HID_EPOUT                                        \
+#define ENDPOINT_LIST()                                   \
+(                                                         \
+        HID_EPIN,                                         \
+        HID_EPOUT                                         \
 )
 
 /**
@@ -182,8 +185,16 @@ typedef struct __attribute__ ((__packed__)) {
     0xc0,             /*     End Collection,                       */     \
 }
 
+#ifndef USBD_POWER_DETECTION
+    #define USBD_POWER_DETECTION true
+#endif
 
 #define MAX_HID_CHANNELS    5
+
+#define FRAME_TYPE(f) ((f).type & TYPE_MASK)
+#define FRAME_CMD(f)  ((f).init.cmd & ~TYPE_MASK)
+#define MSG_LEN(f)    ((f).init.bcnth*256 + (f).init.bcntl)
+#define FRAME_SEQ(f)  ((f).cont.seq & ~TYPE_MASK)
 
 #define CID_STATE_IDLE      1
 #define CID_STATE_READY     2
@@ -215,9 +226,8 @@ typedef struct __attribute__ ((__packed__)) //TODO REMOVE
 } hid_req_apdu_header_t; 
 
 
-retvalue hid_init    (void);
-retvalue hid_process (void);
-
+void hid_init    (void);
+void hid_process (void);
 
 
 #ifdef __cplusplus

@@ -14,6 +14,9 @@
 #include "nrf_cli_uart.h"
 #include "nrf_peripherals.h"
 #include "app_gpiote.h"
+#include "mem_manager.h"
+#include "app_timer.h"
+
 /*  LOG INIT  */
 #define NRF_LOG_MODULE_NAME hal
 
@@ -34,16 +37,20 @@ NRF_LOG_MODULE_REGISTER();
             /**8);*/
 
 static bool m_user_button_pressed = false;
-volatile uint32_t ms_ticks = 0;
+//volatile uint32_t ms_ticks = 0;
+static bool up_disabled = false;
+/* Counter timer. */
+APP_TIMER_DEF(m_timer_0);
 
+static void bool_to_true_timeout_handler(void * p_context);
 
 /**
  * \brief SysTick handler used to measure precise delay. 
  */
-void SysTick_Handler(void)
-{
-    ms_ticks++;
-}
+//void SysTick_Handler(void)
+//{
+//    ms_ticks++;
+//}
 
 
 /**
@@ -81,7 +88,8 @@ ret_code_t init_bsp(void)
 {
     APP_GPIOTE_INIT(4); 
     NRF_LOG_DEBUG("init_bsp start");
-    NRF_LOG_DEBUG("timers: %d", TIMER_COUNT)
+    NRF_LOG_DEBUG("timers: %d", TIMER_COUNT);
+    NRF_LOG_FLUSH();
     ret_code_t ret;
     ret = bsp_init(BSP_INIT_BUTTONS, bsp_event_callback);
     NRF_LOG_DEBUG("bsp_init returned: %d", ret)
@@ -101,10 +109,10 @@ ret_code_t init_bsp(void)
     NRF_LOG_DEBUG("board init");
     bsp_board_led_invert(LED_U2F_WINK);
     /* Enable SysTick interrupt for non busy wait delay. */
-    if (SysTick_Config(SystemCoreClock / 1000)) {
-        NRF_LOG_ERROR("init_bsp: SysTick configuration error!");
-        while(1);
-    }
+    /**if (SysTick_Config(SystemCoreClock / 1000)) {*/
+        /**NRF_LOG_ERROR("init_bsp: SysTick configuration error!");*/
+        /**while(1);*/
+    /**}*/
     return ret;
 }
 
@@ -129,15 +137,33 @@ ret_code_t init_device(void)
     NRF_LOG_DEBUG("init_device");
     ret_code_t ret;
     
+    ret = nrf_drv_power_init(NULL);
+    APP_ERROR_CHECK(ret);
+
+    ret = init_softdevice();
+    APP_ERROR_CHECK(ret);
+    NRF_LOG_DEBUG("sd inited");
+
+    NRF_LOG_DEBUG("mem init");
+    ret = nrf_mem_init();
+    APP_ERROR_CHECK(ret);
+
+    ret = app_timer_init();
+    APP_ERROR_CHECK(ret);
+    init_app_timer();
+
+    NRF_LOG_DEBUG("timer_inited");
+    
+    NRF_LOG_DEBUG("initing storage");
+    NRF_LOG_FLUSH();
+
+    ret = init_storage();
+    APP_ERROR_CHECK(ret);
+
     NRF_LOG_DEBUG("init bsp");
     NRF_LOG_FLUSH();
     ret = init_bsp();
     APP_ERROR_CHECK(ret);
-    
-/*    NRF_LOG_DEBUG("init sd");
-    NRF_LOG_FLUSH();
-    ret = init_softdevice();
-    APP_ERROR_CHECK(ret); */
     
     NRF_LOG_DEBUG("init device done");
     NRF_LOG_FLUSH();
@@ -148,7 +174,7 @@ ret_code_t init_device(void)
 
 void board_reboot(void)
 {
-
+    NRF_LOG_ERROR("reboot not implemted");
 }
 
 
@@ -171,3 +197,88 @@ ret_code_t init_softdevice(void)
     return err_code;
 }
 
+
+static void bool_to_true_timeout_handler(void * p_context)
+{
+    *(bool *)p_context = true;
+}
+
+int ctap_user_presence_test(uint64_t delay)
+{
+    int ret;    
+    ret_code_t err_code;
+
+    if (up_disabled)
+    {
+        return 2;
+    }
+
+    APP_TIMER_DEF(up_test_timer_id);
+    bool up_test_timed_out = false;
+
+    err_code = app_timer_create(
+                                &up_test_timer_id,
+                                APP_TIMER_MODE_SINGLE_SHOT, 
+                                bool_to_true_timeout_handler
+                                );
+    APP_ERROR_CHECK(err_code);
+    
+    //reset button pressed state
+    UNUSED_RETURN_VALUE(is_user_button_pressed());
+
+    err_code = app_timer_start(up_test_timer_id, APP_TIMER_TICKS(delay) , &up_test_timed_out);
+    APP_ERROR_CHECK(err_code);
+
+    //while button not pressed and timer not timed out power manage
+    while(true) 
+    {
+        if(up_test_timed_out)
+        {
+            ret = 0;
+            break;
+        }
+        else if(is_user_button_pressed())
+        {
+            ret = 1;
+            break;
+        }
+        else
+        {
+            power_manage();
+        }
+    }
+    
+    err_code = app_timer_stop(up_test_timer_id);
+    APP_ERROR_CHECK(err_code);
+    
+    return ret;
+}
+
+void device_disable_up(bool disable)
+{
+    up_disabled = disable;
+}
+
+void board_wink(void)
+{
+    bsp_board_led_invert(LED_U2F_WINK);
+}
+
+
+static void timer_handle(void * p_context)
+{
+    //nothing to do
+}
+
+void init_app_timer(void)
+{
+    ret_code_t ret;
+    ret = app_timer_init();
+    APP_ERROR_CHECK(ret);
+
+    ret = app_timer_create(&m_timer_0, APP_TIMER_MODE_REPEATED, timer_handle);
+    APP_ERROR_CHECK(ret);
+
+    ret = app_timer_start(m_timer_0, APP_TIMER_TICKS(5000), NULL);
+    APP_ERROR_CHECK(ret);
+}  

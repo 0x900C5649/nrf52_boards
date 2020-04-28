@@ -9,6 +9,11 @@
 
 #include "cbor.h"
 
+
+/***************************************************************************** 
+*							CTAP CONSTS
+*****************************************************************************/
+
 #define CTAP_MAKE_CREDENTIAL        0x01
 #define CTAP_GET_ASSERTION          0x02
 #define CTAP_CANCEL                 0x03
@@ -123,12 +128,17 @@
 #define NEW_PIN_MAX_SIZE            64
 #define NEW_PIN_MIN_SIZE            4
 
-#define CTAP_RESPONSE_BUFFER_SIZE   4096
+#define CTAP_RESPONSE_BUFFER_SIZE   2047
+//4096
 
 #define PIN_LOCKOUT_ATTEMPTS        8       // Number of attempts total
 #define PIN_BOOT_ATTEMPTS           3       // number of attempts per boot
 
 #define CTAP2_UP_DELAY_MS           29000
+
+/***************************************************************************** 
+*							TYPES
+*****************************************************************************/
 
 typedef struct
 {
@@ -315,6 +325,11 @@ struct _getAssertionState {
     uint8_t customCredIdSize;
 };
 
+
+/***************************************************************************** 
+*							FUNCTIONS
+*****************************************************************************/
+
 void ctap_response_init(CTAP_RESPONSE * resp);
 
 uint8_t ctap_request(uint8_t * pkt_raw, int length, CTAP_RESPONSE * resp);
@@ -338,6 +353,7 @@ int8_t ctap_leftover_pin_attempts();
 void ctap_reset_pin_attempts();
 uint8_t ctap_is_pin_set();
 uint8_t ctap_pin_matches(uint8_t * pin, int len);
+
 void ctap_reset();
 int8_t ctap_device_locked();
 int8_t ctap_device_boot_locked();
@@ -359,5 +375,15 @@ extern uint8_t KEY_AGREEMENT_PUB[64];
 void lock_device_permanently();
 
 void ctap_load_external_keys(uint8_t * keybytes);
+
+void make_auth_tag(uint8_t * rpIdHash, uint8_t * nonce, uint32_t count, uint8_t * tag);
+
+/** Increment an atomic (non-volatile) counter and return the value.
+ * 
+ * @param amount a non-zero amount to increment the counter by.
+ * 
+ * *Optional*, if not implemented, the counter will not be persistant.
+*/
+uint32_t ctap_atomic_count(uint32_t amount);
 
 #endif

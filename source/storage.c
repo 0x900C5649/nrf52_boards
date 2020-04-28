@@ -157,6 +157,18 @@ ret_code_t init_storage(void)
     return rc;
 }
 
+void resetStorage()
+{
+    reset_ctap_state();
+    counterReset();
+    reset_ctap_rk();
+}
+
+
+/***************************************************************************** 
+*							CTAP STATE
+*****************************************************************************/
+
 void write_ctap_state(AuthenticatorState * s)
 {
     ret_code_t rc;
@@ -170,7 +182,8 @@ void write_ctap_state(AuthenticatorState * s)
     record.file_id = STATE_FILE;
     record.key     = STATE_KEY;
     record.data.p_data = s;
-    record.data.length_words = (sizeof(AuthenticatorState) + ((4 - (sizeof(AuthenticatorState) & 3)) & 3)) >> 2 ;
+    record.data.length_words = BYTES_TO_WORDS(sizeof(AuthenticatorState));
+//    record.data.length_words =BYTES_TO_WORDS (sizeof(AuthenticatorState) + ((4 - (sizeof(AuthenticatorState) & 3)) & 3)) >> 2 ;
 
     rc = fds_record_find(STATE_FILE, STATE_KEY, &record_desc, &ftok);
     if(rc == NRF_SUCCESS)
@@ -206,6 +219,7 @@ uint8_t read_ctap_state(AuthenticatorState * s)
     rc = fds_record_find(STATE_FILE, STATE_KEY, &record_desc, &ftok);
     if(rc == NRF_SUCCESS)
     { // found entry -> open, read, copy to mem
+        NRF_LOG_INFO("found state");
         //open record 
         rc = fds_record_open(&record_desc, &flash_record);
         APP_ERROR_CHECK(rc);
@@ -229,6 +243,27 @@ uint8_t read_ctap_state(AuthenticatorState * s)
     }
     return 0;
 }
+
+void reset_ctap_state()
+{
+    wait_for_fds_op();
+    m_fds_ongoing_op = true;
+    ret_code_t rc;
+    rc = fds_file_delete(STATE_FILE);
+    APP_ERROR_CHECK(rc);
+
+    wait_for_fds_op();
+    
+    m_fds_ongoing_op = true;
+    rc = fds_gc();
+    APP_ERROR_CHECK(rc);
+
+    wait_for_fds_op();
+}
+
+/***************************************************************************** 
+*							RKs
+*****************************************************************************/
 
 void reset_ctap_rk()
 {
@@ -262,9 +297,10 @@ void store_ctap_rk(uint16_t index,CTAP_residentKey * rk)
     fds_record_desc_t   record_desc;
 
     record.file_id = RK_FILE;
-    record.key     = index;
+    record.key     = index + 1;
     record.data.p_data = rk;
-    record.data.length_words = (sizeof(CTAP_residentKey) + ((4 - (sizeof(CTAP_residentKey) & 3)) & 3)) >> 2 ;
+    record.data.length_words = BYTES_TO_WORDS(sizeof(CTAP_residentKey));
+//    record.data.length_words = (sizeof(CTAP_residentKey) + ((4 - (sizeof(CTAP_residentKey) & 3)) & 3)) >> 2 ;
     NRF_LOG_DEBUG("CTAP_residentKey has size %d", sizeof(CTAP_residentKey));
     rc = fds_record_write(&record_desc, &record);
 //    NRF_LOG_DEBUG("fds_record_write returned: %X, args where: %X %X %d", rc, RK_FILE, index, record.data.length_words);
@@ -285,7 +321,7 @@ void load_ctap_rk(uint16_t index,CTAP_residentKey * rk)
     /* It is required to zero the token before first use. */
     memset(&ftok, 0x00, sizeof(fds_find_token_t));
 
-    rc = fds_record_find(RK_FILE, index, &record_desc, &ftok);
+    rc = fds_record_find(RK_FILE, index+1, &record_desc, &ftok);
     NRF_LOG_DEBUG("fds_record find: %x", rc);
     APP_ERROR_CHECK(rc);
     
@@ -319,17 +355,148 @@ void overwrite_ctap_rk(uint16_t index,CTAP_residentKey * rk)
     /* It is required to zero the token before first use. */
     memset(&ftok, 0x00, sizeof(fds_find_token_t));
 
-    rc = fds_record_find(RK_FILE, index, &record_desc, &ftok);
+    rc = fds_record_find(RK_FILE, index+1, &record_desc, &ftok);
     APP_ERROR_CHECK(rc);
 
     record.file_id = RK_FILE;
-    record.key     = index;
+    record.key     = index+1;
     record.data.p_data = rk;
-    record.data.length_words = (sizeof(CTAP_residentKey) + ((4 - (sizeof(CTAP_residentKey) & 3)) & 3)) >> 2 ;
+    record.data.length_words = BYTES_TO_WORDS(sizeof(CTAP_residentKey));
+//    record.data.length_words = (sizeof(CTAP_residentKey) + ((4 - (sizeof(CTAP_residentKey) & 3)) & 3)) >> 2 ;
 
     rc = fds_record_update(&record_desc, &record);
     APP_ERROR_CHECK(rc);
     
     wait_for_fds_op();
+}
+
+
+/***************************************************************************** 
+*							PERSISTENT COUNTER
+*****************************************************************************/
+
+uint32_t counterGet(uint16_t index)
+{
+    wait_for_fds_op();
+    
+    uint32_t ret=0;
+    ret_code_t rc;
+    fds_flash_record_t  flash_record;
+    fds_record_desc_t   record_desc;
+    fds_find_token_t    ftok;
+    
+    /* It is required to zero the token before first use. */
+    memset(&ftok, 0x00, sizeof(fds_find_token_t));
+
+    rc = fds_record_find(COUNTER_FILE, index+1, &record_desc, &ftok);
+    NRF_LOG_DEBUG("fds_record find: %x", rc);
+    APP_ERROR_CHECK(rc);
+    
+    {
+        //open record 
+        rc = fds_record_open(&record_desc, &flash_record);
+        NRF_LOG_DEBUG("fds_record open: %x", rc);
+        APP_ERROR_CHECK(rc);
+
+        //copy key to memory
+        memcpy(&ret, flash_record.p_data, 1);
+
+        //close record
+        rc = fds_record_close(&record_desc);
+        NRF_LOG_DEBUG("fds_record close: %x", rc);
+        APP_ERROR_CHECK(rc);
+    }
+    return ret;
+}
+
+uint32_t counterIncrement(uint16_t index, uint32_t amount)
+{
+    wait_for_fds_op();
+    m_fds_ongoing_op = true;
+
+    uint32_t curvalue;
+    uint32_t newvalue;
+
+    ret_code_t rc;
+    fds_record_t        record;
+    fds_flash_record_t  flash_record;
+    fds_record_desc_t   record_desc;
+    fds_find_token_t    ftok;
+    
+    /* It is required to zero the token before first use. */
+    memset(&ftok, 0x00, sizeof(fds_find_token_t));
+
+    rc = fds_record_find(COUNTER_FILE, index+1, &record_desc, &ftok);
+    NRF_LOG_DEBUG("fds_record find: %x, %x, %x, %x", rc, FDS_ERR_NOT_INITIALIZED, FDS_ERR_NULL_ARG, FDS_ERR_NOT_FOUND);
+    APP_ERROR_CHECK(rc);
+    
+    {
+        //open record 
+        rc = fds_record_open(&record_desc, &flash_record);
+        NRF_LOG_DEBUG("fds_record open: %x", rc);
+        APP_ERROR_CHECK(rc);
+
+        //copy key to memory
+        memcpy(&curvalue, flash_record.p_data, 1);
+
+        //close record
+        rc = fds_record_close(&record_desc);
+        NRF_LOG_DEBUG("fds_record close: %x", rc);
+        APP_ERROR_CHECK(rc);
+    }
+    
+    newvalue = curvalue + amount;
+
+    record.file_id = COUNTER_FILE;
+    record.key     = index+1;
+    record.data.p_data = &newvalue;
+    record.data.length_words = 1;
+
+    rc = fds_record_update(&record_desc, &record);
+    APP_ERROR_CHECK(rc);
+
+    wait_for_fds_op(); 
+
+    return newvalue;
+}
+
+void counterReset(void)
+{
+    wait_for_fds_op();
+    m_fds_ongoing_op = true;
+    ret_code_t rc;
+    rc = fds_file_delete(COUNTER_FILE);
+    APP_ERROR_CHECK(rc);
+
+    wait_for_fds_op();
+    
+    m_fds_ongoing_op = true;
+    rc = fds_gc();
+    APP_ERROR_CHECK(rc);
+
+    wait_for_fds_op();
+}
+
+uint32_t counterInit(uint16_t index)
+{
+    wait_for_fds_op();
+    m_fds_ongoing_op = true;
+    
+    NRF_LOG_DEBUG("initing counter %d", index);
+    uint32_t initvalue = 0;
+
+    ret_code_t rc;
+    fds_record_t        record;
+    fds_record_desc_t   record_desc;
+
+    record.file_id = COUNTER_FILE;
+    record.key     = index + 1;
+    record.data.p_data = &initvalue;
+    record.data.length_words = 1;
+    rc = fds_record_write(&record_desc, &record);
+    
+    wait_for_fds_op();
+    APP_ERROR_CHECK(rc);
+    return initvalue;
 }
 

@@ -1,14 +1,14 @@
 #ifndef _STORAGE_H
 #define _STORAGE_H
 
+#include "app_config.h"
 #include "sdk_errors.h"
 #include "ctap.h"
 
-#define KEY_SPACE_BYTES     128
-#define MAX_KEYS            (8)
-#define PIN_SALT_LEN        (32)
-#define STATE_VERSION        (1)
 
+/***************************************************************************** 
+*							CONSTS
+*****************************************************************************/
 
 #define BACKUP_MARKER       0x5A
 #define INITIALIZED_MARKER  0xA5
@@ -21,6 +21,12 @@
 #define STATE_KEY       0x5AA5
 
 #define RK_FILE         0x0002
+
+#define COUNTER_FILE    0x0003
+
+/***************************************************************************** 
+*							TYPES
+*****************************************************************************/
 
 typedef struct
 {
@@ -57,14 +63,30 @@ typedef struct
 
 typedef AuthenticatorState_0x01 AuthenticatorState;
 
-ret_code_t init_storage(void);
 
+/***************************************************************************** 
+*							INIT
+*****************************************************************************/
+
+ret_code_t init_storage(void);
+void resetStorage(void);
+
+
+/***************************************************************************** 
+*							STATE
+*****************************************************************************/
 
 //write state
 void write_ctap_state(AuthenticatorState * s);
 
 //read state
 uint8_t read_ctap_state(AuthenticatorState * s);
+
+void reset_ctap_state(void);
+
+/***************************************************************************** 
+*							RESIDENT KEYS
+*****************************************************************************/
 
 //reset rks
 /** Delete all resident keys.
@@ -109,8 +131,17 @@ void load_ctap_rk(uint16_t index,CTAP_residentKey * rk);
 */
 void overwrite_ctap_rk(uint16_t index,CTAP_residentKey * rk);
 
-ret_code_t init_storage(void);
 
+/***************************************************************************** 
+*							PERSISTENT COUNTER
+*****************************************************************************/
 
+uint32_t counterGet(uint16_t index);
+
+uint32_t counterIncrement(uint16_t index, uint32_t amount);
+
+void counterReset(void);
+
+uint32_t counterInit(uint16_t index);
 
 #endif // STORAGE_H

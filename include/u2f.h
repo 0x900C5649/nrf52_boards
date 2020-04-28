@@ -1,159 +1,115 @@
-// Common U2F raw message format header - Review Draft
-// 2014-10-08
-// Editor: Jakob Ehrensvard, Yubico, jakob@yubico.com
+// Copyright 2019 SoloKeys Developers
+//
+// Licensed under the Apache License, Version 2.0, <LICENSE-APACHE or
+// http://apache.org/licenses/LICENSE-2.0> or the MIT license <LICENSE-MIT or
+// http://opensource.org/licenses/MIT>, at your option. This file may not be
+// copied, modified, or distributed except according to those terms.
+#ifndef _U2F_H_
+#define _U2F_H_
 
-#ifndef __U2F_H_INCLUDED__
-#define __U2F_H_INCLUDED__
-
-#ifdef _MSC_VER  // Windows
-typedef unsigned char     uint8_t;
-typedef unsigned short    uint16_t;
-typedef unsigned int      uint32_t;
-typedef unsigned long int uint64_t;
-#else
 #include <stdint.h>
-#endif
+#include "ctap.h"
 
-#ifdef __cplusplus
-extern "C" {
-#endif
+#define U2F_EC_FMT_UNCOMPRESSED             0x04
 
-// General constants
+#define U2F_EC_POINT_SIZE                   32
+#define U2F_EC_PUBKEY_SIZE                  65
+#define U2F_APDU_SIZE                       7
+#define U2F_CHALLENGE_SIZE                  32
+#define U2F_APPLICATION_SIZE                32
+#define U2F_KEY_HANDLE_TAG_SIZE             16
+#define U2F_KEY_HANDLE_KEY_SIZE             32
+#define U2F_KEY_HANDLE_SIZE                 (U2F_KEY_HANDLE_KEY_SIZE+U2F_KEY_HANDLE_TAG_SIZE)
+#define U2F_REGISTER_REQUEST_SIZE           (U2F_CHALLENGE_SIZE+U2F_APPLICATION_SIZE)
+#define U2F_MAX_REQUEST_PAYLOAD             (1 + U2F_CHALLENGE_SIZE+U2F_APPLICATION_SIZE + 1 + U2F_KEY_HANDLE_SIZE)
 
-#define U2F_EC_KEY_SIZE         32      // EC key size in bytes
-#define U2F_EC_POINT_SIZE       ((U2F_EC_KEY_SIZE * 2) + 1) // Size of EC point
-#define U2F_MAX_KH_SIZE         128     // Max size of key handle
-#define U2F_MAX_ATT_CERT_SIZE   2048    // Max size of attestation certificate
-#define U2F_MAX_EC_SIG_SIZE     72      // Max size of DER coded EC signature
-#define U2F_CTR_SIZE            4       // Size of counter field
-#define U2F_APPID_SIZE          32      // Size of application id
-#define U2F_CHAL_SIZE           32      // Size of challenge
-
-#define ENC_SIZE(x)             ((x + 7) & 0xfff8)
-
-
-// EC (uncompressed) point
-
-#define U2F_POINT_UNCOMPRESSED  0x04    // Uncompressed point format
-
-typedef struct __attribute__ ((__packed__)) {
-    uint8_t pointFormat;                // Point type
-    uint8_t x[U2F_EC_KEY_SIZE];         // X-value
-    uint8_t y[U2F_EC_KEY_SIZE];         // Y-value
-} U2F_EC_POINT;
 
 // U2F native commands
-
-#define U2F_REGISTER            0x01    // Registration command
-#define U2F_AUTHENTICATE        0x02    // Authenticate/sign command
-#define U2F_VERSION             0x03    // Read version string command
-#define U2F_CHECK_REGISTER      0x04    // Registration command that incorporates checking key handles
-#define U2F_AUTHENTICATE_BATCH  0x05    // Authenticate/sign command for a batch of key handles
-
-#define U2F_VENDOR_FIRST        0xc0    // First vendor defined command
-#define U2F_VENDOR_LAST         0xff    // Last vendor defined command
+#define U2F_REGISTER                        0x01
+#define U2F_AUTHENTICATE                    0x02
+#define U2F_VERSION                         0x03
+#define U2F_VENDOR_FIRST                    0xc0
+#define U2F_VENDOR_LAST                     0xff
 
 // U2F_CMD_REGISTER command defines
+#define U2F_REGISTER_ID                     0x05
+#define U2F_REGISTER_HASH_ID                0x00
 
-#define U2F_REGISTER_ID         0x05    // Version 2 registration identifier
-#define U2F_REGISTER_HASH_ID    0x00    // Version 2 hash identintifier
+// U2F Authenticate
+#define U2F_AUTHENTICATE_CHECK              0x7
+#define U2F_AUTHENTICATE_SIGN               0x3
+#define U2F_AUTHENTICATE_SIGN_NO_USER       0x8
 
-typedef struct __attribute__ ((__packed__)) {
-    uint8_t chal[U2F_CHAL_SIZE];        // Challenge
-    uint8_t appId[U2F_APPID_SIZE];      // Application id
-} U2F_REGISTER_REQ;
-
-typedef struct __attribute__ ((__packed__)) {
-    uint8_t registerId;                 // Registration identifier (U2F_REGISTER_ID_V2)
-    U2F_EC_POINT pubKey;                // Generated public key
-    uint8_t keyHandleLen;               // Length of key handle
-    uint8_t keyHandleCertSig[
-        U2F_MAX_KH_SIZE +               // Key handle
-        U2F_MAX_ATT_CERT_SIZE +         // Attestation certificate
-        U2F_MAX_EC_SIG_SIZE];           // Registration signature
-} U2F_REGISTER_RESP;
-
-// U2F_CMD_AUTHENTICATE command defines
-
-// Authentication control byte
-
-#define U2F_AUTH_ENFORCE        0x03    // Enforce user presence and sign
-#define U2F_AUTH_CHECK_ONLY     0x07    // Check only
-#define U2F_AUTH_FLAG_TUP       0x01    // Test of user presence set
-
-typedef struct __attribute__ ((__packed__)) {
-    uint8_t chal[U2F_CHAL_SIZE];        // Challenge
-    uint8_t appId[U2F_APPID_SIZE];      // Application id
-    uint8_t keyHandleLen;               // Length of key handle
-    uint8_t keyHandle[U2F_MAX_KH_SIZE]; // Key handle
-} U2F_AUTHENTICATE_REQ;
-
-typedef struct __attribute__ ((__packed__)) {
-    uint8_t flags;                      // U2F_AUTH_FLAG_ values
-    uint8_t ctr[U2F_CTR_SIZE];          // Counter field (big-endian)
-    uint8_t sig[U2F_MAX_EC_SIG_SIZE];   // Signature
-} U2F_AUTHENTICATE_RESP;
-
-
-#define U2F_MAX_REQ_SIZE        (sizeof(U2F_AUTHENTICATE_REQ) + 10)
-#define U2F_MAX_RESP_SIZE       (sizeof(U2F_REGISTER_RESP) + 2)
 
 // Command status responses
+#define U2F_SW_NO_ERROR                     0x9000
+#define U2F_SW_CONDITIONS_NOT_SATISFIED     0x6985
+#define U2F_SW_INS_NOT_SUPPORTED            0x6d00
+#define U2F_SW_WRONG_LENGTH                 0x6700
+#define U2F_SW_CLASS_NOT_SUPPORTED          0x6E00
+#define U2F_SW_WRONG_DATA                   0x6a80
+#define U2F_SW_INSUFFICIENT_MEMORY          0x9210
 
-#define U2F_SW_NO_ERROR                 0x9000 // SW_NO_ERROR
-#define U2F_SW_WRONG_LENGTH             0x6700 // SW_WRONG_LENGTH
-#define U2F_SW_WRONG_DATA               0x6A80 // SW_WRONG_DATA
-#define U2F_SW_CONDITIONS_NOT_SATISFIED 0x6985 // SW_CONDITIONS_NOT_SATISFIED
-#define U2F_SW_COMMAND_NOT_ALLOWED      0x6986 // SW_COMMAND_NOT_ALLOWED
-#define U2F_SW_INS_NOT_SUPPORTED        0x6D00 // SW_INS_NOT_SUPPORTED
-#define U2F_SW_CLA_NOT_SUPPORTED        0x6E00 // SW_CLA_NOT_SUPPORTED
+// Delay in milliseconds to wait for user input
+#define U2F_MS_USER_INPUT_WAIT              3000
 
-#define VENDOR_U2F_NOMEM                0xEE04
-#define VENDOR_U2F_VERSION              "U2F_V2"
+struct u2f_request_apdu
+{
+    uint8_t cla;
+    uint8_t ins;
+    uint8_t p1;
+    uint8_t p2;
+    uint8_t LC1;
+    uint8_t LC2;
+    uint8_t LC3;
+    uint8_t payload[U2F_MAX_REQUEST_PAYLOAD];
+};
 
+struct u2f_ec_point
+{
+    uint8_t fmt;
+    uint8_t x[U2F_EC_POINT_SIZE];
+    uint8_t y[U2F_EC_POINT_SIZE];
+};
 
-/**
- * @brief Function for initializing the U2F implementation.
- *
- * @return Error status.
- *
- */
-uint32_t u2f_impl_init(void);
-
-
-/**
- * @brief Register U2F Key.
- *
- *
- * @param[in] p_req          Registration Request Message.
- * @param[out] p_resp        Registration Response Message.
- * @param[in] flags          Request Parameter.
- * @param[out] p_resp_len    Registration Response Message length
- *
- * @return Standard error code.
- */
-uint16_t u2f_register(U2F_REGISTER_REQ * p_req, U2F_REGISTER_RESP * p_resp, 
-                      int flags, uint16_t * p_resp_len);
-
-
-/**
- * @brief U2F Key Authentication.
- *
- *
- * @param[in] p_req          Authentication Request Message.
- * @param[out] p_resp        Authentication Response Message.
- * @param[in] flags          Request Parameter.
- * @param[out] p_resp_len    Authentication Response Message length
- *
- * @return Standard error code.
- */
-uint16_t u2f_authenticate(U2F_AUTHENTICATE_REQ * p_req, 
-                          U2F_AUTHENTICATE_RESP * p_resp, 
-                          int flags, uint16_t * p_resp_len);
+struct u2f_register_request
+{
+    uint8_t chal[U2F_CHALLENGE_SIZE];
+    uint8_t app[U2F_APPLICATION_SIZE];
+};
 
 
-#ifdef __cplusplus
-}
-#endif
+struct u2f_key_handle
+{
+    uint8_t tag[U2F_KEY_HANDLE_TAG_SIZE];
+    uint8_t key[U2F_KEY_HANDLE_KEY_SIZE];
+};
 
-#endif  // __U2F_H_INCLUDED__
+
+struct u2f_authenticate_request
+{
+    uint8_t chal[U2F_CHALLENGE_SIZE];
+    uint8_t app[U2F_APPLICATION_SIZE];
+    uint8_t khl;
+    struct u2f_key_handle kh;
+};
+
+// u2f_request send a U2F message to U2F protocol
+// @req U2F message
+void u2f_request(struct u2f_request_apdu* req, CTAP_RESPONSE * resp);
+
+// u2f_request send a U2F message to NFC protocol
+// @req data with iso7816 apdu message
+// @len data length
+void u2f_request_nfc(uint8_t * header, uint8_t * data, int datalen, CTAP_RESPONSE * resp);
+
+int8_t u2f_authenticate_credential(struct u2f_key_handle * kh, uint8_t key_handle_len, uint8_t * appid);
+
+int8_t u2f_response_writeback(const uint8_t * buf, uint16_t len);
+void u2f_reset_response();
+void u2f_set_writeback_buffer(CTAP_RESPONSE * resp);
+
+int16_t u2f_version();
+
+
+#endif /* U2F_H_ */

@@ -58,28 +58,34 @@ void SysTick_Handler(void);
 void board_wink(void);
 void board_reboot(void);
 void power_manage(void);
+void init_app_timer(void);
 
-/** Read the device's 16 byte AAGUID into a buffer.
- * @param dst buffer to write 16 byte AAGUID into.
- * */
-void get_aaguid(uint8_t * dst);
 
-/** Return pointer to attestation key.
- * @return pointer to attestation private key, raw encoded.  For P256, this is 32 bytes.
-*/
-uint8_t * device_get_attestation_key();
-
-/** Read the device's attestation certificate into buffer @dst.
- * @param dst the destination to write the certificate.
+// Return 2 for disabled, 1 for user is present, 0 user not present, -1 if cancel is requested.
+/** Test for user presence.
+ *  Perform test that user is present.  Returns status on user presence.  This is used by FIDO and U2F layer
+ *  to check if an operation should continue, or if the UP flag should be set.
  * 
- * The size of the certificate can be retrieved using `device_attestation_cert_der_get_size()`.
+ * @param delay number of milliseconds to delay waiting for user before timeout.
+ * 
+ * @return 2 - User presence is disabled.  Operation should continue, but UP flag not set.
+ *         1 - User presence confirmed.  Operation should continue, and UP flag is set.
+ *         0 - User presence is not confirmed.  Operation should be denied.
+ *        -1 - Operation was canceled.  Do not continue, reset transaction state.
+ * 
+ * *Optional*, the default implementation will return 1, unless a FIDO2 operation calls for no UP, where this will then return 2.
 */
-void device_attestation_read_cert_der(uint8_t * dst);
+int ctap_user_presence_test(uint64_t delay);
 
-/** Returns the size in bytes of attestation_cert_der.
- * @return number of bytes in attestation_cert_der, not including any C string null byte.
+/** Disable the next user presence test.  This is called by FIDO2 layer when a transaction
+ *  requests UP to be disabled.  The next call to ctap_user_presence_test should return 2,
+ *  and then UP should be enabled again.
+ * 
+ * @param request_active indicate to activate (true) or disable (false) UP.
+ * 
+ * *Optional*, the default implementation will provide expected behaviour with the default ctap_user_presence_test(...).
 */
-uint16_t device_attestation_cert_der_get_size();
+void device_disable_up(bool disable);
 
 
 #ifdef __cplusplus

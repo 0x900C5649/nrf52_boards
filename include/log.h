@@ -2,15 +2,16 @@
 #define _LOG_H
 
 #include "nrf_log.h"
+#include "nrf_log_ctrl.h"
 #include "util.h"
 #include "nordic_common.h"
 
 
 #if APP_MODULE_ENABLED(LOGGING)
 
-#define printf1(tag,fmt, ...) NRF_LOG_INFO(fmt, ##__VA_ARGS__)
-#define printf2(tag,fmt, ...) NRF_LOG_INFO(fmt, ##__VA_ARGS__)
-#define printf3(tag,fmt, ...) NRF_LOG_INFO(fmt, ##__VA_ARGS__)
+#define printf1(tag,fmt, ...) NRF_LOG_INFO(fmt, ##__VA_ARGS__);NRF_LOG_FLUSH();
+#define printf2(tag,fmt, ...) NRF_LOG_INFO(fmt, ##__VA_ARGS__);NRF_LOG_FLUSH();
+#define printf3(tag,fmt, ...) NRF_LOG_INFO(fmt, ##__VA_ARGS__);NRF_LOG_FLUSH();
 
 #define dump_hex1(tag,data,len) NRF_LOG_HEXDUMP_DEBUG(data,len)
 

@@ -32,8 +32,8 @@ SRC_FILES += \
   $(SDK_ROOT)/components/boards/boards.c \
   $(SDK_ROOT)/components/libraries/button/app_button.c \
   $(SDK_ROOT)/components/libraries/util/app_error.c \
-  $(SDK_ROOT)/components/libraries/util/app_error_handler_gcc.c \
   $(SDK_ROOT)/components/libraries/util/app_error_weak.c \
+  $(SDK_ROOT)/components/libraries/util/app_error_handler_gcc.c \
   $(SDK_ROOT)/components/libraries/crc16/crc16.c \
   $(SDK_ROOT)/components/libraries/fds/fds.c \
   $(SDK_ROOT)/components/libraries/fstorage/nrf_fstorage_sd.c \
@@ -48,12 +48,15 @@ SRC_FILES += \
   $(SDK_ROOT)/components/libraries/usbd/class/hid/generic/app_usbd_hid_generic.c \
   $(SDK_ROOT)/components/libraries/usbd/app_usbd_string_desc.c \
   $(SDK_ROOT)/components/libraries/util/app_util_platform.c \
+  $(SDK_ROOT)/modules/nrfx/drivers/src/nrfx_usbd.c \
+  $(SDK_ROOT)/modules/nrfx/drivers/src/nrfx_systick.c \
   $(SDK_ROOT)/external/fnmatch/fnmatch.c \
   $(SDK_ROOT)/components/libraries/hardfault/nrf52/handler/hardfault_handler_gcc.c \
   $(SDK_ROOT)/components/libraries/hardfault/hardfault_implementation.c \
   $(SDK_ROOT)/components/libraries/util/nrf_assert.c \
   $(SDK_ROOT)/components/libraries/atomic_fifo/nrf_atfifo.c \
   $(SDK_ROOT)/components/libraries/atomic/nrf_atomic.c \
+  $(SDK_ROOT)/modules/nrfx/soc/nrfx_atomic.c \
   $(SDK_ROOT)/components/libraries/balloc/nrf_balloc.c \
   $(SDK_ROOT)/components/libraries/cli/nrf_cli.c \
   $(SDK_ROOT)/components/libraries/cli/uart/nrf_cli_uart.c \
@@ -207,16 +210,24 @@ SRC_FILES += \
   $(SDK_ROOT)/components/libraries/crypto/backend/oberon/oberon_backend_hash.c \
   $(SDK_ROOT)/components/libraries/crypto/backend/oberon/oberon_backend_hmac.c \
   $(ROOT_DIR)/certs/keys.c \
+  $(SRC_DIR)/connectivity/interfaces.c \
+  $(SRC_DIR)/connectivity/hid.c \
+  $(SRC_DIR)/ctap.c \
+  $(SRC_DIR)/u2f.c \
+  $(SRC_DIR)/ctap_parse.c \
   $(SRC_DIR)/main.c \
   $(SRC_DIR)/timer.c \
   $(SRC_DIR)/hal.c \
   $(SRC_DIR)/log.c \
   $(SRC_DIR)/storage.c \
+  $(SRC_DIR)/crypto.c \
+  $(SRC_DIR)/attestation.c \
+  $(SRC_DIR)/tests.c \
 
 #  $(SRC_DIR)/u2f_hid.c \
 #  $(SRC_DIR)/u2f_hid_if.c \
+#  $(SRC_DIR)/app_error_ow.c \
 #  $(SRC_DIR)/u2f_impl.c \
-#  $(SRC_DIR)/crypto.c \
 
 # removed
 #   $(SDK_ROOT)/components/drivers_nrf/usbd/nrf_drv_usbd.c \
@@ -225,6 +236,7 @@ SRC_FILES += \
 #  $(SDK_ROOT)/external/segger_rtt/SEGGER_RTT_printf.c \
 #  $(SDK_ROOT)/components/drivers_nrf/nrf_soc_nosd/nrf_nvic.c \
 #  $(SDK_ROOT)/components/drivers_nrf/nrf_soc_nosd/nrf_soc.c \
+
 
 
 # Include folders common to all targets
@@ -300,9 +312,10 @@ INC_FOLDERS += \
   $(LIBDIR)/tinycbor/src \
   $(PROJ_DIR)/config \
   $(INCL_DIR) \
-  $(PROJ_DIR) \
+  $(INCL_DIR)/connectivity \
 
 
+#  $(PROJ_DIR) \
 # Removed
 #  $(SDK_ROOT)/components/drivers_nrf/nrf_soc_nosd \
 
@@ -315,32 +328,36 @@ LIB_FILES += \
 
 
 # DEFINITIONS
-DEFINES = -DAES256=1 \
-          -DUSE_APP_CONFIG \
-		  -DSOFTDEVICE_PRESENT \
-		  -DNRF_SD_BLE_API_VERSION=7 \
-		  -DS140 \
-          -DCONFIG_RANDOM_AES_KEY_ENABLED \
-		  -DBOARD_CUSTOM \
-          -DFLOAT_ABI_HARD \
-          -DMBEDTLS_CONFIG_FILE=\"nrf_crypto_mbedtls_config.h\" \
-          -DNRF52840_XXAA \
-          -DNRF_CRYPTO_MAX_INSTANCE_COUNT=1 \
-          -DuECC_ENABLE_VLI_API=0 \
-          -DuECC_OPTIMIZATION_LEVEL=3 \
-          -DuECC_SQUARE_FUNC=0 \
-          -DuECC_SUPPORT_COMPRESSED_POINT=0 \
-          -DuECC_VLI_NATIVE_LITTLE_ENDIAN=1 \
+DEFINES  = -DAES256=1 \
+           -DUSE_APP_CONFIG \
+		   -DSOFTDEVICE_PRESENT \
+ 		   -DNRF_SD_BLE_API_VERSION=7 \
+ 		   -DS140 \
+           -DCONFIG_RANDOM_AES_KEY_ENABLED \
+		   -DBOARD_CUSTOM \
+           -DFLOAT_ABI_HARD \
+           -DMBEDTLS_CONFIG_FILE=\"nrf_crypto_mbedtls_config.h\" \
+           -DNRF52840_XXAA \
+           -DNRF_CRYPTO_MAX_INSTANCE_COUNT=1 \
+           -DuECC_ENABLE_VLI_API=0 \
+           -DuECC_OPTIMIZATION_LEVEL=3 \
+           -DuECC_SQUARE_FUNC=0 \
+           -DuECC_SUPPORT_COMPRESSED_POINT=0 \
+           -DuECC_VLI_NATIVE_LITTLE_ENDIAN=1 \
+
+
+DEFINES += -DDEBUG -DDEBUG_NRF
 
 
 # Optimization flags
-OPT = $(DEFINES) -O0 -g3
+OPT = -O0 -g3
 #-O3 -g3
 # Uncomment the line below to enable link time optimization
 #OPT += -flto
 
 # C flags common to all targets
 CFLAGS += $(OPT)
+CFLAGS += $(DEFINES)
 CFLAGS += -mcpu=cortex-m4
 CFLAGS += -mthumb -mabi=aapcs
 CFLAGS += -Wall -Werror -Wno-unused-function
@@ -351,17 +368,17 @@ CFLAGS += -fno-builtin -fshort-enums
 
 # C++ flags common to all targets
 CXXFLAGS += $(OPT)
+CXXFLAGS += $(DEFINES)
 
 # Assembler flags common to all targets
 ASMFLAGS += $(OPT)
+ASMFLAGS += $(DEFINES)
 ASMFLAGS += -g3
 ASMFLAGS += -mcpu=cortex-m4
 ASMFLAGS += -mthumb -mabi=aapcs
 ASMFLAGS += -mfloat-abi=hard -mfpu=fpv4-sp-d16
 ASMFLAGS += -DBOARD_CUSTOM
 ASMFLAGS += -DCONFIG_GPIO_AS_PINRESET
-#ASMFLAGS += -DDEBUG
-#ASMFLAGS += -DDEBUG_NRF
 ASMFLAGS += -DFLOAT_ABI_HARD
 ASMFLAGS += -DNRF52840_XXAA
 ASMFLAGS += -DNRF_CRYPTO_MAX_INSTANCE_COUNT=1
@@ -373,6 +390,7 @@ ASMFLAGS += -DuECC_VLI_NATIVE_LITTLE_ENDIAN=1
 
 # Linker flags
 LDFLAGS += $(OPT)
+LDFLAGS += $(DEFINES)
 LDFLAGS += -mthumb -mabi=aapcs -L$(SDK_ROOT)/modules/nrfx/mdk -T$(LINKER_SCRIPT)
 LDFLAGS += -mcpu=cortex-m4
 LDFLAGS += -mfloat-abi=hard -mfpu=fpv4-sp-d16
