@@ -7,6 +7,14 @@ extern "C" {
 
 #include "util.h"
 
+#define TYPE_MASK               0x80    // Frame type mask 
+#define TYPE_INIT               0x80    // Initial frame identifier
+#define TYPE_CONT               0x00    // Continuation frame identifier
+
+#define FRAME_TYPE(f) ((f).type & TYPE_MASK)
+#define FRAME_CMD(f)  ((f).init.cmd & ~TYPE_MASK)
+#define MSG_LEN(f)    ((f).init.bcnth*256 + (f).init.bcntl)
+#define FRAME_SEQ(f)  ((f).cont.seq & ~TYPE_MASK)
 
 enum
 {

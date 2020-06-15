@@ -19,9 +19,6 @@ extern "C" {
 
 #define CID_BROADCAST           0xffffffff // Broadcast channel id
 
-#define TYPE_MASK               0x80    // Frame type mask 
-#define TYPE_INIT               0x80    // Initial frame identifier
-#define TYPE_CONT               0x00    // Continuation frame identifier
 
 typedef struct {
   uint32_t cid;                        // Channel identifier
@@ -190,11 +187,6 @@ typedef struct __attribute__ ((__packed__)) {
 #endif
 
 #define MAX_HID_CHANNELS    5
-
-#define FRAME_TYPE(f) ((f).type & TYPE_MASK)
-#define FRAME_CMD(f)  ((f).init.cmd & ~TYPE_MASK)
-#define MSG_LEN(f)    ((f).init.bcnth*256 + (f).init.bcntl)
-#define FRAME_SEQ(f)  ((f).cont.seq & ~TYPE_MASK)
 
 #define CID_STATE_IDLE      1
 #define CID_STATE_READY     2

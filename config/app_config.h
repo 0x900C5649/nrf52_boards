@@ -1,32 +1,35 @@
 #ifndef APP_CONFIG_H
 #define APP_CONFIG_H
 
-#ifndef APP_LOGGING_ENABLED
 #define APP_LOGGING_ENABLED 1
-#endif //APP_LOGGING_ENABLED
 
-#ifndef APP_HID_ENABLED
 #define APP_HID_ENABLED 1
-#endif //APP_HID_ENABLED
 
-#ifndef APP_BLE_ENABLED
-#define APP_BLE_ENABLED 0
-#endif //APP_BLE_ENABLED
+#define APP_BLE_ENABLED 1
 
-#ifndef APP_NFC_ENABLED
 #define APP_NFC_ENABLED 0
-#endif //APP_NFC_ENABLED
 
-#ifndef ENABLE_U2F
 #define ENABLE_U2F
-#endif //ENABLE_U2F
 
+// if enabled keep persistent storage
+#define APP_PERSISTENT_MODE 0
 
 #define KEY_SPACE_BYTES     96
 #define MAX_KEYS            (8)
 #define PIN_SALT_LEN        (32)
 #define STATE_VERSION        (1)
 
+#define DEVICE_NAME                     "nRF52 FIDO2"
+#define MANUFACTURER_NAME               "NordicSemiconductor"
+#define MODEL_NUM                       "nRF52840_dong_debug"
+#define SERIAL_NUM                      "000000001"
+
+//TODO: https://www.bluetooth.com/xml-viewer/?src=https://www.bluetooth.com/wp-content/uploads/Sitecore-Media-Library/Gatt/Xml/Services/org.bluetooth.service.device_information.xml
+#define MANUFACTURER_ID                 0x1122334455
+//https://aruljohn.com/mac/vendor/nordic
+#define ORG_UNIQUE_ID                   0xF4CE36
+#define FIRMWARE_VERSION                "0.3"
+#define HW_VERSION                      "0.1"
 
 /******************SDK CONFIG OVERWRITE********/
 
@@ -193,8 +196,13 @@
 
 #define APP_USBD_VID 0x1915
 #define APP_USBD_PID 0x520F
-#define APP_USBD_STRINGS_PRODUCT APP_USBD_STRING_DESC("nRF52 FIDO2 Security Key")
-#define APP_USBD_STRING_SERIAL APP_USBD_STRING_DESC("000000000001")
+#define APP_USBD_STRINGS_PRODUCT APP_USBD_STRING_DESC(DEVICE_NAME)
+#define APP_USBD_STRING_SERIAL APP_USBD_STRING_DESC(SERIAL_NUM)
+
+
+/* SOFTBLINK */
+#define LED_SOFTBLINK_ENABLED 1
+#define LOW_POWER_PWM_ENABLED 1
 
 
 /* mem manage */
@@ -207,6 +215,22 @@
 #define MEMORY_MANAGER_XLARGE_BLOCK_SIZE 3444
 #define MEMORY_MANAGER_XXLARGE_BLOCK_COUNT 2
 #define MEMORY_MANAGER_XXLARGE_BLOCK_SIZE 4096
+
+
+/* BLE */
+#define NRF_SDH_BLE_ENABLED 1
+#define NRF_SDH_BLE_CENTRAL_LINK_COUNT 1
+#define NRF_BLE_GATT_ENABLED 1
+#define NRF_BLE_CONN_PARAMS_ENABLED 1
+#define BLE_ADVERTISING_ENABLED 1
+#define PEER_MANAGER_ENABLED 1
+#define BLE_DIS_ENABLED 1
+
+#define NRF_SDH_BLE_VS_UUID_COUNT 1
+#define NRF_SDH_BLE_CENTRAL_LINK_COUNT 1
+#define NRF_SDH_BLE_PERIPHERAL_LINK_COUNT 1
+#define NRF_BLE_CONN_PARAMS_MAX_SLAVE_LATENCY_DEVIATION 499
+#define NRF_BLE_CONN_PARAMS_MAX_SUPERVISION_TIMEOUT_DEVIATION 65535
 
 
 /* other */

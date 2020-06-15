@@ -1,4 +1,6 @@
-#include "hid.h"
+
+#include "fido_hid.h"
+#include "fido_interfaces.h"
 #include "util.h"
 #include "hal.h"
 
@@ -397,6 +399,7 @@ static uint8_t hid_if_send(uint32_t cid, uint8_t cmd, uint8_t *p_data, size_t si
         p_data += frameLen;
 
         frame.cont.seq = seq++;
+        if(seq & TYPE_MASK) seq = 0x00;
         frameLen = MIN(size, sizeof(frame.cont.data));
         memset(frame.cont.data, 0, sizeof(frame.cont.data));
         memcpy(frame.cont.data, p_data, frameLen);
@@ -986,7 +989,7 @@ static void channel_cmd_process(hid_channel_t * p_ch)
 }
 
 
-extern volatile uint32_t ms_ticks;
+//extern volatile uint32_t ms_ticks;
 /**@brief Process HID command of every ready channel.
  * 
  */

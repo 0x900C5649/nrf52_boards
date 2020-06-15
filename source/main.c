@@ -48,7 +48,7 @@
 #include "storage.h"
 #include "crypto.h"
 #include "tests.h"
-#include "interfaces.h"
+#include "fido_interfaces.h"
 #include "ctap.h"
 #include "timer_platform.h"
 #include "timer_interface.h"
@@ -123,6 +123,7 @@ int main(void)
         }
 
         UNUSED_RETURN_VALUE(NRF_LOG_PROCESS());
+        power_manage();
         
     }
 }

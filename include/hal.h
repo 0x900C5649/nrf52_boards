@@ -3,10 +3,6 @@
 #ifndef _HAL_H
 #define _HAL_H
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-
 #include "sdk_errors.h"
 
 #include "util.h"
@@ -25,6 +21,12 @@ extern "C" {
             (bsp_event_t)CONCAT_2(BSP_USER_EVENT_RELEASE_, btn)) \
     )
 
+#define BSP_GREEN   0
+#define BSP_RED     1
+#define BSP_BLUE    2
+
+//#define SOFTBLINKMASK   BSP_LED_1_MASK
+#define SOFTBLINKMASK( color )  CONCAT_3(BSP_LED_, color,_MASK)
 
 /**
  * @brief Additional key release events
@@ -43,7 +45,7 @@ enum {
 };
 
 //GLOBALS
-volatile uint32_t ms_ticks;
+//volatile uint32_t ms_ticks;
 
 
 //FUNCTIONS
@@ -86,10 +88,5 @@ int ctap_user_presence_test(uint64_t delay);
  * *Optional*, the default implementation will provide expected behaviour with the default ctap_user_presence_test(...).
 */
 void device_disable_up(bool disable);
-
-
-#ifdef __cplusplus
-}
-#endif 
 
 #endif // _HAL_H

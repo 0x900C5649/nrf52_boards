@@ -16,6 +16,7 @@
 #include "app_gpiote.h"
 #include "mem_manager.h"
 #include "app_timer.h"
+#include "led_softblink.h"
 
 /*  LOG INIT  */
 #define NRF_LOG_MODULE_NAME hal
@@ -43,6 +44,9 @@ static bool up_disabled = false;
 APP_TIMER_DEF(m_timer_0);
 
 static void bool_to_true_timeout_handler(void * p_context);
+static void init_softblink(void);
+static void start_softblink(void);
+static void stop_softblink(void);
 
 /**
  * \brief SysTick handler used to measure precise delay. 
@@ -105,9 +109,13 @@ ret_code_t init_bsp(void)
 
     NRF_LOG_DEBUG("init assign release action");
     /* Configure LEDs */
-    bsp_board_init(BSP_INIT_LEDS);
+//    bsp_board_init(BSP_INIT_LEDS);
     NRF_LOG_DEBUG("board init");
-    bsp_board_led_invert(LED_U2F_WINK);
+//    bsp_board_led_invert(LED_U2F_WINK);
+    bsp_board_leds_off();
+    /**bsp_board_led_invert(2);*/
+    /**bsp_board_led_invert(1);*/
+    /**bsp_board_led_invert(0);*/
     /* Enable SysTick interrupt for non busy wait delay. */
     /**if (SysTick_Config(SystemCoreClock / 1000)) {*/
         /**NRF_LOG_ERROR("init_bsp: SysTick configuration error!");*/
@@ -136,38 +144,35 @@ ret_code_t init_device(void)
 {
     NRF_LOG_DEBUG("init_device");
     ret_code_t ret;
+   
     
     ret = nrf_drv_power_init(NULL);
     APP_ERROR_CHECK(ret);
 
+    NRF_LOG_INFO("sd init...");
     ret = init_softdevice();
     APP_ERROR_CHECK(ret);
-    NRF_LOG_DEBUG("sd inited");
 
-    NRF_LOG_DEBUG("mem init");
+    NRF_LOG_DEBUG("mem init ...");
     ret = nrf_mem_init();
     APP_ERROR_CHECK(ret);
 
-    ret = app_timer_init();
-    APP_ERROR_CHECK(ret);
+    NRF_LOG_INFO("timer init ...");
     init_app_timer();
-
-    NRF_LOG_DEBUG("timer_inited");
     
-    NRF_LOG_DEBUG("initing storage");
-    NRF_LOG_FLUSH();
-
+    NRF_LOG_INFO("storage init ...");
     ret = init_storage();
     APP_ERROR_CHECK(ret);
 
-    NRF_LOG_DEBUG("init bsp");
-    NRF_LOG_FLUSH();
+    NRF_LOG_INFO("bsp init...");
     ret = init_bsp();
     APP_ERROR_CHECK(ret);
-    
-    NRF_LOG_DEBUG("init device done");
-    NRF_LOG_FLUSH();
+   
+    NRF_LOG_INFO("softblink init...");
+    init_softblink();
 
+    NRF_LOG_INFO("init device done");
+    NRF_LOG_FLUSH();
     //init_cli();
     return ret;
 }
@@ -212,7 +217,7 @@ int ctap_user_presence_test(uint64_t delay)
     {
         return 2;
     }
-
+    NRF_LOG_INFO("waiting for user presence");
     APP_TIMER_DEF(up_test_timer_id);
     bool up_test_timed_out = false;
 
@@ -225,7 +230,8 @@ int ctap_user_presence_test(uint64_t delay)
     
     //reset button pressed state
     UNUSED_RETURN_VALUE(is_user_button_pressed());
-
+    
+    start_softblink();
     err_code = app_timer_start(up_test_timer_id, APP_TIMER_TICKS(delay) , &up_test_timed_out);
     APP_ERROR_CHECK(err_code);
 
@@ -250,7 +256,7 @@ int ctap_user_presence_test(uint64_t delay)
     
     err_code = app_timer_stop(up_test_timer_id);
     APP_ERROR_CHECK(err_code);
-    
+    stop_softblink();
     return ret;
 }
 
@@ -268,6 +274,30 @@ void board_wink(void)
 static void timer_handle(void * p_context)
 {
     //nothing to do
+}
+
+static void init_softblink(void)
+{
+    ret_code_t err_code;
+    const led_sb_init_params_t led_sb_init_param = LED_SB_INIT_DEFAULT_PARAMS(SOFTBLINKMASK(BSP_GREEN));
+    err_code = led_softblink_init(&led_sb_init_param);
+    APP_ERROR_CHECK(err_code);
+    led_softblink_off_time_set(400);
+    led_softblink_on_time_set(200);
+}
+
+static void start_softblink(void)
+{
+    ret_code_t err_code;
+    err_code = led_softblink_start(SOFTBLINKMASK(BSP_GREEN));
+    APP_ERROR_CHECK(err_code);
+}
+
+static void stop_softblink(void)
+{
+    ret_code_t err_code;
+    err_code = led_softblink_stop();
+    APP_ERROR_CHECK(err_code);
 }
 
 void init_app_timer(void)

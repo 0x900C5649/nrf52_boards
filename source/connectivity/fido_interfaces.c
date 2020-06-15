@@ -1,17 +1,14 @@
 
 #include "util.h"
-#include "connectivity/interfaces.h"
+#include "fido_interfaces.h"
 
-#if APP_MODULE_ENABLED(BLE)
-#include "ble.h"
-#endif
+#include "fido_ble.h"
 
 #if APP_MODULE_ENABLED(NFC)
-#include "nfc.h"
+#include "fido_nfc.h"
 #endif
 
-#include "hid.h"
-
+#include "fido_hid.h"
 
 /*  LOG INIT  */
 #define NRF_LOG_MODULE_NAME interfaces
@@ -27,11 +24,6 @@ NRF_LOG_MODULE_REGISTER();
 *****************************************************************************/
 
 volatile uint32_t device_status;
-
-
-/***************************************************************************** 
-*							FUNCTIONs
-*****************************************************************************/
 
 //shoud return returncode (0 -> ok)
 static void (*initHooks[])() = {
@@ -59,6 +51,10 @@ static void (*processHooks[])() = {
     #endif
 };
 
+
+/***************************************************************************** 
+*							FUNCTIONS
+*****************************************************************************/
 
 void initIfaces(void)
 {

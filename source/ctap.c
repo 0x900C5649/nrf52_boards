@@ -21,7 +21,7 @@ NRF_LOG_MODULE_REGISTER();
 
 #include "ctap.h"
 #include "u2f.h"
-#include "hid.h"
+//#include "fido_hid.h"
 #include "storage.h"
 #include "ctap_parse.h"
 #include "ctap_errors.h"
@@ -30,7 +30,7 @@ NRF_LOG_MODULE_REGISTER();
 #include "util.h"
 #include "log.h"
 #include "app_config.h"
-#include "interfaces.h"
+#include "fido_interfaces.h"
 //#include "extensions.h"
 //#include "version.h"
 

@@ -7,7 +7,7 @@
 #include <stdlib.h>
 #include "u2f.h"
 #include "ctap.h"
-#include "interfaces.h"
+#include "fido_interfaces.h"
 #include "crypto.h"
 #include "log.h"
 #include "hal.h"
