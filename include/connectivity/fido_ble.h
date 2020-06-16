@@ -12,10 +12,6 @@ extern "C" {
 #include "ble.h"
 #include "nrf_ble_gq.h"
 
-/***************************************************************************** 
-*                            BLE CONSTS
-*****************************************************************************/
-
 
 /***************************************************************************** 
 *                            BLE SETTINGS
@@ -29,8 +25,8 @@ extern "C" {
 
 #define BLE_DEVICE_APPEARANCE           BLE_APPEARANCE_GENERIC_TAG
 
-#define MIN_CONN_INTERVAL              MSEC_TO_UNITS(100, UNIT_1_25_MS)       /**< Minimum acceptable connection interval (0.5 seconds). */
-#define MAX_CONN_INTERVAL              MSEC_TO_UNITS(300, UNIT_1_25_MS)      /**< Maximum acceptable connection interval (1 second). */
+#define MIN_CONN_INTERVAL              MSEC_TO_UNITS(200, UNIT_1_25_MS)       /**< Minimum acceptable connection interval (0.5 seconds). */
+#define MAX_CONN_INTERVAL              MSEC_TO_UNITS(400, UNIT_1_25_MS)      /**< Maximum acceptable connection interval (1 second). */
 #define SLAVE_LATENCY                  0                                      /**< Slave latency. */
 #define CONN_SUP_TIMEOUT               MSEC_TO_UNITS(5000, UNIT_10_MS)        /**< Connection supervisory time-out (4 seconds). */
 
@@ -49,24 +45,6 @@ extern "C" {
 #define SEC_PARAM_MIN_KEY_SIZE          7                                       /**< Minimum encryption key size. */
 #define SEC_PARAM_MAX_KEY_SIZE          16                                      /**< Maximum encryption key size. */
 
-
-/***************************************************************************** 
-*                            DATA STRUCTS
-*****************************************************************************/
-
-
-
-/***************************************************************************** 
-*	       					 BLE FIDO INTERFACE
-*****************************************************************************/
-
-uint32_t ble_fido_init(ble_fido_t * p_fido, ble_fido_init_t const * p_fido_init);
-
-void ble_fido_on_ble_evt(ble_evt_t const * p_ble_evt, void * p_context);
-
-void ble_fido_send_resp(ble_fido_t * p_fido, uint8_t cmd, uint8_t * p_data, size_t size);
-
-void ble_fido_send_err(ble_fido_t * p_fido, uint8_t err_code);
 
 /***************************************************************************** 
 *                            PUBLIC INTERFACE

@@ -92,7 +92,9 @@ int main(void)
     NRF_LOG_INFO("initializing crypto");
     crypto_init(); //TODO unify return values
 
+#if !APP_PERSISTENT_MODE
     resetStorage();
+#endif
     
     NRF_LOG_INFO("init ctap");
     ctap_init();

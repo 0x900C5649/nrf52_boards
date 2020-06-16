@@ -874,15 +874,17 @@ uint8_t ctap_request(uint8_t * pkt_raw, int length, CTAP_RESPONSE * resp)
             resp->length = cbor_encoder_get_buffer_size(&encoder, buf);
 
             printf1(TAG_DUMP,"cbor [%d]: \n",  resp->length);
-                dump_hex1(TAG_DUMP,buf, resp->length);
+            dump_hex1(TAG_DUMP,buf, resp->length);
             break;
         case CTAP_CANCEL:
             printf1(TAG_CTAP,"CTAP_CANCEL\n");
+            status = CTAP1_ERR_SUCCESS;
+            resp->length = 0;
             break;
         case CTAP_GET_INFO:
             printf1(TAG_CTAP,"CTAP_GET_INFO\n");
             status = ctap_get_info(&encoder);
-
+    
             resp->length = cbor_encoder_get_buffer_size(&encoder, buf);
 
             dump_hex1(TAG_DUMP, buf, resp->length);

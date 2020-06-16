@@ -5,6 +5,7 @@ nrf_sdks/*
 
 _build/
 build/
+.ipynb_checkpoints/
 
 certs/*
 !certs/keys.c

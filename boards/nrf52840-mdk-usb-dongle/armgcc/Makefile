@@ -235,6 +235,7 @@ SRC_FILES += \
   $(SRC_DIR)/connectivity/fido_interfaces.c \
   $(SRC_DIR)/connectivity/fido_hid.c \
   $(SRC_DIR)/connectivity/fido_ble.c \
+  $(SRC_DIR)/connectivity/ble_ctap/ble_ctap.c \
   $(SRC_DIR)/ctap.c \
   $(SRC_DIR)/u2f.c \
   $(SRC_DIR)/ctap_parse.c \
@@ -264,6 +265,7 @@ SRC_FILES += \
 
 # Include folders common to all targets
 INC_FOLDERS += \
+  $(SDK_ROOT)/components/libraries \
   $(SDK_ROOT)/components/libraries/crypto/backend/cc310 \
   $(SDK_ROOT)/components/libraries/crypto/backend/cifra \
   $(SDK_ROOT)/external/nrf_cc310/include \
@@ -348,6 +350,7 @@ INC_FOLDERS += \
   $(ROOT_DIR)/config \
   $(INCL_DIR) \
   $(INCL_DIR)/connectivity \
+  $(INCL_DIR)/connectivity/ble_ctap \
 
 
 #  $(PROJ_DIR) \

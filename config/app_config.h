@@ -3,7 +3,7 @@
 
 #define APP_LOGGING_ENABLED 1
 
-#define APP_HID_ENABLED 1
+#define APP_HID_ENABLED 0
 
 #define APP_BLE_ENABLED 1
 
@@ -12,7 +12,7 @@
 #define ENABLE_U2F
 
 // if enabled keep persistent storage
-#define APP_PERSISTENT_MODE 0
+#define APP_PERSISTENT_MODE 1
 
 #define KEY_SPACE_BYTES     96
 #define MAX_KEYS            (8)
@@ -225,6 +225,9 @@
 #define BLE_ADVERTISING_ENABLED 1
 #define PEER_MANAGER_ENABLED 1
 #define BLE_DIS_ENABLED 1
+#define NRF_SDH_BLE_GATT_MAX_MTU_SIZE 247
+//#define NRF_SDH_BLE_GATT_MAX_MTU_SIZE 517
+//#define NRF_BLE_MAX_MTU_SIZE 158
 
 #define NRF_SDH_BLE_VS_UUID_COUNT 1
 #define NRF_SDH_BLE_CENTRAL_LINK_COUNT 1

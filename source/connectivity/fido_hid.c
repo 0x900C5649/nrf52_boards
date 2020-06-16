@@ -6,6 +6,7 @@
 
 #include "timer_interface.h"
 #include "ctap.h"
+#include "u2f.h"
 
 #include "mem_manager.h"
 #include "app_timer.h"
@@ -417,7 +418,7 @@ static uint8_t hid_if_recv(uint32_t * p_cid, uint8_t * p_cmd,
     uint8_t * p_recv_buf;
     size_t recv_size, totalLen, frameLen;
     HID_FRAME * p_frame;
-    uint8_t seq = 0;
+    uint8_t seq = 0x00;
 
     Timer timer;
     countdown_ms(&timer, timeout);
@@ -444,11 +445,9 @@ static uint8_t hid_if_recv(uint32_t * p_cid, uint8_t * p_cmd,
     memcpy(p_data, p_frame->init.data, frameLen);
     totalLen -= frameLen;
     p_data += frameLen;
-    NRF_LOG_DEBUG("hid_if_recv");
 
     while(totalLen)
     {
-        NRF_LOG_INFO("received and processing something");
         while(!m_report_received)
         {
             while (app_usbd_event_queue_process())
@@ -469,6 +468,7 @@ static uint8_t hid_if_recv(uint32_t * p_cid, uint8_t * p_cmd,
 
         if(p_frame->cid != *p_cid) continue;
         if(FRAME_TYPE(*p_frame) != TYPE_CONT) return ERR_INVALID_SEQ;
+        NRF_LOG_DEBUG("seq %d, expected %d", FRAME_SEQ(*p_frame), seq);
         if(FRAME_SEQ(*p_frame) != seq++) return ERR_INVALID_SEQ;
 
         frameLen = MIN(sizeof(p_frame->cont.data), totalLen);
@@ -477,6 +477,7 @@ static uint8_t hid_if_recv(uint32_t * p_cid, uint8_t * p_cmd,
         totalLen -= frameLen;
         p_data += frameLen;
     }
+    NRF_LOG_DEBUG("hid_if_recv done");
 
     return ERR_NONE;
 }
@@ -879,8 +880,16 @@ static void hid_cbor_response(hid_channel_t *p_ch)
  */
 static void hid_msg_response(hid_channel_t * p_ch)
 {
+    CTAP_RESPONSE resp;
+//    uint8_t status;
     // by flag indicated to not be implemented -> invalid CMD
-    hid_status_response(p_ch, ERR_INVALID_CMD);
+    //hid_status_response(p_ch, ERR_INVALID_CMD);
+    //TODO check length
+
+    ctap_response_init(&resp);
+    u2f_request((struct u2f_request_apdu*)p_ch->req, &resp);
+
+    hid_if_send(p_ch->cid, p_ch->cmd, p_ch->resp, resp.length);
 }
 
 /**@brief Handle a HID PING response

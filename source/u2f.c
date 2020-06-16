@@ -360,6 +360,7 @@ static int16_t u2f_register(struct u2f_register_request * req)
 int16_t u2f_version()
 {
     const char version[] = "U2F_V2";
+//    const char version[] = "FIDO_2_0";
     u2f_response_writeback((uint8_t*)version, sizeof(version)-1);
     return U2F_SW_NO_ERROR;
 }

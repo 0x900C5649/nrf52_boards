@@ -7,6 +7,7 @@
 *****************************************************************************/
 
 #include "fido_ble.h"
+#include "ble_ctap.h"
 #include "fido_interfaces.h"
 #include "hal.h"
 
@@ -129,8 +130,25 @@ static void pm_evt_handler(pm_evt_t const * p_evt);
  *
  * @return 		void
  */
-static void process_fido_request(BLE_REQ* req);
+static void process_ctap_request(ble_ctap_t * p_ctap, BLE_CTAP_REQ* req);
 
+/**
+ * @brief		Process received MSG request
+ * 
+ * @param[in] 	req request to be processed
+ *
+ * @return 		void
+ */
+static void ble_ctap_msg_response(ble_ctap_t * p_ctap, BLE_CTAP_REQ* req);
+
+/** 
+ * @brief		Process received PING request
+ *
+ * @param[in] 	req	request to be processed
+ *
+ * @return 		void
+ */
+static void ble_ctap_ping_response(ble_ctap_t * p_ctap, BLE_CTAP_REQ* req);
 
 /***************************************************************************** 
 *							GLOBALS
@@ -138,12 +156,12 @@ static void process_fido_request(BLE_REQ* req);
 
 NRF_BLE_GATT_DEF(m_gatt);                                                       /**< GATT module instance. */
 //NRF_BLE_QWR_DEF(m_qwr);                                                         /**< Context for the Queued Write module.*/
-BLE_FIDO_DEF(m_fido);
+BLE_CTAP_DEF(m_ctap);
 BLE_ADVERTISING_DEF(m_advertising);                                             /**< Advertising module instance. */
 
 static uint16_t m_conn_handle = BLE_CONN_HANDLE_INVALID;
 
-volatile bool m_hvx_pending = false;
+//volatile bool m_hvx_pending = false;
 
 // YOUR_JOB: Use UUIDs for service(s) used in your application.
 static ble_uuid_t m_adv_uuids[] =                                               /**< Universally unique service identifiers. */
@@ -159,7 +177,7 @@ static ble_uuid_t m_adv_uuids[] =                                               
 
 static void pm_evt_handler(pm_evt_t const * p_evt)
 {
-    NRF_LOG_DEBUG("pm_evt_handler");
+//    NRF_LOG_DEBUG("pm_evt_handler");
     pm_handler_on_pm_evt(p_evt);
     pm_handler_flash_clean(p_evt);
 
@@ -176,6 +194,7 @@ static void pm_evt_handler(pm_evt_t const * p_evt)
 
 static void ble_evt_handler(ble_evt_t const * p_ble_evt, void * p_context)
 {
+//    NRF_LOG_DEBUG("ble_evt_handler app");
     ret_code_t err_code = NRF_SUCCESS;
 
     switch (p_ble_evt->header.evt_id)
@@ -263,7 +282,7 @@ static void ble_stack_init(void)
     uint32_t ram_start = 0;
     err_code = nrf_sdh_ble_default_cfg_set(APP_BLE_CONN_CFG_TAG, &ram_start);
     APP_ERROR_CHECK(err_code);
-
+    
     // Enable BLE stack.
     err_code = nrf_sdh_ble_enable(&ram_start);
     APP_ERROR_CHECK(err_code);
@@ -317,7 +336,7 @@ static void services_init(void)
 {
     NRF_LOG_DEBUG("services init");
     ret_code_t         err_code;
-    ble_fido_init_t    fido_init;
+    ble_ctap_init_t    ctap_init;
     ble_dis_init_t     dis_init;
     ble_dis_sys_id_t   sys_id;
 
@@ -340,10 +359,13 @@ static void services_init(void)
     APP_ERROR_CHECK(err_code);
 
 
-    // Initialize FIDO Service. TODO
-    memset(&fido_init, 0, sizeof(fido_init));
+    // Initialize CTAP Service. TODO
+    memset(&ctap_init, 0, sizeof(ctap_init));
+    
+    ctap_init.request_handler = &process_ctap_request;
+    ctap_init.m_gatt          = &m_gatt;
 
-    err_code = ble_fido_init(&m_fido, &fido_init);
+    err_code = ble_ctap_init(&m_ctap, &ctap_init);
     APP_ERROR_CHECK(err_code);
 
 }
@@ -461,39 +483,39 @@ static void advertising_start(bool erase_bonds)
 *							MESSAGE HANDLING
 *****************************************************************************/
 
-static void process_ctap_request(BLE_CTAP_REQ* req)
+static void process_ctap_request(ble_ctap_t * p_ctap, BLE_CTAP_REQ* req)
 {
     //set timeout
     
     switch(req->cmd)
     {
-        case BLE_CMD_PING:
+        case BLE_CTAP_CMD_PING:
             NRF_LOG_INFO("BLE_PING");
-            ble_fido_ping_response(req);
+            ble_ctap_ping_response(p_ctap, req);
             break;
-        case BLE_CMD_MSG:
+        case BLE_CTAP_CMD_MSG:
             NRF_LOG_INFO("BLE_MSG");
-            ble_fido_msg_response(req);
+            ble_ctap_msg_response(p_ctap, req);
             break;
-        /**case BLE_CMD_CANCEL:*/
+        /**case BLE_CTAP_CMD_CANCEL:*/
             /**NRF_LOG_INFO("BLE_CANCEL");*/
             /**TODO */
             /**break;*/
         default:
             NRF_LOG_WARNING("Unknown Command: 0x%x", req->cmd);
-            ble_fido_send_err(&m_fido, BLE_ERR_INVALID_CMD);
+            ble_ctap_send_err(p_ctap, BLE_CTAP_ERR_INVALID_CMD);
             break;
     }
 }
 
-static void ble_fido_ping_response(BLE_REQ* req)
+static void ble_ctap_ping_response(ble_ctap_t * p_ctap, BLE_CTAP_REQ* req)
 {
     //PONG
-    ble_fido_send_resp(&m_fido, req->cmd, req->data, (size_t) req->length);
+    ble_ctap_send_resp(p_ctap, req->cmd, req->data, (size_t) req->length, true);
 }
 
 
-static void ble_fido_msg_response(BLE_REQ* req)
+static void ble_ctap_msg_response(ble_ctap_t * p_ctap, BLE_CTAP_REQ* req)
 {
     
     CTAP_RESPONSE resp;
@@ -508,7 +530,7 @@ static void ble_fido_msg_response(BLE_REQ* req)
     *sendbuffer = status; //cpy status
     memcpy(sendbuffer+1, resp.data, resp.length);
 
-    ble_fido_send_resp(&m_fido, req->cmd, sendbuffer, resp.length + 1);
+    ble_ctap_send_resp(p_ctap, req->cmd, sendbuffer, resp.length + 1, true);
 
     nrf_free(sendbuffer);
 }
@@ -534,12 +556,6 @@ void ble_init()
 
 void ble_process()
 {
-    if(m_fido.readyfordispatch)// message to handle
-    {
-        NRF_LOG_INFO("request received");
-        
-        process_fido_request((BLE_REQ *)m_fido.dispatchPackage);
-        ble_fido_clear_recv(&m_fido);
-    }
+    ble_ctap_process(&m_ctap);
 }
 

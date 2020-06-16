@@ -6,6 +6,21 @@
 * Description:      ctap ble gatt service
 *****************************************************************************/
 
+#include "string.h"
+#include "stdint.h"
+#include "sdk_config.h"
+
+#include "ctap.h"
+
+#include "ble.h"
+#include "ble_hci.h"
+#include "ble_srv_common.h"
+#include "nrf_sdh.h"
+#include "nrf_sdh_soc.h"
+#include "nrf_sdh_ble.h"
+#include "ble_conn_state.h"
+#include "nrf_ble_gatt.h"
+
 /***************************************************************************** 
 *							BLE_CONTS
 *****************************************************************************/
@@ -56,14 +71,15 @@
 
 #define CTAP_SERVICE_REVISION_BITFIELD_U2F_1_1  (1 << 7)
 #define CTAP_SERVICE_REVISION_BITFIELD_U2F_1_2  (1 << 6)
-#define CTAP_SERVICE_REVISION_BITFIELD_FIDO2    (1 << 5)
+#define CTAP_SERVICE_REVISION_BITFIELD_CTAP2    (1 << 5)
 
 
 /***************************************************************************** 
-*							BLE FIDO SETTING
+*							BLE CTAP SETTING
 *****************************************************************************/
 
-#define BLE_CTAP_MTU                (NRF_SDH_BLE_GATT_MAX_MTU_SIZE -3)
+//#define BLE_CTAP_MTU                (NRF_SDH_BLE_GATT_MAX_MTU_SIZE -3)
+#define BLE_CTAP_MTU                NRF_SDH_BLE_GATT_MAX_MTU_SIZE -3
 #define BLE_CTAP_CTRL_PT_LENGTH     BLE_CTAP_MTU
 #define BLE_CTAP_STATUS_LENGTH      BLE_CTAP_MTU
 #define BLE_CTAP_BLE_OBSERVER_PRIO  2
@@ -73,16 +89,16 @@
 *							 USEFUL MACROS
 *****************************************************************************/
 
-/**@brief   Macro for defining a ble_fido instance.
+/**@brief   Macro for defining a ble_ctap instance.
  *
  * @param   _name   Name of the instance.
  * @hideinitializer
  */
-#define BLE_FIDO_DEF(_name)                          \
-    static ble_fido_t _name;                         \
+#define BLE_CTAP_DEF(_name)                          \
+    static ble_ctap_t _name;                         \
     NRF_SDH_BLE_OBSERVER(_name ## _obs,             \
-                         BLE_FIDO_BLE_OBSERVER_PRIO, \
-                         ble_fido_on_ble_evt, &_name)
+                         BLE_CTAP_BLE_OBSERVER_PRIO, \
+                         ble_ctap_on_ble_evt, &_name)
 
 
 /***************************************************************************** 
@@ -96,11 +112,11 @@ typedef struct {
       uint8_t cmd;                      // Command - b7 set
       uint8_t bcnth;                    // Message byte count - high part
       uint8_t bcntl;                    // Message byte count - low part
-      uint8_t data[BLE_MTU - 3];        // Data payload
+      uint8_t data[BLE_CTAP_MTU - 3];        // Data payload
     } init;
     struct {
       uint8_t seq;                      // Sequence number - b7 cleared
-      uint8_t data[BLE_MTU - 1];        // Data payload
+      uint8_t data[BLE_CTAP_MTU - 1];        // Data payload
     } cont;
   };
 } BLE_CTAP_FRAME; // Cmp. HID_FRAME
@@ -116,138 +132,62 @@ typedef struct {
     CTAP_RESPONSE data;
 } BLE_CTAP_RESP;
 
-typedef struct {
-    uint16_t                    service_handle;
-    uint8_t                     chr_uuid_type;
-    ble_gatts_char_handles_t    ctrl_pt_handle;
-    ble_gatts_char_handles_t    status_handle;
-    ble_gatts_char_handles_t    ctrl_length_handle;
-    ble_gatts_char_handles_t    revision_bitfield_handle;
-    volatile uint16_t           conn_handle;
-    nrf_ble_gq_t *              p_gatt_queue;
-    volatile uint8_t            waitingforContinuation:1;
-    volatile uint8_t            readyfordispatch:1;
-    volatile uint16_t           recvoffset;
-    volatile uint8_t            recvnextseq;
-    volatile BLE_REQ *          dispatchPackage;
-} ble_fido_t;
 
-typedef void (*ble_ctap_msg_handler_t)(ble_fido_t * p_fido, BLE_REQ* req);
+typedef struct ble_ctap_t ble_ctap_t;
+
+typedef void (*ble_ctap_request_handler_t)(ble_ctap_t * p_ctap, BLE_CTAP_REQ* req);
 
 typedef struct {
-    ble_ctap_msg_handler_t  evt_handler; //TODO
-//    ble_srv_error_handler_t error_handler;
-} ble_fido_init_t;
+    ble_ctap_request_handler_t  request_handler; //TODO
+    nrf_ble_gatt_t *            m_gatt;
+} ble_ctap_init_t;
+
+struct ble_ctap_t{
+    uint16_t                            service_handle;
+    uint8_t                             chr_uuid_type;
+    ble_gatts_char_handles_t            ctrl_pt_handle;
+    ble_gatts_char_handles_t            status_handle;
+    ble_gatts_char_handles_t            ctrl_length_handle;
+    ble_gatts_char_handles_t            revision_bitfield_handle;
+    volatile uint16_t                   conn_handle;
+//    nrf_ble_gq_t *              p_gatt_queue;
+    ble_ctap_request_handler_t          request_handler;
+    volatile uint8_t                    waitingforContinuation:1;
+    volatile uint8_t                    readyfordispatch:1;
+    volatile uint16_t                   recvoffset;
+    volatile uint8_t                    recvnextseq;
+    volatile BLE_CTAP_REQ * volatile    dispatchPackage;
+    nrf_ble_gatt_t *                    m_gatt;
+};
 
 
 /***************************************************************************** 
 *							 USEFUL MACROS
 *****************************************************************************/
 
-/**@brief   Macro for defining a ble_fido instance.
+/**@brief   Macro for defining a ble_ctap instance.
  *
  * @param   _name   Name of the instance.
  * @hideinitializer
  */
-#define BLE_FIDO_DEF(_name)                          \
-    static ble_fido_t _name;                         \
+#define BLE_CTAP_DEF(_name)                          \
+    static ble_ctap_t _name;                         \
     NRF_SDH_BLE_OBSERVER(_name ## _obs,             \
-                         BLE_FIDO_BLE_OBSERVER_PRIO, \
-                         ble_fido_on_ble_evt, &_name)
+                         BLE_CTAP_BLE_OBSERVER_PRIO, \
+                         ble_ctap_on_ble_evt, &_name)
 
 
 /***************************************************************************** 
-*							 USEFUL MACROS
+*	       					 BLE CTAP INTERFACE
 *****************************************************************************/
 
-/**@brief   Macro for defining a ble_fido instance.
- *
- * @param   _name   Name of the instance.
- * @hideinitializer
- */
-#define BLE_FIDO_DEF(_name)                          \
-    static ble_fido_t _name;                         \
-    NRF_SDH_BLE_OBSERVER(_name ## _obs,             \
-                         BLE_FIDO_BLE_OBSERVER_PRIO, \
-                         ble_fido_on_ble_evt, &_name)
+uint32_t ble_ctap_init(ble_ctap_t * p_ctap, ble_ctap_init_t const * p_ctap_init);
 
-/***************************************************************************** 
-*							FUNCTIONS
-*****************************************************************************/
+void ble_ctap_on_ble_evt(ble_evt_t const * p_ble_evt, void * p_context);
 
-/**@brief Function for handling writes to fido control point.
- *
- * @param[in]   p_fido                  fido service structure
- * @param[in]   ble_gatts_evt_write_t   write event
- */
-static void ble_fido_on_ctrl_pt_write(ble_fido_t * p_fido, ble_gatts_evt_write_t const * p_evt_write);
+void ble_ctap_send_resp(ble_ctap_t * p_ctap, uint8_t cmd, uint8_t * p_data, size_t size, bool reqcomplete);
 
-/**@brief Function for handling writes to fido revision bitfield.
- *
- * @param[in]   p_fido                  fido service structure
- * @param[in]   ble_gatts_evt_write_t   write event
- */
-static void ble_fido_on_revision_bitfield_write(ble_fido_t * p_fido, ble_gatts_evt_write_t const * p_evt_write);
+void ble_ctap_send_err(ble_ctap_t * p_ctap, uint8_t err_code);
 
-/**@brief Function for cleaning the recving datastructures in the fido service structure
- *
- * @param[in]   p_fido                  fido service structure
- */
-static void ble_fido_clear_recv(ble_fido_t * p_fido);
-
-
-/**@brief ble fido write event handler
- *
- * @param[in]   p_fido                  fido service structure
- * @param[in]   p_ble_evt               ble event
- */
-static void ble_fido_on_write(ble_fido_t * p_fido, ble_evt_t const * p_ble_evt);
-
-/**@brief ble fido connect event handler
- *
- * @param[in]   p_fido                  fido service structure
- * @param[in]   p_ble_evt               ble event
- */
-static void ble_fido_on_connect(ble_fido_t * p_fido, ble_evt_t const * p_ble_evt);
-
-/**@brief ble fido disconnect event handler
- *
- * @param[in]   p_fido                  fido service structure
- * @param[in]   p_ble_evt               ble event
- */
-static void ble_fido_on_disconnect(ble_fido_t * p_fido, ble_evt_t const * p_ble_evt);
-
-/**@brief ble power manage until at least 1 transmission is completed
- */
-static void ble_waitforsendcmpl();
-
-/** 
- * @brief		internal function for sending a single ble frame
- *
- * @param[in] 	conn_handle	    ble connection handle
- * @param[in] 	char_handle	    characteristics handle to send notification from
- * @param[in] 	p_frame 	    frame to be send
- * @param[in] 	p_length	    length of the to be send frame (len(p_frame))
- * 
- * @return 		return nrf-sdk ret_code_t
- */
-static ret_code_t ble_frame_send(uint16_t conn_handle,  ble_gatts_char_handles_t char_handle, BLE_FRAME * p_frame, uint16_t * p_length);
-
-/**
- * @brief		Process received MSG request
- * 
- * @param[in] 	req request to be processed
- *
- * @return 		void
- */
-static void ble_fido_msg_response(BLE_REQ* req);
-
-/** 
- * @brief		Process received PING request
- *
- * @param[in] 	req	request to be processed
- *
- * @return 		void
- */
-static void ble_fido_ping_response(BLE_REQ* req);
+bool ble_ctap_process(ble_ctap_t * p_ctap);
 
