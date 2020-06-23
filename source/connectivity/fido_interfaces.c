@@ -1,14 +1,19 @@
 
 #include "util.h"
 #include "fido_interfaces.h"
+#include "app_config.h"
 
+#if APP_MODULE_ENABLED(BLE)
 #include "fido_ble.h"
+#endif
 
 #if APP_MODULE_ENABLED(NFC)
 #include "fido_nfc.h"
 #endif
 
+#if APP_MODULE_ENABLED(HID)
 #include "fido_hid.h"
+#endif
 
 /*  LOG INIT  */
 #define NRF_LOG_MODULE_NAME interfaces

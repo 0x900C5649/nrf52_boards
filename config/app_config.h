@@ -5,9 +5,9 @@
 
 #define APP_HID_ENABLED 0
 
-#define APP_BLE_ENABLED 1
+#define APP_BLE_ENABLED 0
 
-#define APP_NFC_ENABLED 0
+#define APP_NFC_ENABLED 1
 
 #define ENABLE_U2F
 

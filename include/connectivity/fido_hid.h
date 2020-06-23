@@ -206,7 +206,7 @@ typedef struct channel {
     uint8_t resp[CTAP_RESPONSE_BUFFER_SIZE+1]; //TODO
 } hid_channel_t;
 
-typedef struct __attribute__ ((__packed__)) //TODO REMOVE
+/*typedef struct __attribute__ ((__packed__)) //TODO REMOVE
 {
     uint8_t cla;
     uint8_t ins;
@@ -215,7 +215,7 @@ typedef struct __attribute__ ((__packed__)) //TODO REMOVE
     uint8_t lc1;
     uint8_t lc2;
     uint8_t lc3;
-} hid_req_apdu_header_t; 
+} hid_req_apdu_header_t; */
 
 
 void hid_init    (void);
