@@ -13,52 +13,52 @@
  * */
 #ifndef EXTERNAL_SOLO_CRYPTO
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
+    #include <stdio.h>
+    #include <stdlib.h>
+    #include <string.h>
 
-#include "util.h"
-#include "crypto.h"
+    #include "util.h"
+    #include "crypto.h"
 
-#include "sha256.h"
-#include "uECC.h"
-#include "aes.h"
-#include "ctap.h"
-#include "device.h"
-// stuff for SHA512
-#include "sha2.h"
-#include "blockwise.h"
-#include APP_CONFIG
-#include "log.h"
+    #include "sha256.h"
+    #include "uECC.h"
+    #include "aes.h"
+    #include "ctap.h"
+    #include "device.h"
+    // stuff for SHA512
+    #include "sha2.h"
+    #include "blockwise.h"
+    #include APP_CONFIG
+    #include "log.h"
 
 
 typedef enum
 {
     MBEDTLS_ECP_DP_NONE = 0,
-    MBEDTLS_ECP_DP_SECP192R1,      /*!< 192-bits NIST curve  */
-    MBEDTLS_ECP_DP_SECP224R1,      /*!< 224-bits NIST curve  */
-    MBEDTLS_ECP_DP_SECP256R1,      /*!< 256-bits NIST curve  */
-    MBEDTLS_ECP_DP_SECP384R1,      /*!< 384-bits NIST curve  */
-    MBEDTLS_ECP_DP_SECP521R1,      /*!< 521-bits NIST curve  */
-    MBEDTLS_ECP_DP_BP256R1,        /*!< 256-bits Brainpool curve */
-    MBEDTLS_ECP_DP_BP384R1,        /*!< 384-bits Brainpool curve */
-    MBEDTLS_ECP_DP_BP512R1,        /*!< 512-bits Brainpool curve */
-    MBEDTLS_ECP_DP_CURVE25519,           /*!< Curve25519               */
-    MBEDTLS_ECP_DP_SECP192K1,      /*!< 192-bits "Koblitz" curve */
-    MBEDTLS_ECP_DP_SECP224K1,      /*!< 224-bits "Koblitz" curve */
-    MBEDTLS_ECP_DP_SECP256K1,      /*!< 256-bits "Koblitz" curve */
+    MBEDTLS_ECP_DP_SECP192R1,  /*!< 192-bits NIST curve  */
+    MBEDTLS_ECP_DP_SECP224R1,  /*!< 224-bits NIST curve  */
+    MBEDTLS_ECP_DP_SECP256R1,  /*!< 256-bits NIST curve  */
+    MBEDTLS_ECP_DP_SECP384R1,  /*!< 384-bits NIST curve  */
+    MBEDTLS_ECP_DP_SECP521R1,  /*!< 521-bits NIST curve  */
+    MBEDTLS_ECP_DP_BP256R1,    /*!< 256-bits Brainpool curve */
+    MBEDTLS_ECP_DP_BP384R1,    /*!< 384-bits Brainpool curve */
+    MBEDTLS_ECP_DP_BP512R1,    /*!< 512-bits Brainpool curve */
+    MBEDTLS_ECP_DP_CURVE25519, /*!< Curve25519               */
+    MBEDTLS_ECP_DP_SECP192K1,  /*!< 192-bits "Koblitz" curve */
+    MBEDTLS_ECP_DP_SECP224K1,  /*!< 224-bits "Koblitz" curve */
+    MBEDTLS_ECP_DP_SECP256K1,  /*!< 256-bits "Koblitz" curve */
 } mbedtls_ecp_group_id;
 
 
 //static SHA256_CTX sha256_ctx;
 //static cf_sha512_context sha512_ctx;
-static nrf_crypto_hash_context_t           sha256_ctx;
-static nrf_crypto_hash_context_t           sha512_ctx;
-static const struct uECC_Curve_t * _es256_curve = NULL;
-static ret_code_t nrf_crypto_err_code;
+static nrf_crypto_hash_context_t  sha256_ctx;
+static nrf_crypto_hash_context_t  sha512_ctx;
+static const struct uECC_Curve_t* _es256_curve = NULL;
+static ret_code_t                 nrf_crypto_err_code;
 //static const uint8_t * _signing_key = NULL;
-static const nrf_crypto_ecc_private_key_t _signing_key;
-static int _key_len = 0;
+static const nrf_crypto_ecc_private_key_t            _signing_key;
+static int                                           _key_len = 0;
 static nrf_crypto_ecc_public_key_calculate_context_t ecc_ctx;
 
 // Secrets for testing only
@@ -75,25 +75,27 @@ void crypto_init(void)
 
 void crypto_sha256_init(void)
 {
-    err_code = nrf_crypto_hash_init(&sha256_ctx, &g_nrf_crypto_hash_sha256_info);
+    err_code =
+        nrf_crypto_hash_init(&sha256_ctx, &g_nrf_crypto_hash_sha256_info);
     APP_ERROR_CHECK(err_code);
     //sha256_init(&sha256_ctx);
 }
 
 void crypto_sha512_init(void)
 {
-    err_code = nrf_crypto_hash_init(&sha256_ctx, &g_nrf_crypto_hash_sha512_info);
+    err_code =
+        nrf_crypto_hash_init(&sha256_ctx, &g_nrf_crypto_hash_sha512_info);
     APP_ERROR_CHECK(err_code);
     //cf_sha512_init(&sha512_ctx);
 }
 
-void crypto_load_master_secret(uint8_t * key)
+void crypto_load_master_secret(uint8_t* key)
 {
-#if KEY_SPACE_BYTES < 96
-#error "need more key bytes"
-#endif
+    #if KEY_SPACE_BYTES < 96
+        #error "need more key bytes"
+    #endif
     memmove(master_secret, key, 64);
-    memmove(transport_secret, key+64, 32);
+    memmove(transport_secret, key + 64, 32);
 }
 
 void crypto_reset_master_secret(void)
@@ -104,14 +106,15 @@ void crypto_reset_master_secret(void)
     ctap_generate_rng(transport_secret, 32);
 }
 
-void crypto_sha256_update(uint8_t * data, size_t len)
+void crypto_sha256_update(uint8_t* data, size_t len)
 {
     //sha256_update(&sha256_ctx, data, len);
     err_code = nrf_crypto_hash_update(&sha256_ctx, data, len);
     APP_ERROR_CHECK(err_code);
 }
 
-void crypto_sha512_update(const uint8_t * data, size_t len) {
+void crypto_sha512_update(const uint8_t* data, size_t len)
+{
     //cf_sha512_update(&sha512_ctx, data, len);
     err_code = nrf_crypto_hash_update(&sha512_ctx, data, len);
     APP_ERROR_CHECK(err_code);
@@ -124,16 +127,16 @@ void crypto_sha256_update_secret()
     APP_ERROR_CHECK(err_code);
 }
 
-void crypto_sha256_final(uint8_t * hash)
+void crypto_sha256_final(uint8_t* hash)
 {
     uint32_t digest_size = NRF_CRYPTO_HASH_SIZE_SHA256;
     //sha256_final(&sha256_ctx, hash);
     err_code = nrf_crypto_hash_finalize(&sha256_ctx, hash, &digest_size);
     APP_ERROR_CHECK(err_code);
-//    memset(&sha256_ctx,0, sizeof(sha256_ctx)); //empty hash context to prevent double use
+    //    memset(&sha256_ctx,0, sizeof(sha256_ctx)); //empty hash context to prevent double use
 }
 
-void crypto_sha512_final(uint8_t * hash)
+void crypto_sha512_final(uint8_t* hash)
 {
     uint32_t digest_size = NRF_CRYPTO_HASH_SIZE_SHA512;
     err_code = nrf_crypto_hash_finalize(&sha512_ctx, hash, *digest_size);
@@ -142,24 +145,24 @@ void crypto_sha512_final(uint8_t * hash)
     //cf_sha512_digest_final(&sha512_ctx, hash);
 }
 
-void crypto_sha256_hmac_init(uint8_t * key, uint32_t klen, uint8_t * hmac)
+void crypto_sha256_hmac_init(uint8_t* key, uint32_t klen, uint8_t* hmac)
 {
-    uint8_t buf[64];
+    uint8_t      buf[64];
     unsigned int i;
     memset(buf, 0, sizeof(buf));
 
     if (key == CRYPTO_MASTER_KEY)
     {
-        key = master_secret;
-        klen = sizeof(master_secret)/2;
+        key  = master_secret;
+        klen = sizeof(master_secret) / 2;
     }
     else if (key == CRYPTO_TRANSPORT_KEY)
     {
-        key = transport_secret;
+        key  = transport_secret;
         klen = 32;
     }
 
-    if(klen > 64)
+    if (klen > 64)
     {
         printf2(TAG_ERR, "Error, key size must be <= 64\n");
         exit(1);
@@ -167,44 +170,38 @@ void crypto_sha256_hmac_init(uint8_t * key, uint32_t klen, uint8_t * hmac)
 
     memmove(buf, key, klen);
 
-    for (i = 0; i < sizeof(buf); i++)
-    {
-        buf[i] = buf[i] ^ 0x36;
-    }
+    for (i = 0; i < sizeof(buf); i++) { buf[i] = buf[i] ^ 0x36; }
 
     crypto_sha256_init();
     crypto_sha256_update(buf, 64);
 }
 
-void crypto_sha256_hmac_final(uint8_t * key, uint32_t klen, uint8_t * hmac)
+void crypto_sha256_hmac_final(uint8_t* key, uint32_t klen, uint8_t* hmac)
 {
-    uint8_t buf[64];
+    uint8_t      buf[64];
     unsigned int i;
     crypto_sha256_final(hmac);
     memset(buf, 0, sizeof(buf));
     if (key == CRYPTO_MASTER_KEY)
     {
-        key = master_secret;
-        klen = sizeof(master_secret)/2;
+        key  = master_secret;
+        klen = sizeof(master_secret) / 2;
     }
     else if (key == CRYPTO_TRANSPORT_KEY2)
     {
-        key = transport_secret;
+        key  = transport_secret;
         klen = 32;
     }
 
 
-    if(klen > 64)
+    if (klen > 64)
     {
         printf2(TAG_ERR, "Error, key size must be <= 64\n");
         exit(1);
     }
     memmove(buf, key, klen);
 
-    for (i = 0; i < sizeof(buf); i++)
-    {
-        buf[i] = buf[i] ^ 0x5c;
-    }
+    for (i = 0; i < sizeof(buf); i++) { buf[i] = buf[i] ^ 0x5c; }
 
     crypto_sha256_init();
     crypto_sha256_update(buf, 64);
@@ -215,84 +212,82 @@ void crypto_sha256_hmac_final(uint8_t * key, uint32_t klen, uint8_t * hmac)
 //TODO
 void crypto_ecc256_init(void)
 {
-    uECC_set_rng((uECC_RNG_Function)ctap_generate_rng);
+    uECC_set_rng((uECC_RNG_Function) ctap_generate_rng);
     _es256_curve = uECC_secp256r1();
 }
 
 
 void crypto_ecc256_load_attestation_key(void)
 {
-    err_code = nrf_crypto_ecc_private_key_from_raw( &g_nrf_crypto_ecc_secp256r1_curve_info,
-                                                    &_signing_key,
-                                                    device_get_attestaionkey(),
-                                                    32
-                                                  );
+    err_code = nrf_crypto_ecc_private_key_from_raw(
+        &g_nrf_crypto_ecc_secp256r1_curve_info,
+        &_signing_key,
+        device_get_attestaionkey(),
+        32);
     APP_ERROR_CHECK(err_code);
-//    _signing_key = device_get_attestation_key();
-//    _key_len = 32;
+    //    _signing_key = device_get_attestation_key();
+    //    _key_len = 32;
 }
 
-void crypto_ecc256_sign(uint8_t * data, int len, uint8_t * sig)
+void crypto_ecc256_sign(uint8_t* data, int len, uint8_t* sig)
 {
     size_t siglen = 64;
-    err_code = nrf_crypto_ecdsa_sign( &ecc_ctx,
-                                      &_signing_key,
-                                      data,
-                                      len,
-                                      sig,
-                                      &siglen
-                                    );
+    err_code =
+        nrf_crypto_ecdsa_sign(&ecc_ctx, &_signing_key, data, len, sig, &siglen);
     APP_ERROR_CHECK(err_code);
 
-    if ( uECC_sign(_signing_key, data, len, sig, _es256_curve) == 0)
+    if (uECC_sign(_signing_key, data, len, sig, _es256_curve) == 0)
     {
         printf2(TAG_ERR, "error, uECC failed\n");
         exit(1);
     }
 }
 
-void crypto_ecc256_load_key(uint8_t * data, int len, uint8_t * data2, int len2)
+void crypto_ecc256_load_key(uint8_t* data, int len, uint8_t* data2, int len2)
 {
     static uint8_t privkey[32];
-    generate_private_key(data,len,data2,len2,privkey);
-    err_code = nrf_crypto_ecc_private_key_from_raw( &g_nrf_crypto_ecc_secp256r1_curve_info,
-                                                    &_signing_key,
-                                                    &privkey,
-                                                    32
-                                                  );
-//    _signing_key = privkey;
-//    _key_len = 32;
+    generate_private_key(data, len, data2, len2, privkey);
+    err_code = nrf_crypto_ecc_private_key_from_raw(
+        &g_nrf_crypto_ecc_secp256r1_curve_info,
+        &_signing_key,
+        &privkey,
+        32);
+    //    _signing_key = privkey;
+    //    _key_len = 32;
 }
 
-void crypto_ecdsa_sign(uint8_t * data, int len, uint8_t * sig, int MBEDTLS_ECP_ID)
+void crypto_ecdsa_sign(uint8_t* data, int len, uint8_t* sig, int MBEDTLS_ECP_ID)
 {
+    const struct uECC_Curve_t* curve = NULL;
 
-    const struct uECC_Curve_t * curve = NULL;
-
-    switch(MBEDTLS_ECP_ID)
+    switch (MBEDTLS_ECP_ID)
     {
         case MBEDTLS_ECP_DP_SECP192R1:
             curve = uECC_secp192r1();
-            if (_key_len != 24)  goto fail;
+            if (_key_len != 24)
+                goto fail;
             break;
         case MBEDTLS_ECP_DP_SECP224R1:
             curve = uECC_secp224r1();
-            if (_key_len != 28)  goto fail;
+            if (_key_len != 28)
+                goto fail;
             break;
         case MBEDTLS_ECP_DP_SECP256R1:
             curve = uECC_secp256r1();
-            if (_key_len != 32)  goto fail;
+            if (_key_len != 32)
+                goto fail;
             break;
         case MBEDTLS_ECP_DP_SECP256K1:
             curve = uECC_secp256k1();
-            if (_key_len != 32)  goto fail;
+            if (_key_len != 32)
+                goto fail;
             break;
         default:
             printf2(TAG_ERR, "error, invalid ECDSA alg specifier\n");
             exit(1);
     }
 
-    if ( uECC_sign(_signing_key, data, len, sig, curve) == 0)
+    if (uECC_sign(_signing_key, data, len, sig, curve) == 0)
     {
         printf2(TAG_ERR, "error, uECC failed\n");
         exit(1);
@@ -302,16 +297,20 @@ void crypto_ecdsa_sign(uint8_t * data, int len, uint8_t * sig, int MBEDTLS_ECP_I
 fail:
     printf2(TAG_ERR, "error, invalid key length\n");
     exit(1);
-
 }
 
-void generate_private_key(uint8_t * data, int len, uint8_t * data2, int len2, uint8_t * privkey)
+void generate_private_key(
+    uint8_t* data,
+    int      len,
+    uint8_t* data2,
+    int      len2,
+    uint8_t* privkey)
 {
     //TODO
     crypto_sha256_hmac_init(CRYPTO_MASTER_KEY, 0, privkey);
     crypto_sha256_update(data, len);
     crypto_sha256_update(data2, len2);
-    crypto_sha256_update(master_secret, 32);    // TODO AES
+    crypto_sha256_update(master_secret, 32);  // TODO AES
     crypto_sha256_hmac_final(CRYPTO_MASTER_KEY, 0, privkey);
 
     crypto_aes256_init(master_secret + 32, NULL);
@@ -319,7 +318,11 @@ void generate_private_key(uint8_t * data, int len, uint8_t * data2, int len2, ui
 }
 
 /*int uECC_compute_public_key(const uint8_t *private_key, uint8_t *public_key, uECC_Curve curve);*/
-void crypto_ecc256_derive_public_key(uint8_t * data, int len, uint8_t * x, uint8_t * y)
+void crypto_ecc256_derive_public_key(
+    uint8_t* data,
+    int      len,
+    uint8_t* x,
+    uint8_t* y)
 {
     uint8_t privkey[32];
     uint8_t pubkey[64];
@@ -327,52 +330,50 @@ void crypto_ecc256_derive_public_key(uint8_t * data, int len, uint8_t * x, uint8
     nrf_crypto_ecc_private_key_t __privkey;
     nrf_crypto_ecc_public_key_t  __pubkey;
 
-    generate_private_key(data,len,NULL,0,privkey);
-    err_code = nrf_crypto_ecc_private_key_from_raw( &g_nrf_crypto_ecc_secp256r1_curve_info,
-                                                    &__privkey,
-                                                    &privkey,
-                                                    32
-                                                  );
+    generate_private_key(data, len, NULL, 0, privkey);
+    err_code = nrf_crypto_ecc_private_key_from_raw(
+        &g_nrf_crypto_ecc_secp256r1_curve_info,
+        &__privkey,
+        &privkey,
+        32);
     APP_ERROR_CHECK(err_code);
 
-    err_code = nrf_crypto_ecc_public_key_calculate( &ecc_ctx,    // Context
-                                                    &__privkey,  // Input private key
-                                                    &__pubkey);  // Output public key
+    err_code = nrf_crypto_ecc_public_key_calculate(
+        &ecc_ctx,    // Context
+        &__privkey,  // Input private key
+        &__pubkey);  // Output public key
     APP_ERROR_CHECK(err_code);
 
-    memset(pubkey,0,sizeof(pubkey));
-    err_code = nrf_crypto_ecc_public_key_to_raw( &__pubkey,
-                                                 &pubkey,
-                                                 64
-                                               );
+    memset(pubkey, 0, sizeof(pubkey));
+    err_code = nrf_crypto_ecc_public_key_to_raw(&__pubkey, &pubkey, 64);
     APP_ERROR_CHECK(err_code);
 
     //uECC_compute_public_key(privkey, pubkey, _es256_curve);
 
-    memmove(x,pubkey,32);
-    memmove(y,pubkey+32,32);
+    memmove(x, pubkey, 32);
+    memmove(y, pubkey + 32, 32);
 }
 
-void crypto_ecc256_compute_public_key(uint8_t * privkey, uint8_t * pubkey)
+void crypto_ecc256_compute_public_key(uint8_t* privkey, uint8_t* pubkey)
 {
     uECC_compute_public_key(privkey, pubkey, _es256_curve);
 }
 
 
-void crypto_load_external_key(uint8_t * key, int len)
+void crypto_load_external_key(uint8_t* key, int len)
 {
-    err_code = nrf_crypto_ecc_private_key_from_raw( &g_nrf_crypto_ecc_secp256r1_curve_info,
-                                                    &_signing_key,
-                                                    key,
-                                                    len
-                                                  );
+    err_code = nrf_crypto_ecc_private_key_from_raw(
+        &g_nrf_crypto_ecc_secp256r1_curve_info,
+        &_signing_key,
+        key,
+        len);
     APP_ERROR_CHECK(err_code);
-//    _signing_key = key;
-//    _key_len = len;
+    //    _signing_key = key;
+    //    _key_len = len;
 }
 
 
-void crypto_ecc256_make_key_pair(uint8_t * pubkey, uint8_t * privkey)
+void crypto_ecc256_make_key_pair(uint8_t* pubkey, uint8_t* privkey)
 {
     if (uECC_make_key(pubkey, privkey, _es256_curve) != 1)
     {
@@ -381,18 +382,20 @@ void crypto_ecc256_make_key_pair(uint8_t * pubkey, uint8_t * privkey)
     }
 }
 
-void crypto_ecc256_shared_secret(const uint8_t * pubkey, const uint8_t * privkey, uint8_t * shared_secret)
+void crypto_ecc256_shared_secret(
+    const uint8_t* pubkey,
+    const uint8_t* privkey,
+    uint8_t*       shared_secret)
 {
     if (uECC_shared_secret(pubkey, privkey, shared_secret, _es256_curve) != 1)
     {
         printf2(TAG_ERR, "Error, uECC_shared_secret failed\n");
         exit(1);
     }
-
 }
 
 struct AES_ctx aes_ctx;
-void crypto_aes256_init(uint8_t * key, uint8_t * nonce)
+void           crypto_aes256_init(uint8_t* key, uint8_t* nonce)
 {
     if (key == CRYPTO_TRANSPORT_KEY)
     {
@@ -413,7 +416,7 @@ void crypto_aes256_init(uint8_t * key, uint8_t * nonce)
 }
 
 // prevent round key recomputation
-void crypto_aes256_reset_iv(uint8_t * nonce)
+void crypto_aes256_reset_iv(uint8_t* nonce)
 {
     if (nonce == NULL)
     {
@@ -425,12 +428,12 @@ void crypto_aes256_reset_iv(uint8_t * nonce)
     }
 }
 
-void crypto_aes256_decrypt(uint8_t * buf, int length)
+void crypto_aes256_decrypt(uint8_t* buf, int length)
 {
     AES_CBC_decrypt_buffer(&aes_ctx, buf, length);
 }
 
-void crypto_aes256_encrypt(uint8_t * buf, int length)
+void crypto_aes256_encrypt(uint8_t* buf, int length)
 {
     AES_CBC_encrypt_buffer(&aes_ctx, buf, length);
 }

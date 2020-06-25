@@ -97,7 +97,7 @@ static void delete_bonds(void);
  * @param[in]   p_ble_evt   Bluetooth stack event.
  * @param[in]   p_context   Unused.
  */
-static void ble_evt_handler(ble_evt_t const * p_ble_evt, void * p_context);
+static void ble_evt_handler(ble_evt_t const* p_ble_evt, void* p_context);
 
 /**@brief Function for handling the Connection Parameters Module.
  *
@@ -109,7 +109,7 @@ static void ble_evt_handler(ble_evt_t const * p_ble_evt, void * p_context);
  *
  * @param[in] p_evt  Event received from the Connection Parameters Module.
  */
-static void on_conn_params_evt(ble_conn_params_evt_t * p_evt);
+static void on_conn_params_evt(ble_conn_params_evt_t* p_evt);
 
 /**@brief Function for handling a Connection Parameters error.
  *
@@ -121,7 +121,7 @@ static void conn_params_error_handler(uint32_t nrf_error);
  *
  * @param[in] p_evt  Peer Manager event.
  */
-static void pm_evt_handler(pm_evt_t const * p_evt);
+static void pm_evt_handler(pm_evt_t const* p_evt);
 
 /** 
  * @brief		parse request command and forward requests to handler
@@ -130,7 +130,7 @@ static void pm_evt_handler(pm_evt_t const * p_evt);
  *
  * @return 		void
  */
-static void process_ctap_request(ble_ctap_t * p_ctap, BLE_CTAP_REQ* req);
+static void process_ctap_request(ble_ctap_t* p_ctap, BLE_CTAP_REQ* req);
 
 /**
  * @brief		Process received MSG request
@@ -139,7 +139,7 @@ static void process_ctap_request(ble_ctap_t * p_ctap, BLE_CTAP_REQ* req);
  *
  * @return 		void
  */
-static void ble_ctap_msg_response(ble_ctap_t * p_ctap, BLE_CTAP_REQ* req);
+static void ble_ctap_msg_response(ble_ctap_t* p_ctap, BLE_CTAP_REQ* req);
 
 /** 
  * @brief		Process received PING request
@@ -148,53 +148,49 @@ static void ble_ctap_msg_response(ble_ctap_t * p_ctap, BLE_CTAP_REQ* req);
  *
  * @return 		void
  */
-static void ble_ctap_ping_response(ble_ctap_t * p_ctap, BLE_CTAP_REQ* req);
+static void ble_ctap_ping_response(ble_ctap_t* p_ctap, BLE_CTAP_REQ* req);
 
 /***************************************************************************** 
 *							GLOBALS
 *****************************************************************************/
 
-NRF_BLE_GATT_DEF(m_gatt);                                                       /**< GATT module instance. */
+NRF_BLE_GATT_DEF(m_gatt); /**< GATT module instance. */
 //NRF_BLE_QWR_DEF(m_qwr);                                                         /**< Context for the Queued Write module.*/
 BLE_CTAP_DEF(m_ctap);
-BLE_ADVERTISING_DEF(m_advertising);                                             /**< Advertising module instance. */
+BLE_ADVERTISING_DEF(m_advertising); /**< Advertising module instance. */
 
 static uint16_t m_conn_handle = BLE_CONN_HANDLE_INVALID;
 
 //volatile bool m_hvx_pending = false;
 
 // YOUR_JOB: Use UUIDs for service(s) used in your application.
-static ble_uuid_t m_adv_uuids[] =                                               /**< Universally unique service identifiers. */
-{
-    {BLE_UUID_DEVICE_INFORMATION_SERVICE, BLE_UUID_TYPE_BLE},
-    {BLE_CTAP_GATT_SERVICE_UUID, BLE_UUID_TYPE_BLE}
-};
+static ble_uuid_t
+    m_adv_uuids[] = /**< Universally unique service identifiers. */
+    {{BLE_UUID_DEVICE_INFORMATION_SERVICE, BLE_UUID_TYPE_BLE},
+     {BLE_CTAP_GATT_SERVICE_UUID, BLE_UUID_TYPE_BLE}};
 
 
 /***************************************************************************** 
 *							EVENT HANDLERS
 *****************************************************************************/
 
-static void pm_evt_handler(pm_evt_t const * p_evt)
+static void pm_evt_handler(pm_evt_t const* p_evt)
 {
-//    NRF_LOG_DEBUG("pm_evt_handler");
+    //    NRF_LOG_DEBUG("pm_evt_handler");
     pm_handler_on_pm_evt(p_evt);
     pm_handler_flash_clean(p_evt);
 
     switch (p_evt->evt_id)
     {
-        case PM_EVT_PEERS_DELETE_SUCCEEDED:
-            advertising_start(false);
-            break;
+        case PM_EVT_PEERS_DELETE_SUCCEEDED: advertising_start(false); break;
 
-        default:
-            break;
+        default: break;
     }
 }
 
-static void ble_evt_handler(ble_evt_t const * p_ble_evt, void * p_context)
+static void ble_evt_handler(ble_evt_t const* p_ble_evt, void* p_context)
 {
-//    NRF_LOG_DEBUG("ble_evt_handler app");
+    //    NRF_LOG_DEBUG("ble_evt_handler app");
     ret_code_t err_code = NRF_SUCCESS;
 
     switch (p_ble_evt->header.evt_id)
@@ -216,28 +212,38 @@ static void ble_evt_handler(ble_evt_t const * p_ble_evt, void * p_context)
         case BLE_GAP_EVT_PHY_UPDATE_REQUEST:
         {
             NRF_LOG_DEBUG("PHY update request.");
-            ble_gap_phys_t const phys =
-            {
+            ble_gap_phys_t const phys = {
                 .rx_phys = BLE_GAP_PHY_AUTO,
                 .tx_phys = BLE_GAP_PHY_AUTO,
             };
-            err_code = sd_ble_gap_phy_update(p_ble_evt->evt.gap_evt.conn_handle, &phys);
+            err_code = sd_ble_gap_phy_update(
+                p_ble_evt->evt.gap_evt.conn_handle,
+                &phys);
             APP_ERROR_CHECK(err_code);
-        } break;
-        
+        }
+        break;
+
         case BLE_GATTS_EVT_TIMEOUT:
         {
             // Disconnect on GATT Server timeout event.
             NRF_LOG_DEBUG("GATT Server Timeout.");
-            err_code = sd_ble_gap_disconnect(p_ble_evt->evt.gatts_evt.conn_handle,
-                                             BLE_HCI_REMOTE_USER_TERMINATED_CONNECTION);
+            err_code = sd_ble_gap_disconnect(
+                p_ble_evt->evt.gatts_evt.conn_handle,
+                BLE_HCI_REMOTE_USER_TERMINATED_CONNECTION);
             APP_ERROR_CHECK(err_code);
-        } break;
-        
+        }
+        break;
+
         case BLE_GAP_EVT_CONN_SEC_UPDATE:
         {
-            NRF_LOG_DEBUG("GAP CONN SEC UPDATE sm:%d, lv:%d", p_ble_evt->evt.gap_evt.params.conn_sec_update.conn_sec.sec_mode.sm, p_ble_evt->evt.gap_evt.params.conn_sec_update.conn_sec.sec_mode.lv);
-        } break;
+            NRF_LOG_DEBUG(
+                "GAP CONN SEC UPDATE sm:%d, lv:%d",
+                p_ble_evt->evt.gap_evt.params.conn_sec_update.conn_sec.sec_mode
+                    .sm,
+                p_ble_evt->evt.gap_evt.params.conn_sec_update.conn_sec.sec_mode
+                    .lv);
+        }
+        break;
 
         default:
             // no implementation needed.
@@ -245,13 +251,15 @@ static void ble_evt_handler(ble_evt_t const * p_ble_evt, void * p_context)
     }
 }
 
-static void on_conn_params_evt(ble_conn_params_evt_t * p_evt)
+static void on_conn_params_evt(ble_conn_params_evt_t* p_evt)
 {
     ret_code_t err_code;
 
     if (p_evt->evt_type == BLE_CONN_PARAMS_EVT_FAILED)
     {
-        err_code = sd_ble_gap_disconnect(m_conn_handle, BLE_HCI_CONN_INTERVAL_UNACCEPTABLE);
+        err_code = sd_ble_gap_disconnect(
+            m_conn_handle,
+            BLE_HCI_CONN_INTERVAL_UNACCEPTABLE);
         APP_ERROR_CHECK(err_code);
     }
 }
@@ -270,8 +278,8 @@ static void ble_stack_init(void)
 {
     NRF_LOG_DEBUG("ble stack init");
     ret_code_t err_code;
-    
-    if(!nrf_sdh_is_enabled())
+
+    if (!nrf_sdh_is_enabled())
     {
         err_code = nrf_sdh_enable_request();
         APP_ERROR_CHECK(err_code);
@@ -282,13 +290,17 @@ static void ble_stack_init(void)
     uint32_t ram_start = 0;
     err_code = nrf_sdh_ble_default_cfg_set(APP_BLE_CONN_CFG_TAG, &ram_start);
     APP_ERROR_CHECK(err_code);
-    
+
     // Enable BLE stack.
     err_code = nrf_sdh_ble_enable(&ram_start);
     APP_ERROR_CHECK(err_code);
 
     // Register a handler for BLE events.
-    NRF_SDH_BLE_OBSERVER(m_ble_observer, APP_BLE_OBSERVER_PRIO, ble_evt_handler, NULL);
+    NRF_SDH_BLE_OBSERVER(
+        m_ble_observer,
+        APP_BLE_OBSERVER_PRIO,
+        ble_evt_handler,
+        NULL);
 }
 
 static void gap_params_init(void)
@@ -298,14 +310,15 @@ static void gap_params_init(void)
     ble_gap_conn_params_t   gap_conn_params;
     ble_gap_conn_sec_mode_t sec_mode;
 
-//    sec_mode.sm = 1; sec_mode.lv = 2; // encrypted, not authenticated (no MITM protection)
+    //    sec_mode.sm = 1; sec_mode.lv = 2; // encrypted, not authenticated (no MITM protection)
     BLE_GAP_CONN_SEC_MODE_SET_OPEN(&sec_mode);
-    
-    err_code = sd_ble_gap_device_name_set(&sec_mode,
-                                          (const uint8_t *)DEVICE_NAME,
-                                          strlen(DEVICE_NAME));
+
+    err_code = sd_ble_gap_device_name_set(
+        &sec_mode,
+        (const uint8_t*) DEVICE_NAME,
+        strlen(DEVICE_NAME));
     APP_ERROR_CHECK(err_code);
-    
+
     err_code = sd_ble_gap_appearance_set(BLE_DEVICE_APPEARANCE);
     APP_ERROR_CHECK(err_code);
 
@@ -335,10 +348,10 @@ static void gatt_init(void)
 static void services_init(void)
 {
     NRF_LOG_DEBUG("services init");
-    ret_code_t         err_code;
-    ble_ctap_init_t    ctap_init;
-    ble_dis_init_t     dis_init;
-    ble_dis_sys_id_t   sys_id;
+    ret_code_t       err_code;
+    ble_ctap_init_t  ctap_init;
+    ble_dis_init_t   dis_init;
+    ble_dis_sys_id_t sys_id;
 
     // Initialize Device Information Service.
     memset(&dis_init, 0, sizeof(dis_init));
@@ -361,13 +374,12 @@ static void services_init(void)
 
     // Initialize CTAP Service. TODO
     memset(&ctap_init, 0, sizeof(ctap_init));
-    
+
     ctap_init.request_handler = &process_ctap_request;
     ctap_init.m_gatt          = &m_gatt;
 
     err_code = ble_ctap_init(&m_ctap, &ctap_init);
     APP_ERROR_CHECK(err_code);
-
 }
 
 static void advertising_init(void)
@@ -378,17 +390,18 @@ static void advertising_init(void)
 
     memset(&init, 0, sizeof(init));
 
-    init.advdata.name_type               = BLE_ADVDATA_FULL_NAME;
-    init.advdata.include_appearance      = true;
-    init.advdata.flags                   = BLE_GAP_ADV_FLAGS_LE_ONLY_GENERAL_DISC_MODE;
-    init.advdata.uuids_complete.uuid_cnt = sizeof(m_adv_uuids) / sizeof(m_adv_uuids[0]);
-    init.advdata.uuids_complete.p_uuids  = m_adv_uuids;
+    init.advdata.name_type          = BLE_ADVDATA_FULL_NAME;
+    init.advdata.include_appearance = true;
+    init.advdata.flags = BLE_GAP_ADV_FLAGS_LE_ONLY_GENERAL_DISC_MODE;
+    init.advdata.uuids_complete.uuid_cnt =
+        sizeof(m_adv_uuids) / sizeof(m_adv_uuids[0]);
+    init.advdata.uuids_complete.p_uuids = m_adv_uuids;
 
     init.config.ble_adv_fast_enabled  = true;
     init.config.ble_adv_fast_interval = APP_ADV_INTERVAL;
     init.config.ble_adv_fast_timeout  = APP_ADV_DURATION;
 
-    
+
     err_code = ble_advertising_init(&m_advertising, &init);
     APP_ERROR_CHECK(err_code);
 
@@ -473,7 +486,8 @@ static void advertising_start(bool erase_bonds)
     }
     else
     {
-        ret_code_t err_code = ble_advertising_start(&m_advertising, BLE_ADV_MODE_FAST);
+        ret_code_t err_code =
+            ble_advertising_start(&m_advertising, BLE_ADV_MODE_FAST);
 
         APP_ERROR_CHECK(err_code);
     }
@@ -483,11 +497,11 @@ static void advertising_start(bool erase_bonds)
 *							MESSAGE HANDLING
 *****************************************************************************/
 
-static void process_ctap_request(ble_ctap_t * p_ctap, BLE_CTAP_REQ* req)
+static void process_ctap_request(ble_ctap_t* p_ctap, BLE_CTAP_REQ* req)
 {
     //set timeout
-    
-    switch(req->cmd)
+
+    switch (req->cmd)
     {
         case BLE_CTAP_CMD_PING:
             NRF_LOG_INFO("BLE_PING");
@@ -497,7 +511,7 @@ static void process_ctap_request(ble_ctap_t * p_ctap, BLE_CTAP_REQ* req)
             NRF_LOG_INFO("BLE_MSG");
             ble_ctap_msg_response(p_ctap, req);
             break;
-        /**case BLE_CTAP_CMD_CANCEL:*/
+            /**case BLE_CTAP_CMD_CANCEL:*/
             /**NRF_LOG_INFO("BLE_CANCEL");*/
             /**TODO */
             /**break;*/
@@ -508,27 +522,26 @@ static void process_ctap_request(ble_ctap_t * p_ctap, BLE_CTAP_REQ* req)
     }
 }
 
-static void ble_ctap_ping_response(ble_ctap_t * p_ctap, BLE_CTAP_REQ* req)
+static void ble_ctap_ping_response(ble_ctap_t* p_ctap, BLE_CTAP_REQ* req)
 {
     //PONG
     ble_ctap_send_resp(p_ctap, req->cmd, req->data, (size_t) req->length, true);
 }
 
 
-static void ble_ctap_msg_response(ble_ctap_t * p_ctap, BLE_CTAP_REQ* req)
+static void ble_ctap_msg_response(ble_ctap_t* p_ctap, BLE_CTAP_REQ* req)
 {
-    
     CTAP_RESPONSE resp;
     ctap_response_init(&resp);
-    uint8_t status;
-    uint8_t * sendbuffer;
+    uint8_t  status;
+    uint8_t* sendbuffer;
 
     status = ctap_request(req->data, (int) req->length, &resp);
 
-    sendbuffer = nrf_malloc(resp.length+1);
+    sendbuffer = nrf_malloc(resp.length + 1);
 
-    *sendbuffer = status; //cpy status
-    memcpy(sendbuffer+1, resp.data, resp.length);
+    *sendbuffer = status;  //cpy status
+    memcpy(sendbuffer + 1, resp.data, resp.length);
 
     ble_ctap_send_resp(p_ctap, req->cmd, sendbuffer, resp.length + 1, true);
 
@@ -554,8 +567,4 @@ void ble_init()
     advertising_start(!APP_PERSISTENT_MODE);
 }
 
-void ble_process()
-{
-    ble_ctap_process(&m_ctap);
-}
-
+void ble_process() { ble_ctap_process(&m_ctap); }

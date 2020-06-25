@@ -23,20 +23,26 @@
  */
 
 /*lint -save -e14 */
-void app_error_handler(ret_code_t error_code, uint32_t line_num, const uint8_t * p_file_name)
+void app_error_handler(
+    ret_code_t     error_code,
+    uint32_t       line_num,
+    const uint8_t* p_file_name)
 {
-    error_info_t error_info =
-    {
+    error_info_t error_info = {
         .line_num    = line_num,
         .p_file_name = p_file_name,
         .err_code    = error_code,
     };
-    
-    char const * p_desc = nrf_strerror_get(error_code);
-    NRF_LOG_WARNING("%s:%d error code: %s(0x%x)", NRF_LOG_PUSH((char * const)p_file_name),line_num, NRF_LOG_PUSH((char * const)p_desc), error_code);
-  
+
+    char const* p_desc = nrf_strerror_get(error_code);
+    NRF_LOG_WARNING(
+        "%s:%d error code: %s(0x%x)",
+        NRF_LOG_PUSH((char* const) p_file_name),
+        line_num,
+        NRF_LOG_PUSH((char* const) p_desc),
+        error_code);
+
     app_error_fault_handler(NRF_FAULT_ID_SDK_ERROR, 0, (uint32_t)(&error_info));
 
     UNUSED_VARIABLE(error_info);
 }
-

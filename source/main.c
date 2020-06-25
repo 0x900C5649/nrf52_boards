@@ -83,50 +83,52 @@ int main(void)
 
     ret = init_log();
     APP_ERROR_CHECK(ret);
-    
+
     NRF_LOG_DEBUG("log initialised");
-    
+
     ret = init_device();
     APP_ERROR_CHECK(ret);
-    
+
     NRF_LOG_INFO("initializing crypto");
-    crypto_init(); //TODO unify return values
+    crypto_init();  //TODO unify return values
 
 #if !APP_PERSISTENT_MODE
     resetStorage();
 #endif
-    
+
     NRF_LOG_INFO("init ctap");
     ctap_init();
 
     NRF_LOG_INFO("init interfaces");
     initIfaces();
 
-//    test_flash();
-//    test_crypto();
+    //    test_flash();
+    //    test_crypto();
 
     /**Timer timer;*/
     /**countdown_ms(&timer, 3000);*/
-    
+
     NRF_LOG_INFO("Hello FIDO U2F Security Key!");
-    
+
     while (true)
     {
         processIfaces();
-//        u2f_hid_process();
-//        nrf_cli_process(&m_cli_uart);
+        //        u2f_hid_process();
+        //        nrf_cli_process(&m_cli_uart);
         /**if(has_timer_expired(&timer)){*/
 
-            /**NRF_LOG_INFO("THIS IS A TEST");*/
+        /**NRF_LOG_INFO("THIS IS A TEST");*/
         /**}*/
-        if (is_user_button_pressed()){
+        if (is_user_button_pressed())
+        {
             NRF_LOG_INFO("button pressed");
-            NRF_LOG_DEBUG("current %d, %d", app_timer_cnt_get(), app_timer_cnt_diff_compute(app_timer_cnt_get(), 76920));
+            NRF_LOG_DEBUG(
+                "current %d, %d",
+                app_timer_cnt_get(),
+                app_timer_cnt_diff_compute(app_timer_cnt_get(), 76920));
         }
 
         UNUSED_RETURN_VALUE(NRF_LOG_PROCESS());
         power_manage();
-        
     }
 }
-

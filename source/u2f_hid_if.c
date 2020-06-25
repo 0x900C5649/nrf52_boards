@@ -61,33 +61,36 @@ NRF_LOG_MODULE_REGISTER();
 /**
  * @brief User event handler.
  * */
-static void hid_user_ev_handler(app_usbd_class_inst_t const * p_inst,
-                                app_usbd_hid_user_event_t event);
+static void hid_user_ev_handler(
+    app_usbd_class_inst_t const *p_inst,
+    app_usbd_hid_user_event_t    event);
 
 
 /**
  * @brief Reuse HID mouse report descriptor for HID generic class
  */
-APP_USBD_HID_GENERIC_SUBCLASS_REPORT_DESC(u2f_hid_desc,
-                                          APP_USBD_U2F_HID_REPORT_DSC);
+APP_USBD_HID_GENERIC_SUBCLASS_REPORT_DESC(
+    u2f_hid_desc,
+    APP_USBD_U2F_HID_REPORT_DSC);
 
-static const app_usbd_hid_subclass_desc_t * reports[] = {&u2f_hid_desc};
+static const app_usbd_hid_subclass_desc_t *reports[] = {&u2f_hid_desc};
 
 /*lint -save -e26 -e64 -e123 -e505 -e651*/
 
 /**
  * @brief Global HID generic instance
  */
-APP_USBD_HID_GENERIC_GLOBAL_DEF(m_app_u2f_hid,
-                                U2F_HID_INTERFACE,
-                                hid_user_ev_handler,
-                                ENDPOINT_LIST(),
-                                reports,
-                                REPORT_IN_QUEUE_SIZE,
-                                REPORT_OUT_MAXSIZE,
-                                REPORT_FEATURE_MAXSIZE,
-                                APP_USBD_HID_SUBCLASS_NONE,
-                                APP_USBD_HID_PROTO_GENERIC);
+APP_USBD_HID_GENERIC_GLOBAL_DEF(
+    m_app_u2f_hid,
+    U2F_HID_INTERFACE,
+    hid_user_ev_handler,
+    ENDPOINT_LIST(),
+    reports,
+    REPORT_IN_QUEUE_SIZE,
+    REPORT_OUT_MAXSIZE,
+    REPORT_FEATURE_MAXSIZE,
+    APP_USBD_HID_SUBCLASS_NONE,
+    APP_USBD_HID_PROTO_GENERIC);
 
 /*lint -restore*/
 
@@ -111,23 +114,23 @@ static bool m_report_received = false;
 /**
  * \brief send one HID frame.
  */
-static uint8_t u2f_hid_if_frame_send(U2FHID_FRAME * p_frame)
+static uint8_t u2f_hid_if_frame_send(U2FHID_FRAME *p_frame)
 {
     ret_code_t ret;
 
-    while(m_report_pending){
+    while (m_report_pending)
+    {
         while (app_usbd_event_queue_process())
-        {
-            /* Nothing to do */
+        { /* Nothing to do */
         }
     }
 
     ret = app_usbd_hid_generic_in_report_set(
         &m_app_u2f_hid,
-        (uint8_t *)p_frame,
+        (uint8_t *) p_frame,
         HID_RPT_SIZE);
 
-    if(ret == NRF_SUCCESS)
+    if (ret == NRF_SUCCESS)
     {
         m_report_pending = true;
         return ERR_NONE;
@@ -140,12 +143,12 @@ static uint8_t u2f_hid_if_frame_send(U2FHID_FRAME * p_frame)
 uint8_t u2f_hid_if_send(uint32_t cid, uint8_t cmd, uint8_t *p_data, size_t size)
 {
     U2FHID_FRAME frame;
-    int ret;
-    size_t frameLen;
-    uint8_t seq = 0;
+    int          ret;
+    size_t       frameLen;
+    uint8_t      seq = 0;
 
-    frame.cid = cid;
-    frame.init.cmd = TYPE_INIT | cmd;
+    frame.cid        = cid;
+    frame.init.cmd   = TYPE_INIT | cmd;
     frame.init.bcnth = (size >> 8) & 0xFF;
     frame.init.bcntl = (size & 0xFF);
 
@@ -156,45 +159,52 @@ uint8_t u2f_hid_if_send(uint32_t cid, uint8_t cmd, uint8_t *p_data, size_t size)
     do
     {
         ret = u2f_hid_if_frame_send(&frame);
-        if(ret != ERR_NONE) return ret;
+        if (ret != ERR_NONE)
+            return ret;
 
         size -= frameLen;
         p_data += frameLen;
 
         frame.cont.seq = seq++;
-        frameLen = MIN(size, sizeof(frame.cont.data));
+        frameLen       = MIN(size, sizeof(frame.cont.data));
         memset(frame.cont.data, 0, sizeof(frame.cont.data));
         memcpy(frame.cont.data, p_data, frameLen);
-    } while(size);
+    } while (size);
 
     return ERR_NONE;
 }
 
 
-
-uint8_t u2f_hid_if_recv(uint32_t * p_cid, uint8_t * p_cmd,
-                    uint8_t * p_data, size_t * p_size,
-                    uint32_t timeout)
+uint8_t u2f_hid_if_recv(
+    uint32_t *p_cid,
+    uint8_t * p_cmd,
+    uint8_t * p_data,
+    size_t *  p_size,
+    uint32_t  timeout)
 {
-    uint8_t * p_recv_buf;
-    size_t recv_size, totalLen, frameLen;
-    U2FHID_FRAME * p_frame;
-    uint8_t seq = 0;
+    uint8_t *     p_recv_buf;
+    size_t        recv_size, totalLen, frameLen;
+    U2FHID_FRAME *p_frame;
+    uint8_t       seq = 0;
 
     Timer timer;
     countdown_ms(&timer, timeout);
 
-    if(!m_report_received) return ERR_OTHER+1;
+    if (!m_report_received)
+        return ERR_OTHER + 1;
     m_report_received = false;
 
-    p_recv_buf = (uint8_t *)app_usbd_hid_generic_out_report_get(&m_app_u2f_hid,
-                                                                &recv_size);
+    p_recv_buf = (uint8_t *) app_usbd_hid_generic_out_report_get(
+        &m_app_u2f_hid,
+        &recv_size);
 
-    if(recv_size != sizeof(U2FHID_FRAME)) return ERR_OTHER;
+    if (recv_size != sizeof(U2FHID_FRAME))
+        return ERR_OTHER;
 
-    p_frame = (U2FHID_FRAME *)p_recv_buf;
+    p_frame = (U2FHID_FRAME *) p_recv_buf;
 
-    if(FRAME_TYPE(*p_frame) != TYPE_INIT) return ERR_INVALID_CMD;
+    if (FRAME_TYPE(*p_frame) != TYPE_INIT)
+        return ERR_INVALID_CMD;
 
     *p_cid = p_frame->cid;
     *p_cmd = p_frame->init.cmd;
@@ -208,29 +218,33 @@ uint8_t u2f_hid_if_recv(uint32_t * p_cid, uint8_t * p_cmd,
     totalLen -= frameLen;
     p_data += frameLen;
 
-    while(totalLen)
+    while (totalLen)
     {
-        while(!m_report_received)
+        while (!m_report_received)
         {
             while (app_usbd_event_queue_process())
-            {
-                /* Nothing to do */
+            { /* Nothing to do */
             }
-            if(has_timer_expired(&timer)) return ERR_MSG_TIMEOUT;
+            if (has_timer_expired(&timer))
+                return ERR_MSG_TIMEOUT;
         }
         m_report_received = false;
 
-        p_recv_buf = (uint8_t *)app_usbd_hid_generic_out_report_get(
-                                                                &m_app_u2f_hid,
-                                                                &recv_size);
+        p_recv_buf = (uint8_t *) app_usbd_hid_generic_out_report_get(
+            &m_app_u2f_hid,
+            &recv_size);
 
-        if(recv_size != sizeof(U2FHID_FRAME)) continue;
+        if (recv_size != sizeof(U2FHID_FRAME))
+            continue;
 
-        p_frame = (U2FHID_FRAME *)p_recv_buf;
+        p_frame = (U2FHID_FRAME *) p_recv_buf;
 
-        if(p_frame->cid != *p_cid) continue;
-        if(FRAME_TYPE(*p_frame) != TYPE_CONT) return ERR_INVALID_SEQ;
-        if(FRAME_SEQ(*p_frame) != seq++) return ERR_INVALID_SEQ;
+        if (p_frame->cid != *p_cid)
+            continue;
+        if (FRAME_TYPE(*p_frame) != TYPE_CONT)
+            return ERR_INVALID_SEQ;
+        if (FRAME_SEQ(*p_frame) != seq++)
+            return ERR_INVALID_SEQ;
 
         frameLen = MIN(sizeof(p_frame->cont.data), totalLen);
 
@@ -249,10 +263,10 @@ uint8_t u2f_hid_if_recv(uint32_t * p_cid, uint8_t * p_cmd,
  * @param p_inst    Class instance.
  * @param event     Class specific event.
  * */
-static void hid_user_ev_handler(app_usbd_class_inst_t const * p_inst,
-                                app_usbd_hid_user_event_t event)
+static void hid_user_ev_handler(
+    app_usbd_class_inst_t const *p_inst,
+    app_usbd_hid_user_event_t    event)
 {
-
     switch (event)
     {
         case APP_USBD_HID_USER_EVT_OUT_REPORT_READY:
@@ -277,8 +291,7 @@ static void hid_user_ev_handler(app_usbd_class_inst_t const * p_inst,
             NRF_LOG_INFO("SET_REPORT_PROTO");
             break;
         }
-        default:
-            break;
+        default: break;
     }
 }
 
@@ -291,11 +304,8 @@ static void usbd_user_ev_handler(app_usbd_event_type_t event)
 {
     switch (event)
     {
-        case APP_USBD_EVT_DRV_SOF:
-            break;
-        case APP_USBD_EVT_DRV_RESET:
-            m_report_pending = false;
-            break;
+        case APP_USBD_EVT_DRV_SOF: break;
+        case APP_USBD_EVT_DRV_RESET: m_report_pending = false; break;
         case APP_USBD_EVT_DRV_SUSPEND:
             m_report_pending = false;
             // Allow the library to put the peripheral into sleep mode
@@ -329,8 +339,7 @@ static void usbd_user_ev_handler(app_usbd_event_type_t event)
             NRF_LOG_INFO("USB ready");
             app_usbd_start();
             break;
-        default:
-            break;
+        default: break;
     }
 }
 
@@ -341,8 +350,8 @@ static void usbd_user_ev_handler(app_usbd_event_type_t event)
  * @param p_inst      Class instance.
  * @param report_id   Number of report ID that needs idle transfer.
  * */
-static ret_code_t idle_handle(app_usbd_class_inst_t const * p_inst,
-                              uint8_t report_id)
+static ret_code_t
+    idle_handle(app_usbd_class_inst_t const *p_inst, uint8_t report_id)
 {
     switch (report_id)
     {
@@ -350,28 +359,26 @@ static ret_code_t idle_handle(app_usbd_class_inst_t const * p_inst,
         {
             uint8_t report[] = {0xBE, 0xEF};
             return app_usbd_hid_generic_idle_report_set(
-              &m_app_u2f_hid,
-              report,
-              sizeof(report));
+                &m_app_u2f_hid,
+                report,
+                sizeof(report));
         }
-        default:
-            return NRF_ERROR_NOT_SUPPORTED;
+        default: return NRF_ERROR_NOT_SUPPORTED;
     }
 }
 
 
 uint32_t u2f_hid_if_init(void)
 {
-	ret_code_t ret;
+    ret_code_t ret;
 
-	static const app_usbd_config_t usbd_config = {
-	    .ev_state_proc = usbd_user_ev_handler
-	};
+    static const app_usbd_config_t usbd_config = {
+        .ev_state_proc = usbd_user_ev_handler};
 
-	ret = app_usbd_init(&usbd_config);
+    ret = app_usbd_init(&usbd_config);
     APP_ERROR_CHECK(ret);
 
-    app_usbd_class_inst_t const * class_inst_u2f;
+    app_usbd_class_inst_t const *class_inst_u2f;
     class_inst_u2f = app_usbd_hid_generic_class_inst_get(&m_app_u2f_hid);
 
     ret = hid_generic_idle_handler_set(class_inst_u2f, idle_handle);
@@ -399,9 +406,6 @@ uint32_t u2f_hid_if_init(void)
 void u2f_hid_if_process(void)
 {
     while (app_usbd_event_queue_process())
-    {
-        /* Nothing to do */
+    { /* Nothing to do */
     }
 }
-
-

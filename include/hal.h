@@ -13,27 +13,26 @@
  *
  * Macro used only in @ref init_bsp to simplify the configuration
  */
-#define INIT_BSP_ASSIGN_RELEASE_ACTION(btn)                      \
-    APP_ERROR_CHECK(                                             \
-        bsp_event_to_button_action_assign(                       \
-            btn,                                                 \
-            BSP_BUTTON_ACTION_RELEASE,                           \
-            (bsp_event_t)CONCAT_2(BSP_USER_EVENT_RELEASE_, btn)) \
-    )
+#define INIT_BSP_ASSIGN_RELEASE_ACTION(btn)            \
+    APP_ERROR_CHECK(bsp_event_to_button_action_assign( \
+        btn,                                           \
+        BSP_BUTTON_ACTION_RELEASE,                     \
+        (bsp_event_t) CONCAT_2(BSP_USER_EVENT_RELEASE_, btn)))
 
-#define BSP_GREEN   0
-#define BSP_RED     1
-#define BSP_BLUE    2
+#define BSP_GREEN 0
+#define BSP_RED   1
+#define BSP_BLUE  2
 
 //#define SOFTBLINKMASK   BSP_LED_1_MASK
-#define SOFTBLINKMASK( color )  CONCAT_3(BSP_LED_, color,_MASK)
+#define SOFTBLINKMASK(color) CONCAT_3(BSP_LED_, color, _MASK)
 
 /**
  * @brief Additional key release events
  *
  * This example needs to process release events of used buttons
  */
-enum {
+enum
+{
     BSP_USER_EVENT_RELEASE_0 = BSP_EVENT_KEY_LAST + 1, /**< Button 0 released */
     BSP_USER_EVENT_RELEASE_1,                          /**< Button 1 released */
     BSP_USER_EVENT_RELEASE_2,                          /**< Button 2 released */
@@ -52,7 +51,7 @@ enum {
 ret_code_t init_bsp(void);
 ret_code_t init_softdevice(void);
 ret_code_t init_storage(void);
-void init_cli(void);
+void       init_cli(void);
 ret_code_t init_device(void);
 //static void bsp_event_callback(bsp_event_t ev);
 bool is_user_button_pressed(void);
@@ -89,4 +88,4 @@ int ctap_user_presence_test(uint64_t delay);
 */
 void device_disable_up(bool disable);
 
-#endif // _HAL_H
+#endif  // _HAL_H

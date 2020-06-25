@@ -34,7 +34,8 @@
  */
 
 #ifdef __cplusplus
-extern "C" {
+extern "C"
+{
 #endif
 
 #include <stdint.h>
@@ -43,19 +44,19 @@ extern "C" {
 #include "timer_platform.h"
 #include "app_timer.h"
 
-//extern volatile uint32_t ms_ticks;
-/**
+    //extern volatile uint32_t ms_ticks;
+    /**
  * \brief Get time in milliseconds.
  *
  * \return milli second ticks count.
  */
-static uint32_t getTicks(void)
-{
-    return app_timer_cnt_get();
-//	return ms_ticks;
-}
+    static uint32_t getTicks(void)
+    {
+        return app_timer_cnt_get();
+        //	return ms_ticks;
+    }
 
-/**
+    /**
  * @brief Check if a timer is expired
  *
  * Call this function passing in a timer to check if that timer has expired.
@@ -64,13 +65,17 @@ static uint32_t getTicks(void)
  * @return bool - true = timer expired, false = timer not expired
  */
 
-bool has_timer_expired(Timer *timer) { 
-    return (timer->timeout > 0 && timer->start_time > 0) && timer->timeout < app_timer_cnt_diff_compute(getTicks(), timer->start_time);
-	/**return ((timer->end_time > 0)*/
-	/**&& ((getTimeInMillis() + timer->offset) > timer->end_time));*/
-}
+    bool has_timer_expired(Timer *timer)
+    {
+        return (timer->timeout > 0 && timer->start_time > 0)
+               && timer->timeout < app_timer_cnt_diff_compute(
+                      getTicks(),
+                      timer->start_time);
+        /**return ((timer->end_time > 0)*/
+        /**&& ((getTimeInMillis() + timer->offset) > timer->end_time));*/
+    }
 
-/**
+    /**
  * @brief Create a timer (milliseconds)
  *
  * Sets the timer to expire in a specified number of milliseconds.
@@ -78,23 +83,24 @@ bool has_timer_expired(Timer *timer) {
  * @param Timer - pointer to the timer to be set to expire in milliseconds
  * @param uint32_t - set the timer to expire in this number of milliseconds
  */
-void countdown_ms(Timer *timer, uint32_t timeout) {
-	timer->start_time = getTicks();
-    timer->timeout = APP_TIMER_TICKS(timeout);
-    /**uint32_t timems = getTimeInMillis();*/
+    void countdown_ms(Timer *timer, uint32_t timeout)
+    {
+        timer->start_time = getTicks();
+        timer->timeout    = APP_TIMER_TICKS(timeout);
+        /**uint32_t timems = getTimeInMillis();*/
 
-	/**timer->end_time = timems + timeout;*/
+        /**timer->end_time = timems + timeout;*/
 
-	/**if (timer->end_time < timems) {*/
-		/**timer->offset = ~0 - timems + 1;*/
-		/**timer->end_time += timer->offset;*/
-	/**}*/
-	/**else {*/
-		/**timer->offset = 0;*/
-	/**}*/
-}
+        /**if (timer->end_time < timems) {*/
+        /**timer->offset = ~0 - timems + 1;*/
+        /**timer->end_time += timer->offset;*/
+        /**}*/
+        /**else {*/
+        /**timer->offset = 0;*/
+        /**}*/
+    }
 
-/**
+    /**
  * @brief Create a timer (seconds)
  *
  * Sets the timer to expire in a specified number of seconds.
@@ -102,22 +108,23 @@ void countdown_ms(Timer *timer, uint32_t timeout) {
  * @param Timer - pointer to the timer to be set to expire in seconds
  * @param uint32_t - set the timer to expire in this number of seconds
  */
- void countdown_sec(Timer *timer, uint32_t timeout) {
-    countdown_ms(timer, timeout * 1000);
-	/**uint32_t timems = getTimeInMillis();*/
+    void countdown_sec(Timer *timer, uint32_t timeout)
+    {
+        countdown_ms(timer, timeout * 1000);
+        /**uint32_t timems = getTimeInMillis();*/
 
-	/**timer->end_time = timems + (timeout * 1000);*/
+        /**timer->end_time = timems + (timeout * 1000);*/
 
-	/**if (timer->end_time < timems) {*/
-		/**timer->offset = ~0 - timems + 1;*/
-		/**timer->end_time += timer->offset;*/
-	/**}*/
-	/**else {*/
-		/**timer->offset = 0;*/
-	/**}*/
-}
+        /**if (timer->end_time < timems) {*/
+        /**timer->offset = ~0 - timems + 1;*/
+        /**timer->end_time += timer->offset;*/
+        /**}*/
+        /**else {*/
+        /**timer->offset = 0;*/
+        /**}*/
+    }
 
-/**
+    /**
  * @brief Check the time remaining on a given timer
  *
  * Checks the input timer and returns the number of milliseconds remaining 
@@ -126,24 +133,25 @@ void countdown_ms(Timer *timer, uint32_t timeout) {
  * @param Timer - pointer to the timer to be set to checked
  * @return int - milliseconds left on the countdown timer
  */
-/**uint32_t left_ms(Timer *timer) {*/
-	/**int diff = timer->end_time - (getTimeInMillis() + timer->offset);*/
-	/**return (diff > 0 ? diff : 0);*/
-/**}*/
+    /**uint32_t left_ms(Timer *timer) {*/
+    /**int diff = timer->end_time - (getTimeInMillis() + timer->offset);*/
+    /**return (diff > 0 ? diff : 0);*/
+    /**}*/
 
-/**
+    /**
  * @brief Initialize a timer
  *
  * Performs any initialization required to the timer passed in.
  *
  * @param Timer - pointer to the timer to be initialized
  */
-void init_timer(Timer *timer) {
-    timer->start_time = 0;
-    timer->timeout = 0;
-    /**timer->end_time = 0;*/
-	/**timer->offset = 0;*/
-}
+    void init_timer(Timer *timer)
+    {
+        timer->start_time = 0;
+        timer->timeout    = 0;
+        /**timer->end_time = 0;*/
+        /**timer->offset = 0;*/
+    }
 
 #ifdef __cplusplus
 }

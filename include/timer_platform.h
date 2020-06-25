@@ -32,7 +32,8 @@
 #define _TIMER_PLATFORM_H_
 
 #ifdef __cplusplus
-extern "C" {
+extern "C"
+{
 #endif
 
 /**
@@ -41,15 +42,16 @@ extern "C" {
 #include <stdint.h>
 #include "timer_interface.h"
 
-/**
+    /**
  * definition of the Timer struct. Platform specific
  */
-struct Timer {
-    uint32_t start_time;
-    uint32_t timeout;
-	//uint32_t end_time;
-	//uint32_t offset;
-};
+    struct Timer
+    {
+        uint32_t start_time;
+        uint32_t timeout;
+        //uint32_t end_time;
+        //uint32_t offset;
+    };
 
 #ifdef __cplusplus
 }

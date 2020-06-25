@@ -32,10 +32,10 @@ NRF_LOG_MODULE_REGISTER();
  */
 //NRF_CLI_UART_DEF(m_cli_uart_transport, 0, 64, 16);
 /**NRF_CLI_DEF(m_cli_uart,*/
-            /**"ctap_cli:~$ ",*/
-            /**&m_cli_uart_transport.transport,*/
-            /**'\r',*/
-            /**8);*/
+/**"ctap_cli:~$ ",*/
+/**&m_cli_uart_transport.transport,*/
+/**'\r',*/
+/**8);*/
 
 static bool m_user_button_pressed = false;
 //volatile uint32_t ms_ticks = 0;
@@ -43,7 +43,7 @@ static bool up_disabled = false;
 /* Counter timer. */
 APP_TIMER_DEF(m_timer_0);
 
-static void bool_to_true_timeout_handler(void * p_context);
+static void bool_to_true_timeout_handler(void *p_context);
 static void init_softblink(void);
 static void start_softblink(void);
 static void stop_softblink(void);
@@ -62,7 +62,7 @@ static void stop_softblink(void);
  */
 bool is_user_button_pressed(void)
 {
-    if(m_user_button_pressed)
+    if (m_user_button_pressed)
     {
         m_user_button_pressed = false;
         return true;
@@ -73,7 +73,7 @@ bool is_user_button_pressed(void)
 static void bsp_event_callback(bsp_event_t ev)
 {
     NRF_LOG_DEBUG("bsp_event_callback");
-    switch ((unsigned int)ev)
+    switch ((unsigned int) ev)
     {
         case CONCAT_2(BSP_EVENT_KEY_, BTN_U2F_USER):
             NRF_LOG_INFO("BTN_U2F_USER pressed!");
@@ -82,15 +82,14 @@ static void bsp_event_callback(bsp_event_t ev)
             m_user_button_pressed = true;
             //NRF_LOG_INFO("BTN_U2F_USER released!");
             break;
-        default:
-            return; // no implementation needed
+        default: return;  // no implementation needed
     }
 }
 
 
 ret_code_t init_bsp(void)
 {
-    APP_GPIOTE_INIT(4); 
+    APP_GPIOTE_INIT(4);
     NRF_LOG_DEBUG("init_bsp start");
     NRF_LOG_DEBUG("timers: %d", TIMER_COUNT);
     NRF_LOG_FLUSH();
@@ -100,26 +99,26 @@ ret_code_t init_bsp(void)
     //APP_ERROR_CHECK(ret);
     //if VERIFY_MODULE_INITIALIZED_BOOL(BSP)
     NRF_LOG_DEBUG("bsp_init");
-    
+
     INIT_BSP_ASSIGN_RELEASE_ACTION(BTN_U2F_USER);
-    
+
     ret = bsp_buttons_enable();
     NRF_LOG_DEBUG("bsp_button returned: %d", ret)
 
 
     NRF_LOG_DEBUG("init assign release action");
     /* Configure LEDs */
-//    bsp_board_init(BSP_INIT_LEDS);
+    //    bsp_board_init(BSP_INIT_LEDS);
     NRF_LOG_DEBUG("board init");
-//    bsp_board_led_invert(LED_U2F_WINK);
+    //    bsp_board_led_invert(LED_U2F_WINK);
     bsp_board_leds_off();
     /**bsp_board_led_invert(2);*/
     /**bsp_board_led_invert(1);*/
     /**bsp_board_led_invert(0);*/
     /* Enable SysTick interrupt for non busy wait delay. */
     /**if (SysTick_Config(SystemCoreClock / 1000)) {*/
-        /**NRF_LOG_ERROR("init_bsp: SysTick configuration error!");*/
-        /**while(1);*/
+    /**NRF_LOG_ERROR("init_bsp: SysTick configuration error!");*/
+    /**while(1);*/
     /**}*/
     return ret;
 }
@@ -134,7 +133,7 @@ void init_cli(void)
     /**uart_config.pselrxd = RX_PIN_NUMBER;*/
     /**uart_config.hwfc    = NRF_UART_HWFC_DISABLED;*/
     /**ret = nrf_cli_init(&m_cli_uart, &uart_config, true, true, */
-                       /**NRF_LOG_SEVERITY_INFO);*/
+    /**NRF_LOG_SEVERITY_INFO);*/
     /**APP_ERROR_CHECK(ret);*/
     /**ret = nrf_cli_start(&m_cli_uart);*/
     /**APP_ERROR_CHECK(ret);*/
@@ -144,8 +143,8 @@ ret_code_t init_device(void)
 {
     NRF_LOG_DEBUG("init_device");
     ret_code_t ret;
-   
-    
+
+
     ret = nrf_drv_power_init(NULL);
     APP_ERROR_CHECK(ret);
 
@@ -159,7 +158,7 @@ ret_code_t init_device(void)
 
     NRF_LOG_INFO("timer init ...");
     init_app_timer();
-    
+
     NRF_LOG_INFO("storage init ...");
     ret = init_storage();
     APP_ERROR_CHECK(ret);
@@ -167,7 +166,7 @@ ret_code_t init_device(void)
     NRF_LOG_INFO("bsp init...");
     ret = init_bsp();
     APP_ERROR_CHECK(ret);
-   
+
     NRF_LOG_INFO("softblink init...");
     init_softblink();
 
@@ -177,10 +176,7 @@ ret_code_t init_device(void)
     return ret;
 }
 
-void board_reboot(void)
-{
-    NRF_LOG_ERROR("reboot not implemted");
-}
+void board_reboot(void) { NRF_LOG_ERROR("reboot not implemted"); }
 
 
 void power_manage(void)
@@ -198,19 +194,19 @@ ret_code_t init_softdevice(void)
     // Attempt to enable the SoftDevice
     err_code = nrf_sdh_enable_request();
     APP_ERROR_CHECK(err_code);
-    
+
     return err_code;
 }
 
 
-static void bool_to_true_timeout_handler(void * p_context)
+static void bool_to_true_timeout_handler(void *p_context)
 {
-    *(bool *)p_context = true;
+    *(bool *) p_context = true;
 }
 
 int ctap_user_presence_test(uint64_t delay)
 {
-    int ret;    
+    int        ret;
     ret_code_t err_code;
 
     if (up_disabled)
@@ -222,28 +218,30 @@ int ctap_user_presence_test(uint64_t delay)
     bool up_test_timed_out = false;
 
     err_code = app_timer_create(
-                                &up_test_timer_id,
-                                APP_TIMER_MODE_SINGLE_SHOT, 
-                                bool_to_true_timeout_handler
-                                );
+        &up_test_timer_id,
+        APP_TIMER_MODE_SINGLE_SHOT,
+        bool_to_true_timeout_handler);
     APP_ERROR_CHECK(err_code);
-    
+
     //reset button pressed state
     UNUSED_RETURN_VALUE(is_user_button_pressed());
-    
+
     start_softblink();
-    err_code = app_timer_start(up_test_timer_id, APP_TIMER_TICKS(delay) , &up_test_timed_out);
+    err_code = app_timer_start(
+        up_test_timer_id,
+        APP_TIMER_TICKS(delay),
+        &up_test_timed_out);
     APP_ERROR_CHECK(err_code);
 
     //while button not pressed and timer not timed out power manage
-    while(true) 
+    while (true)
     {
-        if(up_test_timed_out)
+        if (up_test_timed_out)
         {
             ret = 0;
             break;
         }
-        else if(is_user_button_pressed())
+        else if (is_user_button_pressed())
         {
             ret = 1;
             break;
@@ -253,33 +251,28 @@ int ctap_user_presence_test(uint64_t delay)
             power_manage();
         }
     }
-    
+
     err_code = app_timer_stop(up_test_timer_id);
     APP_ERROR_CHECK(err_code);
     stop_softblink();
     return ret;
 }
 
-void device_disable_up(bool disable)
-{
-    up_disabled = disable;
-}
+void device_disable_up(bool disable) { up_disabled = disable; }
 
-void board_wink(void)
-{
-    bsp_board_led_invert(LED_U2F_WINK);
-}
+void board_wink(void) { bsp_board_led_invert(LED_U2F_WINK); }
 
 
-static void timer_handle(void * p_context)
+static void timer_handle(void *p_context)
 {
     //nothing to do
 }
 
 static void init_softblink(void)
 {
-    ret_code_t err_code;
-    const led_sb_init_params_t led_sb_init_param = LED_SB_INIT_DEFAULT_PARAMS(SOFTBLINKMASK(BSP_GREEN));
+    ret_code_t                 err_code;
+    const led_sb_init_params_t led_sb_init_param =
+        LED_SB_INIT_DEFAULT_PARAMS(SOFTBLINKMASK(BSP_GREEN));
     err_code = led_softblink_init(&led_sb_init_param);
     APP_ERROR_CHECK(err_code);
     led_softblink_off_time_set(400);
@@ -311,4 +304,4 @@ void init_app_timer(void)
 
     ret = app_timer_start(m_timer_0, APP_TIMER_TICKS(5000), NULL);
     APP_ERROR_CHECK(ret);
-}  
+}
