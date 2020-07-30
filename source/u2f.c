@@ -131,11 +131,13 @@ void u2f_request_nfc(
 {
     if (!header)
         return;
-    request_from_nfc(true);  // disable presence test
+//    request_from_nfc(true);  // disable presence test
+    set_req_origin(REQ_ORIGIN_NFC);
 
     u2f_request_ex((APDU_HEADER *) header, data, datalen, resp);
 
-    request_from_nfc(false);  // enable presence test
+    set_req_origin(REQ_ORIGIN_NONE);
+//    request_from_nfc(false);  // enable presence test
 }
 #endif
 

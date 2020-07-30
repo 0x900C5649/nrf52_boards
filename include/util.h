@@ -12,11 +12,11 @@
     ((defined(APP_##module##_ENABLED) && (APP_##module##_ENABLED)) ? 1 : 0)
 
 
-#define FREEANDNULL      \
-    (f) if ((f) != NULL) \
-    {                    \
-        nrf_free((f));   \
-        (f) = NULL       \
+#define FREEANDNULL(f) \
+    if ((f) != NULL)   \
+    {                  \
+        nrf_free((f)); \
+        (f) = NULL;    \
     }
 
 #endif  // _util_h

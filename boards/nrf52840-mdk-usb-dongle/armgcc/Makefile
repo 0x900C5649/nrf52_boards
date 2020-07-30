@@ -231,11 +231,16 @@ SRC_FILES += \
   $(SDK_ROOT)/components/ble/ble_advertising/ble_advertising.c \
   $(SDK_ROOT)/components/ble/common/ble_advdata.c \
   $(SDK_ROOT)/components/ble/ble_services/ble_dis/ble_dis.c \
+  $(SDK_ROOT)/modules/nrfx/drivers/src/nrfx_nfct.c \
+  $(SDK_ROOT)/components/nfc/platform/nfc_platform.c \
+  $(SDK_ROOT)/modules/nrfx/drivers/src/nrfx_timer.c \
   $(ROOT_DIR)/certs/keys.c \
-  $(SRC_DIR)/connectivity/fido_interfaces.c \
   $(SRC_DIR)/connectivity/fido_hid.c \
   $(SRC_DIR)/connectivity/fido_ble.c \
   $(SRC_DIR)/connectivity/ble_ctap/ble_ctap.c \
+  $(SRC_DIR)/connectivity/fido_nfc.c \
+  $(SRC_DIR)/connectivity/apdu.c \
+  $(SRC_DIR)/connectivity/fido_interfaces.c \
   $(SRC_DIR)/ctap.c \
   $(SRC_DIR)/u2f.c \
   $(SRC_DIR)/ctap_parse.c \
@@ -344,6 +349,7 @@ INC_FOLDERS += \
   $(SDK_ROOT)/components/ble/nrf_ble_qwr \
   $(SDK_ROOT)/components/ble/ble_advertising \
   $(SDK_ROOT)/components/ble/ble_services/ble_dis \
+  $(SDK_ROOT)/components/nfc/t4t_lib \
   $(SDK_ROOT)/config/nrf52840/config \
   $(LIBDIR)/tinycbor/src \
   $(PROJ_DIR)/config \
@@ -362,6 +368,7 @@ LIB_FILES += \
   $(SDK_ROOT)/external/nrf_cc310/lib/cortex-m4/hard-float/libnrf_cc310_0.9.12.a \
   $(SDK_ROOT)/external/micro-ecc/nrf52hf_armgcc/armgcc/micro_ecc_lib_nrf52.a \
   $(SDK_ROOT)/external/nrf_oberon/lib/cortex-m4/hard-float/liboberon_3.0.1.a \
+  $(SDK_ROOT)/components/nfc/t4t_lib/nfc_t4t_lib_gcc.a \
   $(LIBDIR)/tinycbor/lib/libtinycbor.a \
 
 

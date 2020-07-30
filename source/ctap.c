@@ -813,10 +813,10 @@ uint8_t ctap_client_pin(CborEncoder *encoder, uint8_t *request, int length)
             ret = cbor_encode_int(&map, RESP_keyAgreement);
             check_ret(ret);
 
-#if APP_MODULE_ENABLED(NFC)
-            if (device_is_nfc() == NFC_IS_ACTIVE)
-                device_set_clock_rate(DEVICE_LOW_POWER_FAST);
-#endif
+/**#if APP_MODULE_ENABLED(NFC)*/
+            /**if (device_is_nfc() == NFC_IS_ACTIVE)*/
+                /**device_set_clock_rate(DEVICE_LOW_POWER_FAST);*/
+/**#endif*/
 
             size_t pub_output_len = ECC_PUBLIC_KEY_SIZE;
             crypto_ecc256_compute_public_key(
@@ -826,10 +826,10 @@ uint8_t ctap_client_pin(CborEncoder *encoder, uint8_t *request, int length)
                 &pub_output_len);
             assert(pub_output_len == ECC_PUBLIC_KEY_SIZE);
 
-#if APP_MODULE_ENABLED(NFC)
-            if (device_is_nfc() == NFC_IS_ACTIVE)
-                device_set_clock_rate(DEVICE_LOW_POWER_IDLE);
-#endif
+/**#if APP_MODULE_ENABLED(NFC)*/
+            /**if (device_is_nfc() == NFC_IS_ACTIVE)*/
+                /**device_set_clock_rate(DEVICE_LOW_POWER_IDLE);*/
+/**#endif*/
 
             ret = ctap_add_cose_key(
                 &map,
@@ -1758,17 +1758,17 @@ static int ctap_generate_cose_key(
     switch (algtype)
     {
         case COSE_ALG_ES256:
-#if APP_MODULE_ENABLED(NFC)
-            if (device_is_nfc() == NFC_IS_ACTIVE)
-                device_set_clock_rate(DEVICE_LOW_POWER_FAST);
-#endif
+/**#if APP_MODULE_ENABLED(NFC)*/
+            /**if (device_is_nfc() == NFC_IS_ACTIVE)*/
+                /**device_set_clock_rate(DEVICE_LOW_POWER_FAST);*/
+/**#endif*/
 
             crypto_ecc256_derive_public_key(hmac_input, len, x, y);
 
-#if APP_MODULE_ENABLED(NFC)
-            if (device_is_nfc() == NFC_IS_ACTIVE)
-                device_set_clock_rate(DEVICE_LOW_POWER_IDLE);
-#endif
+/**#if APP_MODULE_ENABLED(NFC)*/
+            /**if (device_is_nfc() == NFC_IS_ACTIVE)*/
+                /**device_set_clock_rate(DEVICE_LOW_POWER_IDLE);*/
+/**#endif*/
             break;
         default:
             printf2(TAG_ERR, "Error, COSE alg %d not supported\n", algtype);

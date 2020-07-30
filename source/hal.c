@@ -1,5 +1,6 @@
 #include "hal.h"
 //#include "storage.h"
+#include "fido_interfaces.h" 
 
 #include "nrf.h"
 #include "app_util_platform.h"
@@ -27,15 +28,6 @@ NRF_LOG_MODULE_REGISTER();
 /*            */
 
 
-/**
- * @brief CLI interface over UART
- */
-//NRF_CLI_UART_DEF(m_cli_uart_transport, 0, 64, 16);
-/**NRF_CLI_DEF(m_cli_uart,*/
-/**"ctap_cli:~$ ",*/
-/**&m_cli_uart_transport.transport,*/
-/**'\r',*/
-/**8);*/
 
 static bool m_user_button_pressed = false;
 //volatile uint32_t ms_ticks = 0;
@@ -62,6 +54,8 @@ static void stop_softblink(void);
  */
 bool is_user_button_pressed(void)
 {
+    if (get_req_origin() == REQ_ORIGIN_NFC) return true;
+
     if (m_user_button_pressed)
     {
         m_user_button_pressed = false;
