@@ -11,6 +11,7 @@
 #include "apdu.h"
 #include "ctap.h"
 #include "ctap_errors.h"
+#include "u2f.h"
 
 #include "nfc_t4t_lib.h"
 #include "app_util.h"
@@ -227,6 +228,33 @@ static void apdu_nfcctap_msg(NFC_STATE *nfc_mod);
  */
 static void apdu_read_binary(NFC_STATE *nfc_mod);
 
+/** 
+ * @brief		handle u2f version request
+ * 
+ * @param[in,out] 	nfc_mod	corresponding state
+ *
+ * @return 		void
+ */
+static void apdu_u2f_version(NFC_STATE *nfc_mod);
+
+/** 
+ * @brief		handle u2f register request
+ * 
+ * @param[in,out] 	nfc_mod	corresponding state
+ *
+ * @return 		void
+ */
+static void apdu_u2f_register(NFC_STATE *nfc_mod);
+
+/** 
+ * @brief		handle u2f authenticate request
+ * 
+ * @param[in,out] 	nfc_mod	corresponding state
+ *
+ * @return 		void
+ */
+static void apdu_u2f_authenticate(NFC_STATE *nfc_mod);
+
 
 /***************************************************************************** 
 *							CONSTS
@@ -262,7 +290,7 @@ const uint8_t NFC_CC[] = {
     0x00};
 
 // 13 chars
-const uint8_t NDEF_SAMPLE[] = "\x00\x14\xd1\x01\x0eU\x04cispa.saarland/";
+const uint8_t NDEF_SAMPLE[] = "https://cispa.de/";
 
 
 /***************************************************************************** 
@@ -270,8 +298,9 @@ const uint8_t NDEF_SAMPLE[] = "\x00\x14\xd1\x01\x0eU\x04cispa.saarland/";
  *****************************************************************************/
 NFC_STATE m_nfc;
 
-uint8_t txbuffer[MAX_NFC_LENGTH];
-
+uint8_t  txbuffer[MAX_NFC_LENGTH];
+uint8_t *NFC_RECVBUF      = NULL;
+size_t   NFC_RECVBUF_SIZE = 0;
 
 /***************************************************************************** 
  *                            NFC CONTROL
@@ -279,13 +308,14 @@ uint8_t txbuffer[MAX_NFC_LENGTH];
 
 static void nfc_send_status(uint16_t status)
 {
-    NRF_LOG_DEBUG("send status: %d", status);
     nfc_send_response(NULL, 0, status);
 }
 
 static void nfc_send_response_plain(uint8_t *data, size_t len)
 {
     memcpy(txbuffer, data, len);
+    //    NRF_LOG_HEXDUMP_DEBUG(txbuffer, len);
+    NRF_LOG_DEBUG("sending %d", len);
     nfc_send_response_raw(txbuffer, len);
 }
 
@@ -318,15 +348,13 @@ static void nfc_response_init_chain(
 {
     if (len <= 255 || ext)
     {
-        nfc_send_response_plain(
-            nfc_mod->response_buffer,
-            nfc_mod->response_length);
+        nfc_send_response_plain(data, len);
     }
     else
     {
         size_t pcklen    = MIN(253, len);
         size_t bytesleft = len - pcklen;
-        NRF_LOG_INFO("61XX chaining %d/%d.", pcklen, bytesleft);
+        NRF_LOG_INFO("61XX chaining %d/%d.", pcklen, len);
 
         // put the rest data into response buffer
         nfc_mod->response_buffer = nrf_malloc(bytesleft);
@@ -438,7 +466,7 @@ static void nfc_clean_dispatch(NFC_STATE *nfc_mod)
     FREEANDNULL(nfc_mod->dispatch_package)
     FREEANDNULL(nfc_mod->dispatch_head)
     nfc_mod->dispatch_length = 0;
-    nfc_mod->dispatch_ready = 0;
+    nfc_mod->dispatch_ready  = 0;
 }
 
 static void nfc_clean_response(NFC_STATE *nfc_mod)
@@ -464,12 +492,12 @@ static void nfc_callback(
     /**uint32_t   resp_len;*/
 
     //    (void) context;
-    NRF_LOG_INFO("NFC callback");
+    /**NRF_LOG_INFO("NFC callback");*/
 
     switch (event)
     {
         case NFC_T4T_EVENT_FIELD_ON:
-            NRF_LOG_INFO("NFC Tag has been selected");
+            NRF_LOG_INFO("NFC field on");
 
             nfc_clean((NFC_STATE *) context);
             break;
@@ -477,10 +505,35 @@ static void nfc_callback(
         case NFC_T4T_EVENT_FIELD_OFF: NRF_LOG_INFO("NFC field lost"); break;
 
         case NFC_T4T_EVENT_DATA_IND:
-            process_apdu((NFC_STATE *) context, data, dataLength, flags);
+            if (!NFC_RECVBUF)
+            {
+                NFC_RECVBUF = nrf_malloc(dataLength);
+            }
+            else
+            {
+                void *newbuf = nrf_malloc(NFC_RECVBUF_SIZE + dataLength);
+                memcpy(newbuf, NFC_RECVBUF, NFC_RECVBUF_SIZE);
+                nrf_free(NFC_RECVBUF);
+                NFC_RECVBUF = newbuf;
+            }
+            memcpy(NFC_RECVBUF + NFC_RECVBUF_SIZE, data, dataLength);
+            NFC_RECVBUF_SIZE += dataLength;
+
+            if (flags != NFC_T4T_DI_FLAG_MORE)
+            {
+                process_apdu(
+                    (NFC_STATE *) context,
+                    NFC_RECVBUF,
+                    NFC_RECVBUF_SIZE,
+                    flags);
+
+                nrf_free(NFC_RECVBUF);
+                NFC_RECVBUF      = NULL;
+                NFC_RECVBUF_SIZE = 0;
+            }
             break;
 
-        case NFC_T4T_EVENT_DATA_TRANSMITTED:
+        case NFC_T4T_EVENT_DATA_TRANSMITTED: break;
         default: NRF_LOG_WARNING("something else happend"); break;
     }
 }
@@ -494,9 +547,9 @@ static void process_apdu(
     APDU_STRUCT *apdu = nrf_malloc(sizeof(APDU_STRUCT));
     //parse header
 
-    NRF_LOG_DEBUG("received apdu");
+    NRF_LOG_DEBUG("received apdu, length: %d", dataLength);
     NRF_LOG_HEXDUMP_DEBUG(data, dataLength);
-
+    //    NRF_LOG_FLUSH();
     memset(apdu, 0, sizeof(APDU_STRUCT));
     if (apdu_decode((uint8_t *) data, dataLength, apdu))
     {
@@ -514,7 +567,7 @@ static void process_apdu(
         apdu->cla,
         apdu->ins);
     NRF_LOG_INFO(
-        "p1=%02x p2=%02x lc=%d le=%d\r\n",
+        "p1=%02x p2=%02x lc=%d le=%d",
         apdu->p1,
         apdu->p2,
         apdu->lc,
@@ -581,6 +634,12 @@ static void process_dispatch(NFC_STATE *nfc_mod)
 
         case APDU_INS_READ_BINARY: apdu_read_binary(nfc_mod); break;
 
+        case APDU_FIDO_U2F_VERSION: apdu_u2f_version(nfc_mod); break;
+
+        case APDU_FIDO_U2F_REGISTER: apdu_u2f_register(nfc_mod); break;
+
+        case APDU_FIDO_U2F_AUTHENTICATE: apdu_u2f_authenticate(nfc_mod); break;
+
         default:
             NRF_LOG_WARNING("Unknown INS %02x", nfc_mod->dispatch_head->ins);
             NRF_LOG_INFO(
@@ -590,7 +649,7 @@ static void process_dispatch(NFC_STATE *nfc_mod)
                 nfc_mod->dispatch_head->cla,
                 nfc_mod->dispatch_head->ins);
             NRF_LOG_INFO(
-                "p1=%02x p2=%02x lc=%d le=%d\r\n",
+                "p1=%02x p2=%02x lc=%d le=%d",
                 nfc_mod->dispatch_head->p1,
                 nfc_mod->dispatch_head->p2,
                 nfc_mod->dispatch_head->lc,
@@ -625,22 +684,23 @@ static void apdu_get_response(NFC_STATE *nfc_mod)
         if (data_left <= 0xff)
             wlresp += data_left & 0xff;
         nfc_send_status(wlresp);
-        NRF_LOG_WARNING("buffer length less than requesteds");
+        NRF_LOG_WARNING("buffer length less than requested");
+        nfc_clean_response(nfc_mod);
         return;
     }
 
     // create temporary packet
     uint8_t pck[255] = {0};
     size_t  pcklen   = 253;
-    if (apdu->le)
+    if (apdu->le && apdu->le != 0x100)
         pcklen = apdu->le;
     if (pcklen > data_left)
         pcklen = data_left;
 
-    NRF_LOG_INFO("GET RESPONSE. pck len: %d buffer len: %d", pcklen, data_left);
+    NRF_LOG_INFO("GET RESPONSE. sending %d/%d bytes left", pcklen, data_left);
 
     // create packet and add 61XX there if we have another portion(s) of data
-    memmove(pck, nfc_mod->response_buffer, pcklen);
+    memmove(pck, nfc_mod->response_buffer + nfc_mod->response_offset, pcklen);
     size_t dlen = 0;
     if (data_left - pcklen)
     {
@@ -667,7 +727,8 @@ static void apdu_select_applet(NFC_STATE *nfc_mod)
         nfc_mod->dispatch_length);
     if (selected == APP_FIDO)
     {
-        nfc_send_response((uint8_t *) "FIDO_2_0", 8, SW_SUCCESS);
+        /**nfc_send_response((uint8_t *) "FIDO_2_0", 8, SW_SUCCESS);*/
+        nfc_send_response((uint8_t *) "U2F_V2", 6, SW_SUCCESS);
         NRF_LOG_INFO("FIDO applet selected");
     }
     else if (selected != APP_NOTHING)
@@ -713,7 +774,7 @@ static void apdu_nfcctap_msg(NFC_STATE *nfc_mod)
     // if (!WTX_off())
     //     return;
 
-    NRF_LOG_INFO("CTAP resp: 0x%02x  len: %d\r\n", status, ctap_resp.length);
+    NRF_LOG_INFO("CTAP resp: 0x%02x  len: %d", status, ctap_resp.length);
 
     if (status == CTAP1_ERR_SUCCESS)
     {
@@ -759,7 +820,6 @@ static void apdu_nfcctap_msg(NFC_STATE *nfc_mod)
         ctap_resp.data,
         ctap_resp.length,
         apdu->extended_apdu);
-    nfc_clean_dispatch(nfc_mod);
     NRF_LOG_INFO("CTAP answered");
 }
 
@@ -793,6 +853,125 @@ static void apdu_read_binary(NFC_STATE *nfc_mod)
     }
 }
 
+static void apdu_u2f_version(NFC_STATE *nfc_mod)
+{
+    CTAP_RESPONSE ctap_resp;
+    APDU_STRUCT * apdu = nfc_mod->dispatch_head;
+
+    if (nfc_mod->selected_applet != APP_FIDO)
+    {
+        nfc_send_status(SW_INS_INVALID);
+        nfc_clean(nfc_mod);
+        return;
+    }
+
+    NRF_LOG_INFO("U2F GetVersion command");
+
+    u2f_request_nfc(
+        (uint8_t *) apdu,
+        (uint8_t *) nfc_mod->dispatch_package,
+        (int) nfc_mod->dispatch_length,
+        &ctap_resp);
+    nfc_response_init_chain(
+        nfc_mod,
+        ctap_resp.data,
+        ctap_resp.length,
+        apdu->extended_apdu);
+}
+
+static void apdu_u2f_register(NFC_STATE *nfc_mod)
+{
+    APDU_STRUCT * apdu = nfc_mod->dispatch_head;
+    CTAP_RESPONSE ctap_resp;
+
+    if (nfc_mod->selected_applet != APP_FIDO)
+    {
+        nfc_send_status(SW_INS_INVALID);
+        nfc_clean(nfc_mod);
+        return;
+    }
+
+    NRF_LOG_INFO("U2F Register command.");
+
+    if (apdu->lc != 64)
+    {
+        NRF_LOG_INFO("U2F Register request length error. len=%d", apdu->lc);
+        nfc_send_status(SW_WRONG_LENGTH);
+        return;
+    }
+
+    /**timestamp();*/
+
+
+    // WTX_on(WTX_TIME_DEFAULT);
+    // SystemClock_Config_LF32();
+    // delay(300);
+    /**if (device_is_nfc() == NFC_IS_ACTIVE)*/
+    /**device_set_clock_rate(DEVICE_LOW_POWER_FAST);*/
+
+    /**u2f_request_nfc(apduptr, apdu->data, apdu->lc, &ctap_resp);*/
+    u2f_request_nfc(
+        (uint8_t *) apdu,
+        (uint8_t *) nfc_mod->dispatch_package,
+        (int) nfc_mod->dispatch_length,
+        &ctap_resp);
+
+    /**if (device_is_nfc() == NFC_IS_ACTIVE)*/
+    /**device_set_clock_rate(DEVICE_LOW_POWER_IDLE);*/
+    // if (!WTX_off())
+    // 	return;
+
+    nfc_response_init_chain(
+        nfc_mod,
+        ctap_resp.data,
+        ctap_resp.length,
+        apdu->extended_apdu);
+}
+
+static void apdu_u2f_authenticate(NFC_STATE *nfc_mod)
+{
+    APDU_STRUCT * apdu = nfc_mod->dispatch_head;
+    CTAP_RESPONSE ctap_resp;
+
+    if (nfc_mod->selected_applet != APP_FIDO)
+    {
+        nfc_send_status(SW_INS_INVALID);
+        nfc_clean(nfc_mod);
+        return;
+    }
+
+    NRF_LOG_INFO("U2F Authenticate command.");
+
+    if (apdu->lc != 64 + 1 + apdu->data[64])
+    {
+        //delay(5);
+        NRF_LOG_INFO(
+            "U2F Authenticate request length error. len=%d keyhlen=%d.",
+            apdu->lc,
+            apdu->data[64]);
+        nfc_send_status(SW_WRONG_LENGTH);
+        return;
+    }
+
+    //    timestamp();
+    // WTX_on(WTX_TIME_DEFAULT);
+    u2f_request_nfc(
+        (uint8_t *) apdu,
+        (uint8_t *) nfc_mod->dispatch_package,
+        (int) nfc_mod->dispatch_length,
+        &ctap_resp);
+    /**u2f_request_nfc(apduptr, apdu->data, apdu->lc, &ctap_resp);*/
+    // if (!WTX_off())
+    // 	return;
+
+    NRF_LOG_INFO("U2F resp len: %d", ctap_resp.length);
+    NRF_LOG_HEXDUMP_DEBUG(ctap_resp.data, ctap_resp.length);
+    nfc_response_init_chain(
+        nfc_mod,
+        ctap_resp.data,
+        ctap_resp.length,
+        apdu->extended_apdu);
+}
 
 /***************************************************************************** 
  *                            public interface

@@ -210,7 +210,7 @@ void crypto_sha256_hmac_init(uint8_t *key, uint32_t klen)
 void crypto_sha256_hmac_update(const uint8_t *data, size_t len)
 {
     err_code = nrf_crypto_hmac_update(&hmac_ctx, data, len);
-    NRF_LOG_DEBUG("hmac_update: %x", err_code);
+    /**NRF_LOG_DEBUG("hmac_update: %x", err_code);*/
     APP_ERROR_CHECK(err_code);
 }
 

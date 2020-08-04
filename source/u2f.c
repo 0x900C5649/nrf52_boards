@@ -112,14 +112,17 @@ end:
         printf1(TAG_U2F, "U2F Error code %04x\n", rcode);
         ctap_response_init(_u2f_resp);
     }
-
+//    printf1(TAG_U2F, "resp len:%d", _u2f_resp->length);
     byte = (rcode & 0xff00) >> 8;
     u2f_response_writeback(&byte, 1);
     byte = rcode & 0xff;
     u2f_response_writeback(&byte, 1);
+//    printf1(TAG_U2F, "resp len:%d", _u2f_resp->length);
+//    dump_hex1(TAG_U2F, _u2f_resp->data+_u2f_resp->length-2, 2);
 
-    printf1(TAG_U2F, "u2f resp: ");
-    dump_hex1(TAG_U2F, _u2f_resp->data, _u2f_resp->length);
+    printf1(TAG_U2F, "u2f resp-code: %x", rcode);
+//    printf1(TAG_U2F, "u2f resp: ");
+//    dump_hex1(TAG_U2F, _u2f_resp->data, _u2f_resp->length);
 }
 
 #if APP_MODULE_ENABLED(NFC)
@@ -314,8 +317,8 @@ static int16_t
 
     crypto_sha256_final(hash);
 
-    printf1(TAG_U2F, "sha256: ");
-    dump_hex1(TAG_U2F, hash, 32);
+//    printf1(TAG_U2F, "sha256: ");
+//    dump_hex1(TAG_U2F, hash, 32);
     crypto_ecc256_sign(hash, 32, sig, &sigsize);
 
     u2f_response_writeback(&up, 1);
