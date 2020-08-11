@@ -34,7 +34,7 @@ SRC_FILES += \
 
 
 # Include folders common to all targets
-INC_FOLDERS += \
+INC_FOLDERS += $(BOARD_DIRECTORY)/board_config \
 
 # Libraries common to all targets
 LIB_FILES += \
@@ -95,7 +95,6 @@ nrf52840_xxaa: ASMFLAGS += -D__STACK_SIZE=8192
 # that may need symbols provided by these libraries.
 LIB_FILES += -lc -lnosys -lm
 
-
 .PHONY: default help
 
 # Default target - first one defined
@@ -124,6 +123,7 @@ merge: default
 
 pkg: default
 	@echo "creating dfu package"
+	echo "`pwd`"
 	nrfutil pkg generate --hw-version 52 --application-version $(VERSION) --application $(OUTPUT_DIRECTORY)/nrf52840_xxaa.hex --sd-req 0xCA _build/nrf52-fido2_app_$(VERSION).zip
 
 flash: pkg
