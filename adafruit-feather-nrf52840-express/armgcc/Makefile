@@ -8,7 +8,7 @@ include $(CONFIG_DIR)/Makefile.common
 #SET PROJECT VARIABLES
 PROJECT_NAME     ?= nrf52840
 TARGETS          ?= nrf52840_xxaa
-OUTPUT_DIRECTORY ?= out
+OUTPUT_DIRECTORY ?= $(PROJ_DIR)/out
 VERSION          ?= 1
 BOARD			 := adafruit-feather-nrf52840-express
 
@@ -25,7 +25,7 @@ LIBDIR := $(ROOT_DIR)/lib
 
 
 $(OUTPUT_DIRECTORY)/nrf52840_xxaa.out: \
-  LINKER_SCRIPT  := nrf52_fido2_gcc_nrf52.ld
+  LINKER_SCRIPT  := nrf52_gcc.ld
 
 # Source files common to all targets
 SRC_FILES += \
