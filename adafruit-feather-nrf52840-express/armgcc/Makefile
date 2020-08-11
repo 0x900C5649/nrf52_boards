@@ -6,11 +6,11 @@ CONFIG_DIR := $(ROOT_DIR)/config
 include $(CONFIG_DIR)/Makefile.common
 
 #SET PROJECT VARIABLES
-PROJECT_NAME	 ?= nrf52840
-TARGETS		  ?= nrf52840_xxaa
-OUTPUT_DIRECTORY ?= $(PROJ_DIR)
-VERSION		  ?= 1
-BOARD			 := adafruit-feather-nrf52840-express
+PROJECT_NAME	 	?= nrf52840
+TARGETS		  		?= nrf52840_xxaa
+OUTPUT_DIRECTORY 	?= $(PROJ_DIR)
+VERSION		  		?= 1
+BOARD			 	:= adafruit-feather-nrf52840-express
 
 #SETUP OTHER DIRS
 SDK_ROOT ?= $(ROOT_DIR)/nrf_sdks/nRF5_SDK_16.0.0_98a08e2
@@ -25,7 +25,7 @@ INCL_DIR := $(SRC_DIR)
 #directory for dependencies
 LIBDIR := $(ROOT_DIR)/lib
 
-LD_SCRIPT ?= $(BOARD_DIRECTORY)/nrf52_gcc.ld
+LD_SCRIPT ?= $(BOARD_DIRECTORY)/armgcc/nrf52_gcc.ld
 
 $(OUTPUT_DIRECTORY)/nrf52840_xxaa.out: \
   LINKER_SCRIPT  := $(LD_SCRIPT)
@@ -34,10 +34,14 @@ $(OUTPUT_DIRECTORY)/nrf52840_xxaa.out: \
 SRC_FILES += \
   $(SDK_ROOT)/modules/nrfx/mdk/gcc_startup_nrf52840.S \
   $(SDK_ROOT)/components/boards/boards.c \
+  $(SDK_ROOT)/modules/nrfx/mdk/system_nrf52.c \
 
 
 # Include folders common to all targets
-INC_FOLDERS +=	 $(BOARD_DIRECTORY)/board_config \
+INC_FOLDERS += 	$(BOARD_DIRECTORY)/board_config \
+			   	$(SDK_ROOT)/config/nrf52840/config \
+			   	$(SDK_ROOT)/components/boards \
+  				$(SDK_ROOT)/modules/nrfx/mdk \
 
 # Libraries common to all targets
 LIB_FILES += \
@@ -46,7 +50,7 @@ LIB_FILES += \
 DEFINES += -DBOARD_CUSTOM \
 		   -DFLOAT_ABI_HARD \
 		   -DNRF52840_XXAA \
-		   -DADAFRUIT-FEATHER-NRF52840-EXPRESS
+		   -DADAFRUIT_FEATHER_NRF52840_EXPRESS \
 
 # Optimization flags
 OPT += -O0 -g3
