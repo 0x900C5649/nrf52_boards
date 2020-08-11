@@ -6,10 +6,10 @@ CONFIG_DIR := $(ROOT_DIR)/config
 include $(CONFIG_DIR)/Makefile.common
 
 #SET PROJECT VARIABLES
-PROJECT_NAME     ?= nrf52840
-TARGETS          ?= nrf52840_xxaa
-OUTPUT_DIRECTORY ?= $(PROJ_DIR)/out
-VERSION          ?= 1
+PROJECT_NAME	 ?= nrf52840
+TARGETS		  ?= nrf52840_xxaa
+OUTPUT_DIRECTORY ?= $(PROJ_DIR)
+VERSION		  ?= 1
 BOARD			 := adafruit-feather-nrf52840-express
 
 #SETUP OTHER DIRS
@@ -17,15 +17,18 @@ SDK_ROOT ?= $(ROOT_DIR)/nrf_sdks/nRF5_SDK_16.0.0_98a08e2
 PROJ_DIR ?= $(ROOT_DIR)/build/$(BOARD)
 BOARD_DIRECTORY ?= $(ROOT_DIR)/boards/$(BOARD)
 
+$(mkdir -p $(PROJ_DIR))	
+
 SRC_DIR := $(ROOT_DIR)/src
 INCL_DIR := $(SRC_DIR)
 
 #directory for dependencies
 LIBDIR := $(ROOT_DIR)/lib
 
+LD_SCRIPT ?= $(BOARD_DIRECTORY)/nrf52_gcc.ld
 
 $(OUTPUT_DIRECTORY)/nrf52840_xxaa.out: \
-  LINKER_SCRIPT  := nrf52_gcc.ld
+  LINKER_SCRIPT  := $(LD_SCRIPT)
 
 # Source files common to all targets
 SRC_FILES += \
@@ -34,16 +37,15 @@ SRC_FILES += \
 
 
 # Include folders common to all targets
-INC_FOLDERS += $(BOARD_DIRECTORY)/board_config \
+INC_FOLDERS +=	 $(BOARD_DIRECTORY)/board_config \
 
 # Libraries common to all targets
 LIB_FILES += \
 
 # DEFINITIONS
-DEFINES += -DUSE_APP_CONFIG \
-		   -DBOARD_CUSTOM \
-           -DFLOAT_ABI_HARD \
-           -DNRF52840_XXAA \
+DEFINES += -DBOARD_CUSTOM \
+		   -DFLOAT_ABI_HARD \
+		   -DNRF52840_XXAA \
 		   -DADAFRUIT-FEATHER-NRF52840-EXPRESS
 
 # Optimization flags
@@ -104,9 +106,9 @@ default: nrf52840_xxaa
 help:
 	@echo following targets are available:
 	@echo		nrf52840_xxaa
-	@echo       flash_softdevice
+	@echo	   flash_softdevice
 	@echo		sdk_config - starting external tool for editing sdk_config.h
-	@echo		flash      - flashing binary
+	@echo		flash	  - flashing binary
 
 TEMPLATE_PATH := $(SDK_ROOT)/components/toolchain/gcc
 
