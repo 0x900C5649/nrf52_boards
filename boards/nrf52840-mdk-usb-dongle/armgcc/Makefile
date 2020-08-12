@@ -4,6 +4,7 @@ OUTPUT_DIRECTORY := _build
 VERSION          := 2
 
 SDK_ROOT := ../../../nrf_sdks/nRF5_SDK_16.0.0_98a08e2
+#SDK_ROOT := ../../../nrf_sdks/nRF5_SDK_17.0.0_9d13099
 #SDK_ROOT := /home/steffensky/SDKs/nRF5_SDK_16.0.0_98a08e2
 #nRF5_SDK_15.3.0_59ac345
 PROJ_DIR := ..
