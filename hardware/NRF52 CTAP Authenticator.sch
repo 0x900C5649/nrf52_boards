@@ -7306,38 +7306,39 @@ Feel free to contact us at &lt;a href="mailto:Support@PCBLayout.com"&gt;Support@
 <part name="R3_1" library="microbuilder" deviceset="RESISTOR" device="0805_NOTHERMALS" value="4.7K"/>
 <part name="LED1" library="microbuilder" deviceset="LED_RGB_PLCC4" device=""/>
 <part name="U$15" library="CLUE_microbuilder" deviceset="3.3V" device=""/>
+<part name="U$19" library="microbuilder" deviceset="3.3V" device=""/>
 </parts>
 <sheets>
 <sheet>
 <plain>
-<text x="266.7" y="53.34" size="1.778" layer="97" grouprefs="POWER_MANAGER ADAFRUIT_FEATHER_NRF52840_SENSE">10K  = 100mA</text>
-<text x="266.7" y="50.8" size="1.778" layer="97" grouprefs="POWER_MANAGER ADAFRUIT_FEATHER_NRF52840_SENSE">5.0K  = 200mA</text>
-<text x="266.7" y="48.26" size="1.778" layer="97" grouprefs="POWER_MANAGER ADAFRUIT_FEATHER_NRF52840_SENSE">2.0K  = 500mA</text>
-<text x="266.7" y="45.72" size="1.778" layer="97" grouprefs="POWER_MANAGER ADAFRUIT_FEATHER_NRF52840_SENSE">1.0K  = 1000mA</text>
-<text x="236.22" y="67.3735" size="2.54" layer="94" grouprefs="POWER_MANAGER ADAFRUIT_FEATHER_NRF52840_SENSE">LIPO CHARGING</text>
-<text x="251.46" y="58.42" size="1.27" layer="97" align="center" grouprefs="POWER_MANAGER ADAFRUIT_FEATHER_NRF52840_SENSE">To charge the LIPO, insert the
+<text x="266.7" y="53.34" size="1.778" layer="97" grouprefs="ADAFRUIT_FEATHER_NRF52840_SENSE POWER_MANAGER">10K  = 100mA</text>
+<text x="266.7" y="50.8" size="1.778" layer="97" grouprefs="ADAFRUIT_FEATHER_NRF52840_SENSE POWER_MANAGER">5.0K  = 200mA</text>
+<text x="266.7" y="48.26" size="1.778" layer="97" grouprefs="ADAFRUIT_FEATHER_NRF52840_SENSE POWER_MANAGER">2.0K  = 500mA</text>
+<text x="266.7" y="45.72" size="1.778" layer="97" grouprefs="ADAFRUIT_FEATHER_NRF52840_SENSE POWER_MANAGER">1.0K  = 1000mA</text>
+<text x="236.22" y="67.3735" size="2.54" layer="94" grouprefs="ADAFRUIT_FEATHER_NRF52840_SENSE POWER_MANAGER">LIPO CHARGING</text>
+<text x="251.46" y="58.42" size="1.27" layer="97" align="center" grouprefs="ADAFRUIT_FEATHER_NRF52840_SENSE POWER_MANAGER">To charge the LIPO, insert the
 battery in the JST PH connector
 and connect USB at the same time.</text>
-<text x="109.22" y="66.04" size="2.54" layer="94" align="bottom-center" grouprefs="POWER_MANAGER ADAFRUIT_FEATHER_NRF52840_SENSE">POWER AND FILTERING
+<text x="109.22" y="66.04" size="2.54" layer="94" align="bottom-center" grouprefs="ADAFRUIT_FEATHER_NRF52840_SENSE POWER_MANAGER">POWER AND FILTERING
 (600mA Output)</text>
-<text x="170.18" y="67.3735" size="2.54" layer="94" grouprefs="POWER_MANAGER ADAFRUIT_FEATHER_NRF52840_SENSE">JST PH LIPO INPUT</text>
-<text x="185.42" y="60.96" size="1.27" layer="97" align="center" grouprefs="POWER_MANAGER ADAFRUIT_FEATHER_NRF52840_SENSE">Dynamic VIN selection: VBUS
+<text x="170.18" y="67.3735" size="2.54" layer="94" grouprefs="ADAFRUIT_FEATHER_NRF52840_SENSE POWER_MANAGER">JST PH LIPO INPUT</text>
+<text x="185.42" y="60.96" size="1.27" layer="97" align="center" grouprefs="ADAFRUIT_FEATHER_NRF52840_SENSE POWER_MANAGER">Dynamic VIN selection: VBUS
 (USB) will override VBAT (LIPO)
 via D5 when both are present.</text>
-<text x="106.68" y="50.8" size="1.778" layer="97" grouprefs="POWER_MANAGER ADAFRUIT_FEATHER_NRF52840_SENSE">Dropout Voltage (25°C):
+<text x="106.68" y="50.8" size="1.778" layer="97" grouprefs="ADAFRUIT_FEATHER_NRF52840_SENSE POWER_MANAGER">Dropout Voltage (25°C):
 100mA: ~250/~40mV
 300mA: ~300/~125mV
 600mA: ~375/~260mV</text>
-<text x="342.9" y="71.12" size="2.54" layer="94" grouprefs="ADAFRUIT_FEATHER_NRF52840_SENSE INDICATOR_LEDS">INDICATOR LEDS</text>
-<text x="241.3" y="127" size="2.54" layer="94" grouprefs="ADAFRUIT_FEATHER_NRF52840_SENSE FLASH">16MBIT QSPI FLASH</text>
-<text x="33.02" y="124.46" size="2.54" layer="94" grouprefs="CONNECTORS ADAFRUIT_FEATHER_NRF52840_SENSE USB">MICRO USB</text>
-<text x="256.54" y="182.88" size="2.54" layer="94" grouprefs="ACCEL/GYRO SENSORS ADAFRUIT_FEATHER_NRF52840_SENSE">ACCEL / GYRO</text>
-<text x="241.3" y="231.14" size="2.54" layer="94" grouprefs="ADAFRUIT_FEATHER_NRF52840_SENSE SENSORS LIGHT/COLOR/PROX/GESTURE">LIGHT/COLOR/PROX/GESTURE</text>
-<text x="332.74" y="157.48" size="2.54" layer="94" grouprefs="SWITCHES SENSORS">RESET/USER SWITCHES</text>
-<text x="170.434" y="262.89" size="2.54" layer="94" grouprefs="CONNECTORS DISPLAY ADAFRUIT_CLUE">TFT + BACKLIGHT</text>
-<text x="81.28" y="124.46" size="2.54" layer="94" grouprefs="CONNECTORS SWD_DEBUDDER">SWD DEBUGGER</text>
+<text x="342.9" y="71.12" size="2.54" layer="94" grouprefs="INDICATOR_LEDS ADAFRUIT_FEATHER_NRF52840_SENSE">INDICATOR LEDS</text>
+<text x="241.3" y="127" size="2.54" layer="94" grouprefs="FLASH ADAFRUIT_FEATHER_NRF52840_SENSE">16MBIT QSPI FLASH</text>
+<text x="33.02" y="124.46" size="2.54" layer="94" grouprefs="USB ADAFRUIT_FEATHER_NRF52840_SENSE CONNECTORS">MICRO USB</text>
+<text x="256.54" y="182.88" size="2.54" layer="94" grouprefs="ADAFRUIT_FEATHER_NRF52840_SENSE SENSORS ACCEL/GYRO">ACCEL / GYRO</text>
+<text x="241.3" y="231.14" size="2.54" layer="94" grouprefs="LIGHT/COLOR/PROX/GESTURE SENSORS ADAFRUIT_FEATHER_NRF52840_SENSE">LIGHT/COLOR/PROX/GESTURE</text>
+<text x="332.74" y="157.48" size="2.54" layer="94" grouprefs="SENSORS SWITCHES">RESET/USER SWITCHES</text>
+<text x="170.434" y="262.89" size="2.54" layer="94" grouprefs="ADAFRUIT_CLUE DISPLAY CONNECTORS">TFT + BACKLIGHT</text>
+<text x="81.28" y="124.46" size="2.54" layer="94" grouprefs="SWD_DEBUDDER CONNECTORS">SWD DEBUGGER</text>
 <text x="25.4" y="185.42" size="1.778" layer="97" rot="R90" grouprefs="MCU">Place 10uH for DC/DC</text>
-<text x="22.86" y="66.9925" size="2.54" layer="94" grouprefs="POWER_MANAGER ADAFRUIT_CLUE">DECOUPLING CAPS</text>
+<text x="22.86" y="66.9925" size="2.54" layer="94" grouprefs="ADAFRUIT_CLUE POWER_MANAGER">DECOUPLING CAPS</text>
 <text x="-88.9" y="251.46" size="1.778" layer="97">notes:
 - exchange resistor/capasitor sizes to something manual managable
 
@@ -7355,7 +7356,7 @@ Features:
 - check footprints
 - AREF
 </text>
-<text x="139.7" y="124.46" size="2.54" layer="94" grouprefs="SENSORS CONNECTORS NFC">NFC U.FL CONNECTOR</text>
+<text x="139.7" y="124.46" size="2.54" layer="94" grouprefs="NFC CONNECTORS SENSORS">NFC U.FL CONNECTOR</text>
 <text x="17.78" y="266.7" size="2.54" layer="94" grouprefs="MCU">nRF52840 MODULE</text>
 <text x="337.82" y="220.98" size="2.54" layer="94">HAPTIC MOTOR DRIVER</text>
 <wire x1="154.94" y1="271.78" x2="154.94" y2="137.16" width="0.1524" layer="94" style="longdash"/>
@@ -7376,253 +7377,253 @@ Features:
 <instance part="MDBT50Q-1MV2" gate="G$1" x="101.6" y="205.74" smashed="yes" rot="R270" grouprefs="MCU">
 <attribute name="NAME" x="91.44" y="208.28" size="1.778" layer="95"/>
 </instance>
-<instance part="U3" gate="G$1" x="251.46" y="40.64" smashed="yes" grouprefs="POWER_MANAGER ADAFRUIT_FEATHER_NRF52840_SENSE">
+<instance part="U3" gate="G$1" x="251.46" y="40.64" smashed="yes" grouprefs="ADAFRUIT_FEATHER_NRF52840_SENSE POWER_MANAGER">
 <attribute name="NAME" x="241.3" y="52.07" size="1.27" layer="95"/>
 <attribute name="VALUE" x="241.3" y="27.94" size="1.27" layer="95"/>
 </instance>
-<instance part="LED_C" gate="G$1" x="220.98" y="38.1" smashed="yes" grouprefs="POWER_MANAGER ADAFRUIT_FEATHER_NRF52840_SENSE">
+<instance part="LED_C" gate="G$1" x="220.98" y="38.1" smashed="yes" grouprefs="ADAFRUIT_FEATHER_NRF52840_SENSE POWER_MANAGER">
 <attribute name="NAME" x="219.71" y="42.545" size="1.27" layer="95" align="center"/>
 <attribute name="VALUE" x="219.71" y="35.306" size="1.27" layer="96" align="center"/>
 </instance>
-<instance part="U$33" gate="G$1" x="284.48" y="25.4" smashed="yes" grouprefs="POWER_MANAGER ADAFRUIT_FEATHER_NRF52840_SENSE">
+<instance part="U$33" gate="G$1" x="284.48" y="25.4" smashed="yes" grouprefs="ADAFRUIT_FEATHER_NRF52840_SENSE POWER_MANAGER">
 <attribute name="VALUE" x="282.956" y="22.86" size="1.27" layer="96"/>
 </instance>
-<instance part="U$36" gate="G$1" x="279.4" y="25.4" smashed="yes" grouprefs="POWER_MANAGER ADAFRUIT_FEATHER_NRF52840_SENSE">
+<instance part="U$36" gate="G$1" x="279.4" y="25.4" smashed="yes" grouprefs="ADAFRUIT_FEATHER_NRF52840_SENSE POWER_MANAGER">
 <attribute name="VALUE" x="277.876" y="22.86" size="1.27" layer="96"/>
 </instance>
-<instance part="U$38" gate="G$1" x="213.36" y="48.26" smashed="yes" grouprefs="POWER_MANAGER ADAFRUIT_FEATHER_NRF52840_SENSE">
+<instance part="U$38" gate="G$1" x="213.36" y="48.26" smashed="yes" grouprefs="ADAFRUIT_FEATHER_NRF52840_SENSE POWER_MANAGER">
 <attribute name="VALUE" x="211.836" y="49.276" size="1.27" layer="96"/>
 </instance>
-<instance part="U$3" gate="G$1" x="292.1" y="50.8" smashed="yes" grouprefs="POWER_MANAGER ADAFRUIT_FEATHER_NRF52840_SENSE">
+<instance part="U$3" gate="G$1" x="292.1" y="50.8" smashed="yes" grouprefs="ADAFRUIT_FEATHER_NRF52840_SENSE POWER_MANAGER">
 <attribute name="VALUE" x="290.576" y="51.816" size="1.27" layer="96"/>
 </instance>
-<instance part="U$4" gate="G$1" x="91.44" y="27.94" smashed="yes" grouprefs="POWER_MANAGER ADAFRUIT_FEATHER_NRF52840_SENSE">
+<instance part="U$4" gate="G$1" x="91.44" y="27.94" smashed="yes" grouprefs="ADAFRUIT_FEATHER_NRF52840_SENSE POWER_MANAGER">
 <attribute name="VALUE" x="89.916" y="25.4" size="1.27" layer="96"/>
 </instance>
-<instance part="U$5" gate="G$1" x="137.16" y="25.4" smashed="yes" grouprefs="POWER_MANAGER ADAFRUIT_FEATHER_NRF52840_SENSE">
+<instance part="U$5" gate="G$1" x="137.16" y="25.4" smashed="yes" grouprefs="ADAFRUIT_FEATHER_NRF52840_SENSE POWER_MANAGER">
 <attribute name="VALUE" x="135.636" y="22.86" size="1.27" layer="96"/>
 </instance>
-<instance part="U$30" gate="G$1" x="114.3" y="25.4" smashed="yes" grouprefs="POWER_MANAGER ADAFRUIT_FEATHER_NRF52840_SENSE">
+<instance part="U$30" gate="G$1" x="114.3" y="25.4" smashed="yes" grouprefs="ADAFRUIT_FEATHER_NRF52840_SENSE POWER_MANAGER">
 <attribute name="VALUE" x="112.776" y="22.86" size="1.27" layer="96"/>
 </instance>
-<instance part="U2" gate="G$1" x="124.46" y="43.18" smashed="yes" grouprefs="POWER_MANAGER ADAFRUIT_FEATHER_NRF52840_SENSE">
+<instance part="U2" gate="G$1" x="124.46" y="43.18" smashed="yes" grouprefs="ADAFRUIT_FEATHER_NRF52840_SENSE POWER_MANAGER">
 <attribute name="NAME" x="116.84" y="49.276" size="1.27" layer="95"/>
 <attribute name="VALUE" x="116.84" y="35.56" size="1.27" layer="95"/>
 </instance>
-<instance part="U$6" gate="G$1" x="175.26" y="53.34" smashed="yes" grouprefs="POWER_MANAGER ADAFRUIT_FEATHER_NRF52840_SENSE">
+<instance part="U$6" gate="G$1" x="175.26" y="53.34" smashed="yes" grouprefs="ADAFRUIT_FEATHER_NRF52840_SENSE POWER_MANAGER">
 <attribute name="VALUE" x="173.736" y="54.356" size="1.27" layer="96"/>
 </instance>
-<instance part="U$7" gate="G$1" x="175.26" y="22.86" smashed="yes" grouprefs="POWER_MANAGER ADAFRUIT_FEATHER_NRF52840_SENSE">
+<instance part="U$7" gate="G$1" x="175.26" y="22.86" smashed="yes" grouprefs="ADAFRUIT_FEATHER_NRF52840_SENSE POWER_MANAGER">
 <attribute name="VALUE" x="173.736" y="20.32" size="1.27" layer="96"/>
 </instance>
-<instance part="U$11" gate="G$1" x="137.16" y="50.8" smashed="yes" grouprefs="POWER_MANAGER ADAFRUIT_FEATHER_NRF52840_SENSE">
+<instance part="U$11" gate="G$1" x="137.16" y="50.8" smashed="yes" grouprefs="ADAFRUIT_FEATHER_NRF52840_SENSE POWER_MANAGER">
 <attribute name="VALUE" x="135.636" y="51.816" size="1.27" layer="96"/>
 </instance>
-<instance part="U$13" gate="G$1" x="81.28" y="60.96" smashed="yes" grouprefs="POWER_MANAGER ADAFRUIT_FEATHER_NRF52840_SENSE">
+<instance part="U$13" gate="G$1" x="81.28" y="60.96" smashed="yes" grouprefs="ADAFRUIT_FEATHER_NRF52840_SENSE POWER_MANAGER">
 <attribute name="VALUE" x="79.756" y="61.976" size="1.27" layer="96"/>
 </instance>
-<instance part="U$43" gate="G$1" x="91.44" y="60.96" smashed="yes" grouprefs="POWER_MANAGER ADAFRUIT_FEATHER_NRF52840_SENSE">
+<instance part="U$43" gate="G$1" x="91.44" y="60.96" smashed="yes" grouprefs="ADAFRUIT_FEATHER_NRF52840_SENSE POWER_MANAGER">
 <attribute name="VALUE" x="89.916" y="61.976" size="1.27" layer="96"/>
 </instance>
-<instance part="Q1_1" gate="G$1" x="91.44" y="53.34" smashed="yes" rot="MR180" grouprefs="POWER_MANAGER ADAFRUIT_FEATHER_NRF52840_SENSE">
+<instance part="Q1_1" gate="G$1" x="91.44" y="53.34" smashed="yes" rot="MR180" grouprefs="ADAFRUIT_FEATHER_NRF52840_SENSE POWER_MANAGER">
 <attribute name="VALUE" x="94.234" y="55.245" size="1.27" layer="96" rot="MR180"/>
 <attribute name="NAME" x="94.234" y="52.959" size="1.27" layer="95" rot="MR180"/>
 </instance>
-<instance part="U$44" gate="G$1" x="81.28" y="27.94" smashed="yes" grouprefs="POWER_MANAGER ADAFRUIT_FEATHER_NRF52840_SENSE">
+<instance part="U$44" gate="G$1" x="81.28" y="27.94" smashed="yes" grouprefs="ADAFRUIT_FEATHER_NRF52840_SENSE POWER_MANAGER">
 <attribute name="VALUE" x="79.756" y="25.4" size="1.27" layer="96"/>
 </instance>
-<instance part="U$57" gate="G$1" x="193.04" y="22.86" smashed="yes" grouprefs="POWER_MANAGER ADAFRUIT_FEATHER_NRF52840_SENSE">
+<instance part="U$57" gate="G$1" x="193.04" y="22.86" smashed="yes" grouprefs="ADAFRUIT_FEATHER_NRF52840_SENSE POWER_MANAGER">
 <attribute name="VALUE" x="191.516" y="20.32" size="1.27" layer="96"/>
 </instance>
-<instance part="U$58" gate="G$1" x="193.04" y="55.88" smashed="yes" grouprefs="POWER_MANAGER ADAFRUIT_FEATHER_NRF52840_SENSE">
+<instance part="U$58" gate="G$1" x="193.04" y="55.88" smashed="yes" grouprefs="ADAFRUIT_FEATHER_NRF52840_SENSE POWER_MANAGER">
 <attribute name="VALUE" x="191.516" y="56.896" size="1.27" layer="96"/>
 </instance>
-<instance part="C1_8" gate="G$1" x="91.44" y="38.1" smashed="yes" rot="R180" grouprefs="POWER_MANAGER ADAFRUIT_FEATHER_NRF52840_SENSE">
+<instance part="C1_8" gate="G$1" x="91.44" y="38.1" smashed="yes" rot="R180" grouprefs="ADAFRUIT_FEATHER_NRF52840_SENSE POWER_MANAGER">
 <attribute name="NAME" x="93.73" y="36.85" size="1.27" layer="95" font="vector" rot="R270" align="center"/>
 <attribute name="VALUE" x="89.14" y="36.85" size="1.27" layer="96" font="vector" rot="R270" align="center"/>
 </instance>
-<instance part="C1_9" gate="G$1" x="137.16" y="35.56" smashed="yes" rot="R180" grouprefs="POWER_MANAGER ADAFRUIT_FEATHER_NRF52840_SENSE">
+<instance part="C1_9" gate="G$1" x="137.16" y="35.56" smashed="yes" rot="R180" grouprefs="ADAFRUIT_FEATHER_NRF52840_SENSE POWER_MANAGER">
 <attribute name="NAME" x="139.45" y="34.31" size="1.27" layer="95" font="vector" rot="R270" align="center"/>
 <attribute name="VALUE" x="134.86" y="34.31" size="1.27" layer="96" font="vector" rot="R270" align="center"/>
 </instance>
-<instance part="C1_10" gate="G$1" x="284.48" y="38.1" smashed="yes" rot="R180" grouprefs="POWER_MANAGER ADAFRUIT_FEATHER_NRF52840_SENSE">
+<instance part="C1_10" gate="G$1" x="284.48" y="38.1" smashed="yes" rot="R180" grouprefs="ADAFRUIT_FEATHER_NRF52840_SENSE POWER_MANAGER">
 <attribute name="NAME" x="286.77" y="36.85" size="1.27" layer="95" font="vector" rot="R270" align="center"/>
 <attribute name="VALUE" x="282.18" y="36.85" size="1.27" layer="96" font="vector" rot="R270" align="center"/>
 </instance>
-<instance part="R1_1" gate="G$1" x="231.14" y="38.1" smashed="yes" grouprefs="POWER_MANAGER ADAFRUIT_FEATHER_NRF52840_SENSE">
+<instance part="R1_1" gate="G$1" x="231.14" y="38.1" smashed="yes" grouprefs="ADAFRUIT_FEATHER_NRF52840_SENSE POWER_MANAGER">
 <attribute name="NAME" x="231.14" y="40.64" size="1.27" layer="95" font="vector" align="center"/>
 <attribute name="VALUE" x="231.14" y="38.1" size="1.016" layer="96" font="vector" ratio="15" align="center"/>
 </instance>
-<instance part="R1_2" gate="G$1" x="274.32" y="40.64" smashed="yes" grouprefs="POWER_MANAGER ADAFRUIT_FEATHER_NRF52840_SENSE">
+<instance part="R1_2" gate="G$1" x="274.32" y="40.64" smashed="yes" grouprefs="ADAFRUIT_FEATHER_NRF52840_SENSE POWER_MANAGER">
 <attribute name="NAME" x="274.32" y="43.18" size="1.27" layer="95" font="vector" align="center"/>
 <attribute name="VALUE" x="274.32" y="40.64" size="1.016" layer="96" font="vector" ratio="15" align="center"/>
 </instance>
-<instance part="RG1_1" gate="G$2" x="104.14" y="38.1" smashed="yes" rot="R90" grouprefs="POWER_MANAGER ADAFRUIT_FEATHER_NRF52840_SENSE">
+<instance part="RG1_1" gate="G$2" x="104.14" y="38.1" smashed="yes" rot="R90" grouprefs="ADAFRUIT_FEATHER_NRF52840_SENSE POWER_MANAGER">
 <attribute name="NAME" x="101.6" y="38.1" size="1.27" layer="95" font="vector" rot="R90" align="center"/>
 <attribute name="VALUE" x="104.14" y="38.1" size="1.016" layer="96" font="vector" ratio="15" rot="R90" align="center"/>
 </instance>
-<instance part="RG1_1" gate="G$1" x="81.28" y="38.1" smashed="yes" rot="R90" grouprefs="POWER_MANAGER ADAFRUIT_FEATHER_NRF52840_SENSE">
+<instance part="RG1_1" gate="G$1" x="81.28" y="38.1" smashed="yes" rot="R90" grouprefs="ADAFRUIT_FEATHER_NRF52840_SENSE POWER_MANAGER">
 <attribute name="NAME" x="78.74" y="38.1" size="1.27" layer="95" font="vector" rot="R90" align="center"/>
 <attribute name="VALUE" x="81.28" y="38.1" size="1.016" layer="96" font="vector" ratio="15" rot="R90" align="center"/>
 </instance>
-<instance part="RG1_1" gate="G$4" x="193.04" y="45.72" smashed="yes" rot="R90" grouprefs="POWER_MANAGER ADAFRUIT_FEATHER_NRF52840_SENSE">
+<instance part="RG1_1" gate="G$4" x="193.04" y="45.72" smashed="yes" rot="R90" grouprefs="ADAFRUIT_FEATHER_NRF52840_SENSE POWER_MANAGER">
 <attribute name="NAME" x="190.5" y="45.72" size="1.27" layer="95" font="vector" rot="R90" align="center"/>
 <attribute name="VALUE" x="193.04" y="45.72" size="1.016" layer="96" font="vector" ratio="15" rot="R90" align="center"/>
 </instance>
-<instance part="RG1_1" gate="G$3" x="193.04" y="30.48" smashed="yes" rot="R270" grouprefs="POWER_MANAGER ADAFRUIT_FEATHER_NRF52840_SENSE">
+<instance part="RG1_1" gate="G$3" x="193.04" y="30.48" smashed="yes" rot="R270" grouprefs="ADAFRUIT_FEATHER_NRF52840_SENSE POWER_MANAGER">
 <attribute name="NAME" x="195.58" y="30.48" size="1.27" layer="95" font="vector" rot="R270" align="center"/>
 <attribute name="VALUE" x="193.04" y="30.48" size="1.016" layer="96" font="vector" ratio="15" rot="R270" align="center"/>
 </instance>
-<instance part="R2_1" gate="G$1" x="370.84" y="48.26" smashed="yes" grouprefs="ADAFRUIT_FEATHER_NRF52840_SENSE INDICATOR_LEDS">
+<instance part="R2_1" gate="G$1" x="370.84" y="48.26" smashed="yes" grouprefs="INDICATOR_LEDS ADAFRUIT_FEATHER_NRF52840_SENSE">
 <attribute name="NAME" x="370.84" y="50.8" size="1.27" layer="95" font="vector" align="center"/>
 <attribute name="VALUE" x="370.84" y="48.26" size="1.016" layer="96" font="vector" ratio="15" align="center"/>
 </instance>
-<instance part="X2" gate="G$1" x="172.72" y="40.64" smashed="yes" rot="R180" grouprefs="POWER_MANAGER ADAFRUIT_FEATHER_NRF52840_SENSE">
+<instance part="X2" gate="G$1" x="172.72" y="40.64" smashed="yes" rot="R180" grouprefs="ADAFRUIT_FEATHER_NRF52840_SENSE POWER_MANAGER">
 <attribute name="NAME" x="179.07" y="34.925" size="1.778" layer="95" rot="R180"/>
 <attribute name="VALUE" x="179.07" y="45.72" size="1.778" layer="96" rot="R180"/>
 </instance>
-<instance part="X2" gate="MT2" x="175.26" y="27.94" smashed="yes" rot="R270" grouprefs="POWER_MANAGER ADAFRUIT_FEATHER_NRF52840_SENSE">
+<instance part="X2" gate="MT2" x="175.26" y="27.94" smashed="yes" rot="R270" grouprefs="ADAFRUIT_FEATHER_NRF52840_SENSE POWER_MANAGER">
 <attribute name="NAME" x="180.848" y="27.94" size="1.27" layer="95" align="center-left"/>
 <attribute name="VALUE" x="180.848" y="26.289" size="1.27" layer="96" align="center-left"/>
 </instance>
-<instance part="X2" gate="MT1" x="175.26" y="27.94" smashed="yes" rot="R90" grouprefs="POWER_MANAGER ADAFRUIT_FEATHER_NRF52840_SENSE">
+<instance part="X2" gate="MT1" x="175.26" y="27.94" smashed="yes" rot="R90" grouprefs="ADAFRUIT_FEATHER_NRF52840_SENSE POWER_MANAGER">
 <attribute name="NAME" x="169.672" y="27.94" size="1.27" layer="95" rot="R180" align="center-left"/>
 <attribute name="VALUE" x="169.672" y="29.591" size="1.27" layer="96" rot="R180" align="center-left"/>
 </instance>
-<instance part="U$21" gate="G$1" x="50.8" y="111.76" smashed="yes" grouprefs="CONNECTORS ADAFRUIT_FEATHER_NRF52840_SENSE USB">
+<instance part="U$21" gate="G$1" x="50.8" y="111.76" smashed="yes" grouprefs="USB ADAFRUIT_FEATHER_NRF52840_SENSE CONNECTORS">
 <attribute name="VALUE" x="49.276" y="112.776" size="1.27" layer="96"/>
 </instance>
-<instance part="IC2" gate="G$1" x="261.62" y="106.68" smashed="yes" grouprefs="ADAFRUIT_FEATHER_NRF52840_SENSE FLASH">
+<instance part="IC2" gate="G$1" x="261.62" y="106.68" smashed="yes" grouprefs="FLASH ADAFRUIT_FEATHER_NRF52840_SENSE">
 <attribute name="NAME" x="248.92" y="119.38" size="1.778" layer="95"/>
 <attribute name="VALUE" x="248.92" y="96.52" size="1.778" layer="95"/>
 </instance>
-<instance part="U$55" gate="G$1" x="281.94" y="119.38" smashed="yes" grouprefs="ADAFRUIT_FEATHER_NRF52840_SENSE FLASH">
+<instance part="U$55" gate="G$1" x="281.94" y="119.38" smashed="yes" grouprefs="FLASH ADAFRUIT_FEATHER_NRF52840_SENSE">
 <attribute name="VALUE" x="280.416" y="120.396" size="1.27" layer="96"/>
 </instance>
-<instance part="U$56" gate="G$1" x="281.94" y="96.52" smashed="yes" grouprefs="ADAFRUIT_FEATHER_NRF52840_SENSE FLASH">
+<instance part="U$56" gate="G$1" x="281.94" y="96.52" smashed="yes" grouprefs="FLASH ADAFRUIT_FEATHER_NRF52840_SENSE">
 <attribute name="VALUE" x="280.416" y="93.98" size="1.27" layer="96"/>
 </instance>
-<instance part="R4_1" gate="G$1" x="60.96" y="104.14" smashed="yes" grouprefs="CONNECTORS ADAFRUIT_FEATHER_NRF52840_SENSE USB">
+<instance part="R4_1" gate="G$1" x="60.96" y="104.14" smashed="yes" grouprefs="USB ADAFRUIT_FEATHER_NRF52840_SENSE CONNECTORS">
 <attribute name="NAME" x="60.96" y="106.68" size="1.27" layer="95" font="vector" align="center"/>
 <attribute name="VALUE" x="60.96" y="104.14" size="1.016" layer="96" font="vector" ratio="15" align="center"/>
 </instance>
-<instance part="R4_2" gate="G$1" x="60.96" y="109.22" smashed="yes" grouprefs="CONNECTORS ADAFRUIT_FEATHER_NRF52840_SENSE USB">
+<instance part="R4_2" gate="G$1" x="60.96" y="109.22" smashed="yes" grouprefs="USB ADAFRUIT_FEATHER_NRF52840_SENSE CONNECTORS">
 <attribute name="NAME" x="60.96" y="111.76" size="1.27" layer="95" font="vector" align="center"/>
 <attribute name="VALUE" x="60.96" y="109.22" size="1.016" layer="96" font="vector" ratio="15" align="center"/>
 </instance>
-<instance part="D+" gate="G$1" x="55.88" y="111.76" smashed="yes" grouprefs="CONNECTORS ADAFRUIT_FEATHER_NRF52840_SENSE USB">
+<instance part="D+" gate="G$1" x="55.88" y="111.76" smashed="yes" grouprefs="USB ADAFRUIT_FEATHER_NRF52840_SENSE CONNECTORS">
 <attribute name="NAME" x="54.61" y="113.03" size="1.778" layer="95"/>
 <attribute name="TP_SIGNAL_NAME" x="57.15" y="110.49" size="1.778" layer="97"/>
 </instance>
-<instance part="D-" gate="G$1" x="55.88" y="101.6" smashed="yes" rot="R180" grouprefs="CONNECTORS ADAFRUIT_FEATHER_NRF52840_SENSE USB">
+<instance part="D-" gate="G$1" x="55.88" y="101.6" smashed="yes" rot="R180" grouprefs="USB ADAFRUIT_FEATHER_NRF52840_SENSE CONNECTORS">
 <attribute name="NAME" x="57.15" y="100.33" size="1.778" layer="95" rot="R180"/>
 <attribute name="TP_SIGNAL_NAME" x="54.61" y="102.87" size="1.778" layer="97" rot="R180"/>
 </instance>
-<instance part="IC1" gate="G$1" x="269.24" y="160.02" smashed="yes" grouprefs="ACCEL/GYRO SENSORS ADAFRUIT_FEATHER_NRF52840_SENSE">
+<instance part="IC1" gate="G$1" x="269.24" y="160.02" smashed="yes" grouprefs="ADAFRUIT_FEATHER_NRF52840_SENSE SENSORS ACCEL/GYRO">
 <attribute name="NAME" x="256.54" y="172.72" size="1.27" layer="95"/>
 </instance>
-<instance part="U$16" gate="G$1" x="266.7" y="177.8" smashed="yes" grouprefs="ACCEL/GYRO SENSORS ADAFRUIT_FEATHER_NRF52840_SENSE">
+<instance part="U$16" gate="G$1" x="266.7" y="177.8" smashed="yes" grouprefs="ADAFRUIT_FEATHER_NRF52840_SENSE SENSORS ACCEL/GYRO">
 <attribute name="VALUE" x="265.176" y="178.816" size="1.27" layer="96"/>
 </instance>
-<instance part="U$18" gate="G$1" x="271.78" y="177.8" smashed="yes" grouprefs="ACCEL/GYRO SENSORS ADAFRUIT_FEATHER_NRF52840_SENSE">
+<instance part="U$18" gate="G$1" x="271.78" y="177.8" smashed="yes" grouprefs="ADAFRUIT_FEATHER_NRF52840_SENSE SENSORS ACCEL/GYRO">
 <attribute name="VALUE" x="270.256" y="178.816" size="1.27" layer="96"/>
 </instance>
-<instance part="U$39" gate="G$1" x="251.46" y="152.4" smashed="yes" rot="R180" grouprefs="ACCEL/GYRO SENSORS ADAFRUIT_FEATHER_NRF52840_SENSE">
+<instance part="U$39" gate="G$1" x="251.46" y="152.4" smashed="yes" rot="R180" grouprefs="ADAFRUIT_FEATHER_NRF52840_SENSE SENSORS ACCEL/GYRO">
 <attribute name="VALUE" x="252.984" y="151.384" size="1.27" layer="96" rot="R180"/>
 </instance>
-<instance part="U$41" gate="G$1" x="269.24" y="142.24" smashed="yes" grouprefs="ACCEL/GYRO SENSORS ADAFRUIT_FEATHER_NRF52840_SENSE">
+<instance part="U$41" gate="G$1" x="269.24" y="142.24" smashed="yes" grouprefs="ADAFRUIT_FEATHER_NRF52840_SENSE SENSORS ACCEL/GYRO">
 <attribute name="VALUE" x="267.716" y="139.7" size="1.27" layer="96"/>
 </instance>
-<instance part="U$52" gate="G$1" x="248.92" y="157.48" smashed="yes" rot="R270" grouprefs="ACCEL/GYRO SENSORS ADAFRUIT_FEATHER_NRF52840_SENSE">
+<instance part="U$52" gate="G$1" x="248.92" y="157.48" smashed="yes" rot="R270" grouprefs="ADAFRUIT_FEATHER_NRF52840_SENSE SENSORS ACCEL/GYRO">
 <attribute name="VALUE" x="246.38" y="159.004" size="1.27" layer="96" rot="R270"/>
 </instance>
-<instance part="U$65" gate="G$1" x="241.3" y="180.34" smashed="yes" grouprefs="ACCEL/GYRO SENSORS ADAFRUIT_FEATHER_NRF52840_SENSE">
+<instance part="U$65" gate="G$1" x="241.3" y="180.34" smashed="yes" grouprefs="ADAFRUIT_FEATHER_NRF52840_SENSE SENSORS ACCEL/GYRO">
 <attribute name="VALUE" x="239.776" y="181.356" size="1.27" layer="96"/>
 </instance>
-<instance part="U$66" gate="G$1" x="236.22" y="180.34" smashed="yes" grouprefs="ACCEL/GYRO SENSORS ADAFRUIT_FEATHER_NRF52840_SENSE">
+<instance part="U$66" gate="G$1" x="236.22" y="180.34" smashed="yes" grouprefs="ADAFRUIT_FEATHER_NRF52840_SENSE SENSORS ACCEL/GYRO">
 <attribute name="VALUE" x="234.696" y="181.356" size="1.27" layer="96"/>
 </instance>
-<instance part="U1" gate="G$1" x="261.62" y="210.82" smashed="yes" grouprefs="ADAFRUIT_FEATHER_NRF52840_SENSE SENSORS LIGHT/COLOR/PROX/GESTURE">
+<instance part="U1" gate="G$1" x="261.62" y="210.82" smashed="yes" grouprefs="LIGHT/COLOR/PROX/GESTURE SENSORS ADAFRUIT_FEATHER_NRF52840_SENSE">
 <attribute name="NAME" x="251.46" y="224.536" size="1.27" layer="95"/>
 <attribute name="VALUE" x="251.46" y="195.58" size="1.27" layer="96"/>
 </instance>
-<instance part="U$62" gate="G$1" x="236.22" y="220.98" smashed="yes" grouprefs="ADAFRUIT_FEATHER_NRF52840_SENSE SENSORS LIGHT/COLOR/PROX/GESTURE">
+<instance part="U$62" gate="G$1" x="236.22" y="220.98" smashed="yes" grouprefs="LIGHT/COLOR/PROX/GESTURE SENSORS ADAFRUIT_FEATHER_NRF52840_SENSE">
 <attribute name="VALUE" x="234.696" y="221.996" size="1.27" layer="96"/>
 </instance>
-<instance part="U$63" gate="G$1" x="241.3" y="208.28" smashed="yes" grouprefs="ADAFRUIT_FEATHER_NRF52840_SENSE SENSORS LIGHT/COLOR/PROX/GESTURE">
+<instance part="U$63" gate="G$1" x="241.3" y="208.28" smashed="yes" grouprefs="LIGHT/COLOR/PROX/GESTURE SENSORS ADAFRUIT_FEATHER_NRF52840_SENSE">
 <attribute name="VALUE" x="244.856" y="208.28" size="1.27" layer="96"/>
 </instance>
-<instance part="C3_1" gate="G$1" x="236.22" y="203.2" smashed="yes" rot="R180" grouprefs="ADAFRUIT_FEATHER_NRF52840_SENSE SENSORS LIGHT/COLOR/PROX/GESTURE">
+<instance part="C3_1" gate="G$1" x="236.22" y="203.2" smashed="yes" rot="R180" grouprefs="LIGHT/COLOR/PROX/GESTURE SENSORS ADAFRUIT_FEATHER_NRF52840_SENSE">
 <attribute name="NAME" x="238.51" y="201.95" size="1.27" layer="95" font="vector" rot="R270" align="center"/>
 <attribute name="VALUE" x="233.92" y="201.95" size="1.27" layer="96" font="vector" rot="R270" align="center"/>
 </instance>
-<instance part="U$64" gate="G$1" x="236.22" y="195.58" smashed="yes" grouprefs="ADAFRUIT_FEATHER_NRF52840_SENSE SENSORS LIGHT/COLOR/PROX/GESTURE">
+<instance part="U$64" gate="G$1" x="236.22" y="195.58" smashed="yes" grouprefs="LIGHT/COLOR/PROX/GESTURE SENSORS ADAFRUIT_FEATHER_NRF52840_SENSE">
 <attribute name="VALUE" x="239.776" y="195.58" size="1.27" layer="96"/>
 </instance>
-<instance part="SW_R" gate="G$1" x="350.52" y="144.78" smashed="yes" grouprefs="SWITCHES SENSORS">
+<instance part="SW_R" gate="G$1" x="350.52" y="144.78" smashed="yes" grouprefs="SENSORS SWITCHES">
 <attribute name="NAME" x="347.98" y="151.13" size="1.27" layer="95"/>
 <attribute name="VALUE" x="347.98" y="139.7" size="1.27" layer="96"/>
 </instance>
-<instance part="U$2" gate="G$1" x="342.9" y="137.16" smashed="yes" grouprefs="SWITCHES SENSORS">
+<instance part="U$2" gate="G$1" x="342.9" y="137.16" smashed="yes" grouprefs="SENSORS SWITCHES">
 <attribute name="VALUE" x="341.376" y="134.62" size="1.27" layer="96"/>
 </instance>
-<instance part="SW_4" gate="G$1" x="365.76" y="104.14" smashed="yes" grouprefs="SWITCHES SENSORS">
+<instance part="SW_4" gate="G$1" x="365.76" y="104.14" smashed="yes" grouprefs="SENSORS SWITCHES">
 <attribute name="NAME" x="368.3" y="110.49" size="1.27" layer="95" rot="R180"/>
 </instance>
-<instance part="U$1" gate="G$1" x="358.14" y="96.52" smashed="yes" grouprefs="SWITCHES SENSORS">
+<instance part="U$1" gate="G$1" x="358.14" y="96.52" smashed="yes" grouprefs="SENSORS SWITCHES">
 <attribute name="VALUE" x="356.616" y="93.98" size="1.27" layer="96"/>
 </instance>
-<instance part="SW_2" gate="G$1" x="365.76" y="124.46" smashed="yes" grouprefs="SWITCHES SENSORS">
+<instance part="SW_2" gate="G$1" x="365.76" y="124.46" smashed="yes" grouprefs="SENSORS SWITCHES">
 <attribute name="NAME" x="368.3" y="130.81" size="1.27" layer="95" rot="R180"/>
 </instance>
-<instance part="U$10" gate="G$1" x="358.14" y="116.84" smashed="yes" grouprefs="SWITCHES SENSORS">
+<instance part="U$10" gate="G$1" x="358.14" y="116.84" smashed="yes" grouprefs="SENSORS SWITCHES">
 <attribute name="VALUE" x="356.616" y="114.3" size="1.27" layer="96"/>
 </instance>
-<instance part="SW_3" gate="G$1" x="332.74" y="104.14" smashed="yes" grouprefs="SWITCHES SENSORS">
+<instance part="SW_3" gate="G$1" x="332.74" y="104.14" smashed="yes" grouprefs="SENSORS SWITCHES">
 <attribute name="NAME" x="335.28" y="110.49" size="1.27" layer="95" rot="R180"/>
 </instance>
-<instance part="U$8" gate="G$1" x="325.12" y="96.52" smashed="yes" grouprefs="SWITCHES SENSORS">
+<instance part="U$8" gate="G$1" x="325.12" y="96.52" smashed="yes" grouprefs="SENSORS SWITCHES">
 <attribute name="VALUE" x="323.596" y="93.98" size="1.27" layer="96"/>
 </instance>
-<instance part="SW_1" gate="G$1" x="332.74" y="124.46" smashed="yes" grouprefs="SWITCHES SENSORS">
+<instance part="SW_1" gate="G$1" x="332.74" y="124.46" smashed="yes" grouprefs="SENSORS SWITCHES">
 <attribute name="NAME" x="335.28" y="130.81" size="1.27" layer="95" rot="R180"/>
 </instance>
-<instance part="U$12" gate="G$1" x="325.12" y="116.84" smashed="yes" grouprefs="SWITCHES SENSORS">
+<instance part="U$12" gate="G$1" x="325.12" y="116.84" smashed="yes" grouprefs="SENSORS SWITCHES">
 <attribute name="VALUE" x="323.596" y="114.3" size="1.27" layer="96"/>
 </instance>
-<instance part="DISPLAY1" gate="G$1" x="203.454" y="209.55" smashed="yes" grouprefs="CONNECTORS DISPLAY ADAFRUIT_CLUE">
+<instance part="DISPLAY1" gate="G$1" x="203.454" y="209.55" smashed="yes" grouprefs="ADAFRUIT_CLUE DISPLAY CONNECTORS">
 <attribute name="NAME" x="195.834" y="241.3" size="1.27" layer="95"/>
 <attribute name="VALUE" x="195.834" y="181.61" size="1.27" layer="95"/>
 </instance>
-<instance part="GND4" gate="1" x="183.134" y="229.87" smashed="yes" rot="MR0" grouprefs="CONNECTORS DISPLAY ADAFRUIT_CLUE">
+<instance part="GND4" gate="1" x="183.134" y="229.87" smashed="yes" rot="MR0" grouprefs="ADAFRUIT_CLUE DISPLAY CONNECTORS">
 <attribute name="VALUE" x="185.674" y="227.33" size="1.778" layer="96" rot="MR0"/>
 </instance>
-<instance part="GND5" gate="1" x="175.514" y="212.09" smashed="yes" rot="MR90" grouprefs="CONNECTORS DISPLAY ADAFRUIT_CLUE"/>
-<instance part="GND7" gate="1" x="178.054" y="196.85" smashed="yes" rot="MR0" grouprefs="CONNECTORS DISPLAY ADAFRUIT_CLUE">
+<instance part="GND5" gate="1" x="175.514" y="212.09" smashed="yes" rot="MR90" grouprefs="ADAFRUIT_CLUE DISPLAY CONNECTORS"/>
+<instance part="GND7" gate="1" x="178.054" y="196.85" smashed="yes" rot="MR0" grouprefs="ADAFRUIT_CLUE DISPLAY CONNECTORS">
 <attribute name="VALUE" x="180.594" y="194.31" size="1.778" layer="96" rot="MR0"/>
 </instance>
-<instance part="U$14" gate="G$1" x="188.214" y="242.57" smashed="yes" rot="MR0" grouprefs="CONNECTORS DISPLAY ADAFRUIT_CLUE">
+<instance part="U$14" gate="G$1" x="188.214" y="242.57" smashed="yes" rot="MR0" grouprefs="ADAFRUIT_CLUE DISPLAY CONNECTORS">
 <attribute name="VALUE" x="189.738" y="243.586" size="1.27" layer="96" rot="MR0"/>
 </instance>
-<instance part="U$68" gate="G$1" x="178.054" y="227.33" smashed="yes" rot="MR0" grouprefs="CONNECTORS DISPLAY ADAFRUIT_CLUE">
+<instance part="U$68" gate="G$1" x="178.054" y="227.33" smashed="yes" rot="MR0" grouprefs="ADAFRUIT_CLUE DISPLAY CONNECTORS">
 <attribute name="VALUE" x="179.578" y="228.346" size="1.27" layer="96" rot="MR0"/>
 </instance>
-<instance part="GND8" gate="1" x="178.054" y="151.13" smashed="yes" grouprefs="CONNECTORS DISPLAY ADAFRUIT_CLUE">
+<instance part="GND8" gate="1" x="178.054" y="151.13" smashed="yes" grouprefs="ADAFRUIT_CLUE DISPLAY CONNECTORS">
 <attribute name="VALUE" x="175.514" y="148.59" size="1.778" layer="96"/>
 </instance>
-<instance part="R5_1" gate="G$1" x="185.674" y="163.83" smashed="yes" rot="R90" grouprefs="CONNECTORS DISPLAY ADAFRUIT_CLUE">
+<instance part="R5_1" gate="G$1" x="185.674" y="163.83" smashed="yes" rot="R90" grouprefs="ADAFRUIT_CLUE DISPLAY CONNECTORS">
 <attribute name="NAME" x="183.134" y="163.83" size="1.27" layer="95" font="vector" rot="R90" align="center"/>
 <attribute name="VALUE" x="185.674" y="163.83" size="1.016" layer="96" font="vector" ratio="15" rot="R90" align="center"/>
 </instance>
-<instance part="Q5_1" gate="G$1" x="180.594" y="161.29" smashed="yes" rot="MR0" grouprefs="CONNECTORS DISPLAY ADAFRUIT_CLUE">
+<instance part="Q5_1" gate="G$1" x="180.594" y="161.29" smashed="yes" rot="MR0" grouprefs="ADAFRUIT_CLUE DISPLAY CONNECTORS">
 <attribute name="NAME" x="175.514" y="161.925" size="1.27" layer="95" rot="MR0"/>
 <attribute name="VALUE" x="175.514" y="160.02" size="1.27" layer="96" rot="MR0"/>
 </instance>
-<instance part="R5_2" gate="G$1" x="178.054" y="171.45" smashed="yes" rot="R90" grouprefs="CONNECTORS DISPLAY ADAFRUIT_CLUE">
+<instance part="R5_2" gate="G$1" x="178.054" y="171.45" smashed="yes" rot="R90" grouprefs="ADAFRUIT_CLUE DISPLAY CONNECTORS">
 <attribute name="NAME" x="175.514" y="171.45" size="1.27" layer="95" font="vector" rot="R90" align="center"/>
 <attribute name="VALUE" x="178.054" y="171.45" size="1.016" layer="96" font="vector" ratio="15" rot="R90" align="center"/>
 </instance>
-<instance part="U$70" gate="G$1" x="185.674" y="173.99" smashed="yes" grouprefs="CONNECTORS DISPLAY ADAFRUIT_CLUE">
+<instance part="U$70" gate="G$1" x="185.674" y="173.99" smashed="yes" grouprefs="ADAFRUIT_CLUE DISPLAY CONNECTORS">
 <attribute name="VALUE" x="184.15" y="175.006" size="1.27" layer="96"/>
 </instance>
 <instance part="FRAME1" gate="G$1" x="10.16" y="15.24" smashed="yes"/>
@@ -7633,7 +7634,7 @@ Features:
 <attribute name="DRAWN" x="274.0152" y="256.8448" size="1.778" layer="94"/>
 <attribute name="REV" x="385.7752" y="254.9398" size="3.81" layer="94" ratio="12"/>
 </instance>
-<instance part="J2" gate="A" x="86.36" y="106.68" smashed="yes" rot="R180" grouprefs="CONNECTORS SWD_DEBUDDER">
+<instance part="J2" gate="A" x="86.36" y="106.68" smashed="yes" rot="R180" grouprefs="SWD_DEBUDDER CONNECTORS">
 <attribute name="NAME" x="92.71" y="95.885" size="1.778" layer="95" rot="R180"/>
 <attribute name="VALUE" x="92.71" y="116.84" size="1.778" layer="96" rot="R180"/>
 </instance>
@@ -7665,104 +7666,104 @@ Features:
 <instance part="U$37" gate="G$1" x="127" y="172.72" smashed="yes" rot="R90" grouprefs="MCU">
 <attribute name="VALUE" x="127.508" y="174.752" size="1.27" layer="96" rot="R270"/>
 </instance>
-<instance part="U$40" gate="G$1" x="27.94" y="38.1" smashed="yes" grouprefs="POWER_MANAGER ADAFRUIT_CLUE">
+<instance part="U$40" gate="G$1" x="27.94" y="38.1" smashed="yes" grouprefs="ADAFRUIT_CLUE POWER_MANAGER">
 <attribute name="VALUE" x="26.416" y="35.56" size="1.27" layer="96"/>
 </instance>
-<instance part="U$45" gate="G$1" x="50.8" y="38.1" smashed="yes" grouprefs="POWER_MANAGER ADAFRUIT_CLUE">
+<instance part="U$45" gate="G$1" x="50.8" y="38.1" smashed="yes" grouprefs="ADAFRUIT_CLUE POWER_MANAGER">
 <attribute name="VALUE" x="49.276" y="35.56" size="1.27" layer="96"/>
 </instance>
-<instance part="U$48" gate="G$1" x="35.56" y="38.1" smashed="yes" grouprefs="POWER_MANAGER ADAFRUIT_CLUE">
+<instance part="U$48" gate="G$1" x="35.56" y="38.1" smashed="yes" grouprefs="ADAFRUIT_CLUE POWER_MANAGER">
 <attribute name="VALUE" x="34.036" y="35.56" size="1.27" layer="96"/>
 </instance>
-<instance part="U$49" gate="G$1" x="20.32" y="38.1" smashed="yes" grouprefs="POWER_MANAGER ADAFRUIT_CLUE">
+<instance part="U$49" gate="G$1" x="20.32" y="38.1" smashed="yes" grouprefs="ADAFRUIT_CLUE POWER_MANAGER">
 <attribute name="VALUE" x="18.796" y="35.56" size="1.27" layer="96"/>
 </instance>
-<instance part="U$50" gate="G$1" x="20.32" y="55.88" smashed="yes" grouprefs="POWER_MANAGER ADAFRUIT_CLUE">
+<instance part="U$50" gate="G$1" x="20.32" y="55.88" smashed="yes" grouprefs="ADAFRUIT_CLUE POWER_MANAGER">
 <attribute name="VALUE" x="18.796" y="56.896" size="1.27" layer="96"/>
 </instance>
-<instance part="U$51" gate="G$1" x="35.56" y="55.88" smashed="yes" grouprefs="POWER_MANAGER ADAFRUIT_CLUE">
+<instance part="U$51" gate="G$1" x="35.56" y="55.88" smashed="yes" grouprefs="ADAFRUIT_CLUE POWER_MANAGER">
 <attribute name="VALUE" x="34.036" y="56.896" size="1.27" layer="96"/>
 </instance>
-<instance part="U$53" gate="G$1" x="50.8" y="55.88" smashed="yes" grouprefs="POWER_MANAGER ADAFRUIT_CLUE">
+<instance part="U$53" gate="G$1" x="50.8" y="55.88" smashed="yes" grouprefs="ADAFRUIT_CLUE POWER_MANAGER">
 <attribute name="VALUE" x="49.276" y="56.896" size="1.27" layer="96"/>
 </instance>
-<instance part="U$54" gate="G$1" x="27.94" y="55.88" smashed="yes" grouprefs="POWER_MANAGER ADAFRUIT_CLUE">
+<instance part="U$54" gate="G$1" x="27.94" y="55.88" smashed="yes" grouprefs="ADAFRUIT_CLUE POWER_MANAGER">
 <attribute name="VALUE" x="26.416" y="56.896" size="1.27" layer="96"/>
 </instance>
-<instance part="C1_3" gate="G$1" x="35.56" y="48.26" smashed="yes" rot="R180" grouprefs="POWER_MANAGER ADAFRUIT_CLUE">
+<instance part="C1_3" gate="G$1" x="35.56" y="48.26" smashed="yes" rot="R180" grouprefs="ADAFRUIT_CLUE POWER_MANAGER">
 <attribute name="NAME" x="37.85" y="47.01" size="1.27" layer="95" font="vector" rot="R270" align="center"/>
 <attribute name="VALUE" x="33.26" y="47.01" size="1.27" layer="96" font="vector" rot="R270" align="center"/>
 </instance>
-<instance part="C1_5" gate="G$1" x="50.8" y="48.26" smashed="yes" rot="R180" grouprefs="POWER_MANAGER ADAFRUIT_CLUE">
+<instance part="C1_5" gate="G$1" x="50.8" y="48.26" smashed="yes" rot="R180" grouprefs="ADAFRUIT_CLUE POWER_MANAGER">
 <attribute name="NAME" x="53.09" y="47.01" size="1.27" layer="95" font="vector" rot="R270" align="center"/>
 <attribute name="VALUE" x="48.5" y="47.01" size="1.27" layer="96" font="vector" rot="R270" align="center"/>
 </instance>
-<instance part="C1_1" gate="G$1" x="20.32" y="48.26" smashed="yes" rot="R180" grouprefs="POWER_MANAGER ADAFRUIT_CLUE">
+<instance part="C1_1" gate="G$1" x="20.32" y="48.26" smashed="yes" rot="R180" grouprefs="ADAFRUIT_CLUE POWER_MANAGER">
 <attribute name="NAME" x="22.61" y="47.01" size="1.27" layer="95" font="vector" rot="R270" align="center"/>
 <attribute name="VALUE" x="18.02" y="47.01" size="1.27" layer="96" font="vector" rot="R270" align="center"/>
 </instance>
-<instance part="C1_2" gate="G$1" x="27.94" y="48.26" smashed="yes" rot="R180" grouprefs="POWER_MANAGER ADAFRUIT_CLUE">
+<instance part="C1_2" gate="G$1" x="27.94" y="48.26" smashed="yes" rot="R180" grouprefs="ADAFRUIT_CLUE POWER_MANAGER">
 <attribute name="NAME" x="30.23" y="47.01" size="1.27" layer="95" font="vector" rot="R270" align="center"/>
 <attribute name="VALUE" x="25.64" y="47.01" size="1.27" layer="96" font="vector" rot="R270" align="center"/>
 </instance>
-<instance part="C1_6" gate="G$1" x="58.42" y="48.26" smashed="yes" rot="R180" grouprefs="POWER_MANAGER ADAFRUIT_CLUE">
+<instance part="C1_6" gate="G$1" x="58.42" y="48.26" smashed="yes" rot="R180" grouprefs="ADAFRUIT_CLUE POWER_MANAGER">
 <attribute name="NAME" x="60.71" y="47.01" size="1.27" layer="95" font="vector" rot="R270" align="center"/>
 <attribute name="VALUE" x="56.12" y="47.01" size="1.27" layer="96" font="vector" rot="R270" align="center"/>
 </instance>
-<instance part="U$59" gate="G$1" x="58.42" y="38.1" smashed="yes" grouprefs="POWER_MANAGER ADAFRUIT_CLUE">
+<instance part="U$59" gate="G$1" x="58.42" y="38.1" smashed="yes" grouprefs="ADAFRUIT_CLUE POWER_MANAGER">
 <attribute name="VALUE" x="56.896" y="35.56" size="1.27" layer="96"/>
 </instance>
-<instance part="C1_4" gate="G$1" x="43.18" y="48.26" smashed="yes" rot="R180" grouprefs="POWER_MANAGER ADAFRUIT_CLUE">
+<instance part="C1_4" gate="G$1" x="43.18" y="48.26" smashed="yes" rot="R180" grouprefs="ADAFRUIT_CLUE POWER_MANAGER">
 <attribute name="NAME" x="45.47" y="47.01" size="1.27" layer="95" font="vector" rot="R270" align="center"/>
 <attribute name="VALUE" x="40.88" y="47.01" size="1.27" layer="96" font="vector" rot="R270" align="center"/>
 </instance>
-<instance part="U$60" gate="G$1" x="43.18" y="55.88" smashed="yes" grouprefs="POWER_MANAGER ADAFRUIT_CLUE">
+<instance part="U$60" gate="G$1" x="43.18" y="55.88" smashed="yes" grouprefs="ADAFRUIT_CLUE POWER_MANAGER">
 <attribute name="VALUE" x="41.656" y="56.896" size="1.27" layer="96"/>
 </instance>
-<instance part="U$61" gate="G$1" x="43.18" y="38.1" smashed="yes" grouprefs="POWER_MANAGER ADAFRUIT_CLUE">
+<instance part="U$61" gate="G$1" x="43.18" y="38.1" smashed="yes" grouprefs="ADAFRUIT_CLUE POWER_MANAGER">
 <attribute name="VALUE" x="41.656" y="35.56" size="1.27" layer="96"/>
 </instance>
-<instance part="U$69" gate="G$1" x="58.42" y="55.88" smashed="yes" grouprefs="POWER_MANAGER ADAFRUIT_CLUE">
+<instance part="U$69" gate="G$1" x="58.42" y="55.88" smashed="yes" grouprefs="ADAFRUIT_CLUE POWER_MANAGER">
 <attribute name="VALUE" x="56.896" y="56.896" size="1.27" layer="96"/>
 </instance>
-<instance part="C1_7" gate="G$1" x="66.04" y="48.26" smashed="yes" rot="R180" grouprefs="POWER_MANAGER ADAFRUIT_CLUE">
+<instance part="C1_7" gate="G$1" x="66.04" y="48.26" smashed="yes" rot="R180" grouprefs="ADAFRUIT_CLUE POWER_MANAGER">
 <attribute name="NAME" x="68.33" y="47.01" size="1.27" layer="95" font="vector" rot="R270" align="center"/>
 <attribute name="VALUE" x="63.74" y="47.01" size="1.27" layer="96" font="vector" rot="R270" align="center"/>
 </instance>
-<instance part="U$72" gate="G$1" x="66.04" y="55.88" smashed="yes" grouprefs="POWER_MANAGER ADAFRUIT_CLUE">
+<instance part="U$72" gate="G$1" x="66.04" y="55.88" smashed="yes" grouprefs="ADAFRUIT_CLUE POWER_MANAGER">
 <attribute name="VALUE" x="64.516" y="56.896" size="1.27" layer="96"/>
 </instance>
-<instance part="U$73" gate="G$1" x="66.04" y="38.1" smashed="yes" grouprefs="POWER_MANAGER ADAFRUIT_CLUE">
+<instance part="U$73" gate="G$1" x="66.04" y="38.1" smashed="yes" grouprefs="ADAFRUIT_CLUE POWER_MANAGER">
 <attribute name="VALUE" x="64.516" y="35.56" size="1.27" layer="96"/>
 </instance>
-<instance part="C4_1" gate="G$1" x="167.64" y="96.52" smashed="yes" grouprefs="SENSORS CONNECTORS NFC">
+<instance part="C4_1" gate="G$1" x="167.64" y="96.52" smashed="yes" grouprefs="NFC CONNECTORS SENSORS">
 <attribute name="NAME" x="170.18" y="99.06" size="1.27" layer="95" font="vector"/>
 <attribute name="VALUE" x="170.18" y="96.52" size="1.27" layer="96" font="vector"/>
 </instance>
-<instance part="C4_3" gate="G$1" x="139.7" y="96.52" smashed="yes" grouprefs="SENSORS CONNECTORS NFC">
+<instance part="C4_3" gate="G$1" x="139.7" y="96.52" smashed="yes" grouprefs="NFC CONNECTORS SENSORS">
 <attribute name="NAME" x="142.24" y="99.06" size="1.27" layer="95" font="vector"/>
 <attribute name="VALUE" x="142.24" y="96.52" size="1.27" layer="96" font="vector"/>
 </instance>
-<instance part="U$71" gate="G$1" x="154.94" y="88.9" smashed="yes" grouprefs="SENSORS CONNECTORS NFC">
+<instance part="U$71" gate="G$1" x="154.94" y="88.9" smashed="yes" grouprefs="NFC CONNECTORS SENSORS">
 <attribute name="VALUE" x="153.416" y="86.36" size="1.27" layer="96"/>
 </instance>
-<instance part="C4_2" gate="G$1" x="177.8" y="96.52" smashed="yes" grouprefs="SENSORS CONNECTORS NFC">
+<instance part="C4_2" gate="G$1" x="177.8" y="96.52" smashed="yes" grouprefs="NFC CONNECTORS SENSORS">
 <attribute name="NAME" x="180.34" y="99.06" size="1.27" layer="95" font="vector"/>
 <attribute name="VALUE" x="180.34" y="96.52" size="1.27" layer="96" font="vector"/>
 </instance>
-<instance part="C4_4" gate="G$1" x="132.08" y="96.52" smashed="yes" grouprefs="SENSORS CONNECTORS NFC">
+<instance part="C4_4" gate="G$1" x="132.08" y="96.52" smashed="yes" grouprefs="NFC CONNECTORS SENSORS">
 <attribute name="NAME" x="134.62" y="99.06" size="1.27" layer="95" font="vector"/>
 <attribute name="VALUE" x="134.62" y="96.52" size="1.27" layer="96" font="vector"/>
 </instance>
-<instance part="J1" gate="G$1" x="154.94" y="106.68" smashed="yes" grouprefs="SENSORS CONNECTORS NFC">
+<instance part="J1" gate="G$1" x="154.94" y="106.68" smashed="yes" grouprefs="NFC CONNECTORS SENSORS">
 <attribute name="NAME" x="142.24" y="109.982" size="1.778" layer="95"/>
 <attribute name="VALUE" x="147.32" y="111.506" size="1.778" layer="96"/>
 </instance>
-<instance part="R4_3" gate="G$1" x="182.88" y="106.68" smashed="yes" rot="R90" grouprefs="SENSORS CONNECTORS NFC">
+<instance part="R4_3" gate="G$1" x="182.88" y="106.68" smashed="yes" rot="R90" grouprefs="NFC CONNECTORS SENSORS">
 <attribute name="NAME" x="180.848" y="104.14" size="1.27" layer="95" font="vector" rot="R90"/>
 <attribute name="VALUE" x="186.055" y="104.14" size="1.27" layer="96" font="vector" rot="R90"/>
 </instance>
-<instance part="R4_4" gate="G$1" x="129.54" y="106.68" smashed="yes" rot="R270" grouprefs="SENSORS CONNECTORS NFC">
+<instance part="R4_4" gate="G$1" x="129.54" y="106.68" smashed="yes" rot="R270" grouprefs="NFC CONNECTORS SENSORS">
 <attribute name="NAME" x="131.572" y="109.22" size="1.27" layer="95" font="vector" rot="R270"/>
 <attribute name="VALUE" x="126.365" y="109.22" size="1.27" layer="96" font="vector" rot="R270"/>
 </instance>
@@ -7770,30 +7771,30 @@ Features:
 <attribute name="NAME" x="86.36" y="48.26" size="1.27" layer="95" align="center"/>
 <attribute name="VALUE" x="86.36" y="43.22" size="1.27" layer="96" align="center"/>
 </instance>
-<instance part="X3" gate="G$1" x="363.22" y="205.74" smashed="yes" rot="R180" grouprefs="CONNECTORS HAPTIC_MOTOR">
+<instance part="X3" gate="G$1" x="363.22" y="205.74" smashed="yes" rot="R180" grouprefs="HAPTIC_MOTOR CONNECTORS">
 <attribute name="NAME" x="369.57" y="197.485" size="1.778" layer="95" rot="R180"/>
 <attribute name="VALUE" x="382.27" y="210.82" size="1.778" layer="96" rot="R180"/>
 </instance>
-<instance part="Q2_1" gate="G$1" x="347.98" y="193.04" smashed="yes" grouprefs="CONNECTORS HAPTIC_MOTOR">
+<instance part="Q2_1" gate="G$1" x="347.98" y="193.04" smashed="yes" grouprefs="HAPTIC_MOTOR CONNECTORS">
 <attribute name="NAME" x="349.25" y="193.675" size="1.27" layer="95"/>
 <attribute name="VALUE" x="349.25" y="191.77" size="1.27" layer="96"/>
 </instance>
-<instance part="R2_4" gate="G$1" x="335.28" y="193.04" smashed="yes" grouprefs="CONNECTORS HAPTIC_MOTOR">
+<instance part="R2_4" gate="G$1" x="335.28" y="193.04" smashed="yes" grouprefs="HAPTIC_MOTOR CONNECTORS">
 <attribute name="NAME" x="335.28" y="195.58" size="1.27" layer="95" font="vector" align="center"/>
 <attribute name="VALUE" x="335.28" y="193.04" size="1.016" layer="96" font="vector" ratio="15" align="center"/>
 </instance>
-<instance part="DS2_1" gate="G$1" x="347.98" y="205.74" smashed="yes" rot="R90" grouprefs="CONNECTORS HAPTIC_MOTOR">
+<instance part="DS2_1" gate="G$1" x="347.98" y="205.74" smashed="yes" rot="R90" grouprefs="HAPTIC_MOTOR CONNECTORS">
 <attribute name="NAME" x="345.694" y="204.216" size="1.27" layer="95" rot="R90"/>
 <attribute name="VALUE" x="351.79" y="203.2" size="1.27" layer="96" rot="R90"/>
 </instance>
-<instance part="C2_1" gate="G$1" x="355.6" y="205.74" smashed="yes" rot="R180" grouprefs="CONNECTORS HAPTIC_MOTOR">
+<instance part="C2_1" gate="G$1" x="355.6" y="205.74" smashed="yes" rot="R180" grouprefs="HAPTIC_MOTOR CONNECTORS">
 <attribute name="NAME" x="357.89" y="204.49" size="1.27" layer="95" font="vector" rot="R270" align="center"/>
 <attribute name="VALUE" x="353.3" y="204.49" size="1.27" layer="96" font="vector" rot="R270" align="center"/>
 </instance>
-<instance part="U$9" gate="G$1" x="347.98" y="182.88" smashed="yes" grouprefs="CONNECTORS HAPTIC_MOTOR">
+<instance part="U$9" gate="G$1" x="347.98" y="182.88" smashed="yes" grouprefs="HAPTIC_MOTOR CONNECTORS">
 <attribute name="VALUE" x="346.456" y="180.34" size="1.27" layer="96"/>
 </instance>
-<instance part="U$22" gate="G$1" x="342.9" y="213.36" smashed="yes" rot="R90" grouprefs="CONNECTORS HAPTIC_MOTOR">
+<instance part="U$22" gate="G$1" x="342.9" y="213.36" smashed="yes" rot="R90" grouprefs="HAPTIC_MOTOR CONNECTORS">
 <attribute name="VALUE" x="341.884" y="211.836" size="1.27" layer="96" rot="R90"/>
 </instance>
 <instance part="R2_3" gate="G$1" x="370.84" y="53.34" smashed="yes">
@@ -7826,12 +7827,15 @@ Features:
 <instance part="U$15" gate="G$1" x="330.2" y="58.42" smashed="yes">
 <attribute name="VALUE" x="328.676" y="59.436" size="1.27" layer="96"/>
 </instance>
+<instance part="U$19" gate="G$1" x="87.376" y="141.986" smashed="yes" rot="R180">
+<attribute name="VALUE" x="88.9" y="140.97" size="1.27" layer="96" rot="R180"/>
+</instance>
 </instances>
 <busses>
 <bus name="TFT_SPI:TFT_BACKLIGHT,TFT_CS,TFT_DC,TFT_MOSI,TFT_RESET,TFT_SCK">
 <segment>
-<wire x1="172.974" y1="204.47" x2="172.974" y2="222.25" width="0.762" layer="92" grouprefs="CONNECTORS DISPLAY ADAFRUIT_CLUE"/>
-<label x="171.704" y="210.82" size="1.778" layer="95" rot="R90" grouprefs="CONNECTORS DISPLAY ADAFRUIT_CLUE"/>
+<wire x1="172.974" y1="204.47" x2="172.974" y2="222.25" width="0.762" layer="92" grouprefs="ADAFRUIT_CLUE DISPLAY CONNECTORS"/>
+<label x="171.704" y="210.82" size="1.778" layer="95" rot="R90" grouprefs="ADAFRUIT_CLUE DISPLAY CONNECTORS"/>
 </segment>
 <segment>
 <label x="18.034" y="214.884" size="1.778" layer="95" rot="R90" grouprefs="MCU"/>
@@ -7840,7 +7844,7 @@ Features:
 </bus>
 <bus name="FLASH_QSPI:QSPI_CS,QSPI_DATA0,QSPI_DATA1,QSPI_DATA2,QSPI_DATA3,QSPI_SCK">
 <segment>
-<wire x1="228.6" y1="99.06" x2="228.6" y2="116.84" width="0.762" layer="92" grouprefs="ADAFRUIT_FEATHER_NRF52840_SENSE FLASH"/>
+<wire x1="228.6" y1="99.06" x2="228.6" y2="116.84" width="0.762" layer="92" grouprefs="FLASH ADAFRUIT_FEATHER_NRF52840_SENSE"/>
 <label x="226.06" y="101.6" size="1.778" layer="95" rot="R90" grouprefs="FLASH"/>
 </segment>
 <segment>
@@ -7850,21 +7854,21 @@ Features:
 </bus>
 <bus name="I2C:SCL,SDA">
 <segment>
-<wire x1="243.84" y1="165.1" x2="243.84" y2="162.56" width="0.762" layer="92" grouprefs="ACCEL/GYRO SENSORS ADAFRUIT_FEATHER_NRF52840_SENSE"/>
-<label x="241.3" y="160.02" size="1.778" layer="95" grouprefs="ACCEL/GYRO SENSORS"/>
+<wire x1="243.84" y1="165.1" x2="243.84" y2="162.56" width="0.762" layer="92" grouprefs="ADAFRUIT_FEATHER_NRF52840_SENSE SENSORS ACCEL/GYRO"/>
+<label x="241.3" y="160.02" size="1.778" layer="95" grouprefs="SENSORS ACCEL/GYRO"/>
 </segment>
 <segment>
-<wire x1="279.4" y1="208.28" x2="279.4" y2="205.74" width="0.762" layer="92" grouprefs="SENSORS LIGHT/COLOR/PROX/GESTURE"/>
-<label x="276.86" y="203.2" size="1.778" layer="95" grouprefs="LIGHT/COLOR/PROX/GESTURE SENSORS"/>
+<wire x1="279.4" y1="208.28" x2="279.4" y2="205.74" width="0.762" layer="92" grouprefs="LIGHT/COLOR/PROX/GESTURE SENSORS"/>
+<label x="276.86" y="203.2" size="1.778" layer="95" grouprefs="SENSORS LIGHT/COLOR/PROX/GESTURE"/>
 </segment>
 <segment>
 <wire x1="134.62" y1="246.38" x2="137.16" y2="246.38" width="0.762" layer="92"/>
 <label x="134.112" y="247.396" size="1.778" layer="95"/>
 </segment>
 </bus>
-<bus name="SWD_BUS:AREF,GND,RESET,SWCLK,SWIO,SWO">
+<bus name="SWD_BUS:3.3V,GND,RESET,SWCLK,SWIO,SWO">
 <segment>
-<wire x1="104.14" y1="114.3" x2="104.14" y2="96.52" width="0.762" layer="92" grouprefs="CONNECTORS SWD_DEBUDDER"/>
+<wire x1="104.14" y1="114.3" x2="104.14" y2="96.52" width="0.762" layer="92" grouprefs="SWD_DEBUDDER CONNECTORS"/>
 <label x="106.68" y="99.06" size="1.778" layer="95" rot="R90" grouprefs="CONNECTORS"/>
 </segment>
 <segment>
@@ -7874,8 +7878,8 @@ Features:
 </bus>
 <bus name="USB_BUS:USBD-,USBD+">
 <segment>
-<wire x1="68.58" y1="109.22" x2="68.58" y2="104.14" width="0.762" layer="92" grouprefs="CONNECTORS USB"/>
-<label x="71.12" y="101.6" size="1.778" layer="95" rot="R90" grouprefs="CONNECTORS USB"/>
+<wire x1="68.58" y1="109.22" x2="68.58" y2="104.14" width="0.762" layer="92" grouprefs="USB CONNECTORS"/>
+<label x="71.12" y="101.6" size="1.778" layer="95" rot="R90" grouprefs="USB CONNECTORS"/>
 </segment>
 <segment>
 <wire x1="66.04" y1="172.72" x2="68.58" y2="172.72" width="0.762" layer="92" grouprefs="MCU"/>
@@ -7887,54 +7891,54 @@ Features:
 <net name="GND" class="0">
 <segment>
 <pinref part="U$33" gate="G$1" pin="GND"/>
-<wire x1="284.48" y1="33.02" x2="284.48" y2="27.94" width="0.1524" layer="91" grouprefs="POWER_MANAGER ADAFRUIT_FEATHER_NRF52840_SENSE"/>
+<wire x1="284.48" y1="33.02" x2="284.48" y2="27.94" width="0.1524" layer="91" grouprefs="ADAFRUIT_FEATHER_NRF52840_SENSE POWER_MANAGER"/>
 <pinref part="C1_10" gate="G$1" pin="P$1"/>
 </segment>
 <segment>
 <pinref part="U$36" gate="G$1" pin="GND"/>
 <pinref part="U3" gate="G$1" pin="VSS"/>
-<wire x1="279.4" y1="40.64" x2="279.4" y2="30.48" width="0.1524" layer="91" grouprefs="POWER_MANAGER ADAFRUIT_FEATHER_NRF52840_SENSE"/>
-<wire x1="279.4" y1="30.48" x2="279.4" y2="27.94" width="0.1524" layer="91" grouprefs="POWER_MANAGER ADAFRUIT_FEATHER_NRF52840_SENSE"/>
-<wire x1="264.16" y1="38.1" x2="266.7" y2="38.1" width="0.1524" layer="91" grouprefs="POWER_MANAGER ADAFRUIT_FEATHER_NRF52840_SENSE"/>
-<wire x1="266.7" y1="38.1" x2="266.7" y2="30.48" width="0.1524" layer="91" grouprefs="POWER_MANAGER ADAFRUIT_FEATHER_NRF52840_SENSE"/>
-<wire x1="266.7" y1="30.48" x2="279.4" y2="30.48" width="0.1524" layer="91" grouprefs="POWER_MANAGER ADAFRUIT_FEATHER_NRF52840_SENSE"/>
-<junction x="279.4" y="30.48" grouprefs="POWER_MANAGER ADAFRUIT_FEATHER_NRF52840_SENSE"/>
+<wire x1="279.4" y1="40.64" x2="279.4" y2="30.48" width="0.1524" layer="91" grouprefs="ADAFRUIT_FEATHER_NRF52840_SENSE POWER_MANAGER"/>
+<wire x1="279.4" y1="30.48" x2="279.4" y2="27.94" width="0.1524" layer="91" grouprefs="ADAFRUIT_FEATHER_NRF52840_SENSE POWER_MANAGER"/>
+<wire x1="264.16" y1="38.1" x2="266.7" y2="38.1" width="0.1524" layer="91" grouprefs="ADAFRUIT_FEATHER_NRF52840_SENSE POWER_MANAGER"/>
+<wire x1="266.7" y1="38.1" x2="266.7" y2="30.48" width="0.1524" layer="91" grouprefs="ADAFRUIT_FEATHER_NRF52840_SENSE POWER_MANAGER"/>
+<wire x1="266.7" y1="30.48" x2="279.4" y2="30.48" width="0.1524" layer="91" grouprefs="ADAFRUIT_FEATHER_NRF52840_SENSE POWER_MANAGER"/>
+<junction x="279.4" y="30.48" grouprefs="ADAFRUIT_FEATHER_NRF52840_SENSE POWER_MANAGER"/>
 <pinref part="R1_2" gate="G$1" pin="2"/>
 </segment>
 <segment>
 <pinref part="U$4" gate="G$1" pin="GND"/>
-<wire x1="91.44" y1="33.02" x2="91.44" y2="30.48" width="0.1524" layer="91" grouprefs="POWER_MANAGER ADAFRUIT_FEATHER_NRF52840_SENSE"/>
+<wire x1="91.44" y1="33.02" x2="91.44" y2="30.48" width="0.1524" layer="91" grouprefs="ADAFRUIT_FEATHER_NRF52840_SENSE POWER_MANAGER"/>
 <pinref part="C1_8" gate="G$1" pin="P$1"/>
 </segment>
 <segment>
 <pinref part="U$5" gate="G$1" pin="GND"/>
-<wire x1="137.16" y1="30.48" x2="137.16" y2="27.94" width="0.1524" layer="91" grouprefs="POWER_MANAGER ADAFRUIT_FEATHER_NRF52840_SENSE"/>
+<wire x1="137.16" y1="30.48" x2="137.16" y2="27.94" width="0.1524" layer="91" grouprefs="ADAFRUIT_FEATHER_NRF52840_SENSE POWER_MANAGER"/>
 <pinref part="C1_9" gate="G$1" pin="P$1"/>
 </segment>
 <segment>
 <pinref part="U2" gate="G$1" pin="GND"/>
-<wire x1="114.3" y1="40.64" x2="114.3" y2="27.94" width="0.1524" layer="91" grouprefs="POWER_MANAGER ADAFRUIT_FEATHER_NRF52840_SENSE"/>
+<wire x1="114.3" y1="40.64" x2="114.3" y2="27.94" width="0.1524" layer="91" grouprefs="ADAFRUIT_FEATHER_NRF52840_SENSE POWER_MANAGER"/>
 <pinref part="U$30" gate="G$1" pin="GND"/>
 </segment>
 <segment>
 <pinref part="U$7" gate="G$1" pin="GND"/>
-<wire x1="175.26" y1="25.4" x2="175.26" y2="27.94" width="0.1524" layer="91" grouprefs="POWER_MANAGER ADAFRUIT_FEATHER_NRF52840_SENSE"/>
+<wire x1="175.26" y1="25.4" x2="175.26" y2="27.94" width="0.1524" layer="91" grouprefs="ADAFRUIT_FEATHER_NRF52840_SENSE POWER_MANAGER"/>
 <pinref part="X2" gate="G$1" pin="1"/>
 <pinref part="X2" gate="MT2" pin="P$1"/>
-<wire x1="175.26" y1="27.94" x2="175.26" y2="38.1" width="0.1524" layer="91" grouprefs="POWER_MANAGER ADAFRUIT_FEATHER_NRF52840_SENSE"/>
-<junction x="175.26" y="27.94" grouprefs="POWER_MANAGER ADAFRUIT_FEATHER_NRF52840_SENSE"/>
+<wire x1="175.26" y1="27.94" x2="175.26" y2="38.1" width="0.1524" layer="91" grouprefs="ADAFRUIT_FEATHER_NRF52840_SENSE POWER_MANAGER"/>
+<junction x="175.26" y="27.94" grouprefs="ADAFRUIT_FEATHER_NRF52840_SENSE POWER_MANAGER"/>
 <pinref part="X2" gate="MT1" pin="P$1"/>
 </segment>
 <segment>
-<wire x1="43.18" y1="99.06" x2="48.26" y2="99.06" width="0.1524" layer="91" grouprefs="CONNECTORS ADAFRUIT_FEATHER_NRF52840_SENSE USB"/>
+<wire x1="43.18" y1="99.06" x2="48.26" y2="99.06" width="0.1524" layer="91" grouprefs="USB ADAFRUIT_FEATHER_NRF52840_SENSE CONNECTORS"/>
 <pinref part="X1" gate="G$1" pin="GND"/>
 <pinref part="U$25" gate="G$1" pin="GND"/>
 </segment>
 <segment>
 <pinref part="IC2" gate="G$1" pin="VSS"/>
 <pinref part="U$56" gate="G$1" pin="GND"/>
-<wire x1="276.86" y1="101.6" x2="281.94" y2="101.6" width="0.1524" layer="91" grouprefs="ADAFRUIT_FEATHER_NRF52840_SENSE FLASH"/>
-<wire x1="281.94" y1="101.6" x2="281.94" y2="99.06" width="0.1524" layer="91" grouprefs="ADAFRUIT_FEATHER_NRF52840_SENSE FLASH"/>
+<wire x1="276.86" y1="101.6" x2="281.94" y2="101.6" width="0.1524" layer="91" grouprefs="FLASH ADAFRUIT_FEATHER_NRF52840_SENSE"/>
+<wire x1="281.94" y1="101.6" x2="281.94" y2="99.06" width="0.1524" layer="91" grouprefs="FLASH ADAFRUIT_FEATHER_NRF52840_SENSE"/>
 </segment>
 <segment>
 <pinref part="IC1" gate="G$1" pin="GND"/>
@@ -7947,7 +7951,7 @@ Features:
 <segment>
 <pinref part="U1" gate="G$1" pin="GND"/>
 <pinref part="U$63" gate="G$1" pin="GND"/>
-<wire x1="248.92" y1="210.82" x2="241.3" y2="210.82" width="0.1524" layer="91" grouprefs="ADAFRUIT_FEATHER_NRF52840_SENSE SENSORS LIGHT/COLOR/PROX/GESTURE"/>
+<wire x1="248.92" y1="210.82" x2="241.3" y2="210.82" width="0.1524" layer="91" grouprefs="LIGHT/COLOR/PROX/GESTURE SENSORS ADAFRUIT_FEATHER_NRF52840_SENSE"/>
 </segment>
 <segment>
 <pinref part="C3_1" gate="G$1" pin="P$1"/>
@@ -7956,94 +7960,94 @@ Features:
 <segment>
 <pinref part="SW_R" gate="G$1" pin="P1"/>
 <pinref part="U$2" gate="G$1" pin="GND"/>
-<wire x1="345.44" y1="142.24" x2="342.9" y2="142.24" width="0.1524" layer="91" grouprefs="SWITCHES SENSORS"/>
-<wire x1="342.9" y1="142.24" x2="342.9" y2="139.7" width="0.1524" layer="91" grouprefs="SWITCHES SENSORS"/>
+<wire x1="345.44" y1="142.24" x2="342.9" y2="142.24" width="0.1524" layer="91" grouprefs="SENSORS SWITCHES"/>
+<wire x1="342.9" y1="142.24" x2="342.9" y2="139.7" width="0.1524" layer="91" grouprefs="SENSORS SWITCHES"/>
 <pinref part="SW_R" gate="G$1" pin="P"/>
-<wire x1="345.44" y1="144.78" x2="342.9" y2="144.78" width="0.1524" layer="91" grouprefs="SWITCHES SENSORS"/>
-<wire x1="342.9" y1="144.78" x2="342.9" y2="142.24" width="0.1524" layer="91" grouprefs="SWITCHES SENSORS"/>
-<junction x="342.9" y="142.24" grouprefs="SWITCHES SENSORS"/>
+<wire x1="345.44" y1="144.78" x2="342.9" y2="144.78" width="0.1524" layer="91" grouprefs="SENSORS SWITCHES"/>
+<wire x1="342.9" y1="144.78" x2="342.9" y2="142.24" width="0.1524" layer="91" grouprefs="SENSORS SWITCHES"/>
+<junction x="342.9" y="142.24" grouprefs="SENSORS SWITCHES"/>
 </segment>
 <segment>
 <pinref part="SW_4" gate="G$1" pin="P1"/>
 <pinref part="U$1" gate="G$1" pin="GND"/>
-<wire x1="360.68" y1="101.6" x2="358.14" y2="101.6" width="0.1524" layer="91" grouprefs="SWITCHES SENSORS"/>
-<wire x1="358.14" y1="101.6" x2="358.14" y2="99.06" width="0.1524" layer="91" grouprefs="SWITCHES SENSORS"/>
+<wire x1="360.68" y1="101.6" x2="358.14" y2="101.6" width="0.1524" layer="91" grouprefs="SENSORS SWITCHES"/>
+<wire x1="358.14" y1="101.6" x2="358.14" y2="99.06" width="0.1524" layer="91" grouprefs="SENSORS SWITCHES"/>
 <pinref part="SW_4" gate="G$1" pin="P"/>
-<wire x1="360.68" y1="104.14" x2="358.14" y2="104.14" width="0.1524" layer="91" grouprefs="SWITCHES SENSORS"/>
-<wire x1="358.14" y1="104.14" x2="358.14" y2="101.6" width="0.1524" layer="91" grouprefs="SWITCHES SENSORS"/>
-<junction x="358.14" y="101.6" grouprefs="SWITCHES SENSORS"/>
+<wire x1="360.68" y1="104.14" x2="358.14" y2="104.14" width="0.1524" layer="91" grouprefs="SENSORS SWITCHES"/>
+<wire x1="358.14" y1="104.14" x2="358.14" y2="101.6" width="0.1524" layer="91" grouprefs="SENSORS SWITCHES"/>
+<junction x="358.14" y="101.6" grouprefs="SENSORS SWITCHES"/>
 </segment>
 <segment>
 <pinref part="SW_2" gate="G$1" pin="P1"/>
 <pinref part="U$10" gate="G$1" pin="GND"/>
-<wire x1="360.68" y1="121.92" x2="358.14" y2="121.92" width="0.1524" layer="91" grouprefs="SWITCHES SENSORS"/>
-<wire x1="358.14" y1="121.92" x2="358.14" y2="119.38" width="0.1524" layer="91" grouprefs="SWITCHES SENSORS"/>
+<wire x1="360.68" y1="121.92" x2="358.14" y2="121.92" width="0.1524" layer="91" grouprefs="SENSORS SWITCHES"/>
+<wire x1="358.14" y1="121.92" x2="358.14" y2="119.38" width="0.1524" layer="91" grouprefs="SENSORS SWITCHES"/>
 <pinref part="SW_2" gate="G$1" pin="P"/>
-<wire x1="360.68" y1="124.46" x2="358.14" y2="124.46" width="0.1524" layer="91" grouprefs="SWITCHES SENSORS"/>
-<wire x1="358.14" y1="124.46" x2="358.14" y2="121.92" width="0.1524" layer="91" grouprefs="SWITCHES SENSORS"/>
-<junction x="358.14" y="121.92" grouprefs="SWITCHES SENSORS"/>
+<wire x1="360.68" y1="124.46" x2="358.14" y2="124.46" width="0.1524" layer="91" grouprefs="SENSORS SWITCHES"/>
+<wire x1="358.14" y1="124.46" x2="358.14" y2="121.92" width="0.1524" layer="91" grouprefs="SENSORS SWITCHES"/>
+<junction x="358.14" y="121.92" grouprefs="SENSORS SWITCHES"/>
 </segment>
 <segment>
 <pinref part="SW_3" gate="G$1" pin="P1"/>
 <pinref part="U$8" gate="G$1" pin="GND"/>
-<wire x1="327.66" y1="101.6" x2="325.12" y2="101.6" width="0.1524" layer="91" grouprefs="SWITCHES SENSORS"/>
-<wire x1="325.12" y1="101.6" x2="325.12" y2="99.06" width="0.1524" layer="91" grouprefs="SWITCHES SENSORS"/>
+<wire x1="327.66" y1="101.6" x2="325.12" y2="101.6" width="0.1524" layer="91" grouprefs="SENSORS SWITCHES"/>
+<wire x1="325.12" y1="101.6" x2="325.12" y2="99.06" width="0.1524" layer="91" grouprefs="SENSORS SWITCHES"/>
 <pinref part="SW_3" gate="G$1" pin="P"/>
-<wire x1="327.66" y1="104.14" x2="325.12" y2="104.14" width="0.1524" layer="91" grouprefs="SWITCHES SENSORS"/>
-<wire x1="325.12" y1="104.14" x2="325.12" y2="101.6" width="0.1524" layer="91" grouprefs="SWITCHES SENSORS"/>
-<junction x="325.12" y="101.6" grouprefs="SWITCHES SENSORS"/>
+<wire x1="327.66" y1="104.14" x2="325.12" y2="104.14" width="0.1524" layer="91" grouprefs="SENSORS SWITCHES"/>
+<wire x1="325.12" y1="104.14" x2="325.12" y2="101.6" width="0.1524" layer="91" grouprefs="SENSORS SWITCHES"/>
+<junction x="325.12" y="101.6" grouprefs="SENSORS SWITCHES"/>
 </segment>
 <segment>
 <pinref part="SW_1" gate="G$1" pin="P1"/>
 <pinref part="U$12" gate="G$1" pin="GND"/>
-<wire x1="327.66" y1="121.92" x2="325.12" y2="121.92" width="0.1524" layer="91" grouprefs="SWITCHES SENSORS"/>
-<wire x1="325.12" y1="121.92" x2="325.12" y2="119.38" width="0.1524" layer="91" grouprefs="SWITCHES SENSORS"/>
+<wire x1="327.66" y1="121.92" x2="325.12" y2="121.92" width="0.1524" layer="91" grouprefs="SENSORS SWITCHES"/>
+<wire x1="325.12" y1="121.92" x2="325.12" y2="119.38" width="0.1524" layer="91" grouprefs="SENSORS SWITCHES"/>
 <pinref part="SW_1" gate="G$1" pin="P"/>
-<wire x1="327.66" y1="124.46" x2="325.12" y2="124.46" width="0.1524" layer="91" grouprefs="SWITCHES SENSORS"/>
-<wire x1="325.12" y1="124.46" x2="325.12" y2="121.92" width="0.1524" layer="91" grouprefs="SWITCHES SENSORS"/>
-<junction x="325.12" y="121.92" grouprefs="SWITCHES SENSORS"/>
+<wire x1="327.66" y1="124.46" x2="325.12" y2="124.46" width="0.1524" layer="91" grouprefs="SENSORS SWITCHES"/>
+<wire x1="325.12" y1="124.46" x2="325.12" y2="121.92" width="0.1524" layer="91" grouprefs="SENSORS SWITCHES"/>
+<junction x="325.12" y="121.92" grouprefs="SENSORS SWITCHES"/>
 </segment>
 <segment>
 <pinref part="DISPLAY1" gate="G$1" pin="GND"/>
-<wire x1="193.294" y1="232.41" x2="183.134" y2="232.41" width="0.1524" layer="91" grouprefs="CONNECTORS DISPLAY ADAFRUIT_CLUE"/>
+<wire x1="193.294" y1="232.41" x2="183.134" y2="232.41" width="0.1524" layer="91" grouprefs="ADAFRUIT_CLUE DISPLAY CONNECTORS"/>
 <pinref part="GND4" gate="1" pin="GND"/>
 </segment>
 <segment>
 <pinref part="DISPLAY1" gate="G$1" pin="RD"/>
-<wire x1="193.294" y1="212.09" x2="178.054" y2="212.09" width="0.1524" layer="91" grouprefs="CONNECTORS DISPLAY ADAFRUIT_CLUE"/>
-<label x="188.214" y="212.09" size="1.778" layer="95" rot="MR0" grouprefs="CONNECTORS DISPLAY ADAFRUIT_CLUE"/>
+<wire x1="193.294" y1="212.09" x2="178.054" y2="212.09" width="0.1524" layer="91" grouprefs="ADAFRUIT_CLUE DISPLAY CONNECTORS"/>
+<label x="188.214" y="212.09" size="1.778" layer="95" rot="MR0" grouprefs="ADAFRUIT_CLUE DISPLAY CONNECTORS"/>
 <pinref part="GND5" gate="1" pin="GND"/>
 </segment>
 <segment>
 <pinref part="DISPLAY1" gate="G$1" pin="D0"/>
 <pinref part="DISPLAY1" gate="G$1" pin="D7"/>
-<wire x1="193.294" y1="207.01" x2="193.294" y2="204.47" width="0.1524" layer="91" grouprefs="CONNECTORS DISPLAY ADAFRUIT_CLUE"/>
+<wire x1="193.294" y1="207.01" x2="193.294" y2="204.47" width="0.1524" layer="91" grouprefs="ADAFRUIT_CLUE DISPLAY CONNECTORS"/>
 <pinref part="DISPLAY1" gate="G$1" pin="D1"/>
-<wire x1="193.294" y1="204.47" x2="193.294" y2="201.93" width="0.1524" layer="91" grouprefs="CONNECTORS DISPLAY ADAFRUIT_CLUE"/>
-<junction x="193.294" y="204.47" grouprefs="CONNECTORS DISPLAY ADAFRUIT_CLUE"/>
+<wire x1="193.294" y1="204.47" x2="193.294" y2="201.93" width="0.1524" layer="91" grouprefs="ADAFRUIT_CLUE DISPLAY CONNECTORS"/>
+<junction x="193.294" y="204.47" grouprefs="ADAFRUIT_CLUE DISPLAY CONNECTORS"/>
 <pinref part="DISPLAY1" gate="G$1" pin="D2"/>
-<wire x1="193.294" y1="201.93" x2="193.294" y2="199.39" width="0.1524" layer="91" grouprefs="CONNECTORS DISPLAY ADAFRUIT_CLUE"/>
-<junction x="193.294" y="201.93" grouprefs="CONNECTORS DISPLAY ADAFRUIT_CLUE"/>
+<wire x1="193.294" y1="201.93" x2="193.294" y2="199.39" width="0.1524" layer="91" grouprefs="ADAFRUIT_CLUE DISPLAY CONNECTORS"/>
+<junction x="193.294" y="201.93" grouprefs="ADAFRUIT_CLUE DISPLAY CONNECTORS"/>
 <pinref part="DISPLAY1" gate="G$1" pin="D3"/>
-<wire x1="193.294" y1="199.39" x2="193.294" y2="196.85" width="0.1524" layer="91" grouprefs="CONNECTORS DISPLAY ADAFRUIT_CLUE"/>
-<junction x="193.294" y="199.39" grouprefs="CONNECTORS DISPLAY ADAFRUIT_CLUE"/>
+<wire x1="193.294" y1="199.39" x2="193.294" y2="196.85" width="0.1524" layer="91" grouprefs="ADAFRUIT_CLUE DISPLAY CONNECTORS"/>
+<junction x="193.294" y="199.39" grouprefs="ADAFRUIT_CLUE DISPLAY CONNECTORS"/>
 <pinref part="DISPLAY1" gate="G$1" pin="D4"/>
-<wire x1="193.294" y1="196.85" x2="193.294" y2="194.31" width="0.1524" layer="91" grouprefs="CONNECTORS DISPLAY ADAFRUIT_CLUE"/>
-<junction x="193.294" y="196.85" grouprefs="CONNECTORS DISPLAY ADAFRUIT_CLUE"/>
+<wire x1="193.294" y1="196.85" x2="193.294" y2="194.31" width="0.1524" layer="91" grouprefs="ADAFRUIT_CLUE DISPLAY CONNECTORS"/>
+<junction x="193.294" y="196.85" grouprefs="ADAFRUIT_CLUE DISPLAY CONNECTORS"/>
 <pinref part="DISPLAY1" gate="G$1" pin="D5"/>
-<wire x1="193.294" y1="194.31" x2="193.294" y2="191.77" width="0.1524" layer="91" grouprefs="CONNECTORS DISPLAY ADAFRUIT_CLUE"/>
-<junction x="193.294" y="194.31" grouprefs="CONNECTORS DISPLAY ADAFRUIT_CLUE"/>
+<wire x1="193.294" y1="194.31" x2="193.294" y2="191.77" width="0.1524" layer="91" grouprefs="ADAFRUIT_CLUE DISPLAY CONNECTORS"/>
+<junction x="193.294" y="194.31" grouprefs="ADAFRUIT_CLUE DISPLAY CONNECTORS"/>
 <pinref part="DISPLAY1" gate="G$1" pin="D6"/>
-<wire x1="193.294" y1="191.77" x2="193.294" y2="189.23" width="0.1524" layer="91" grouprefs="CONNECTORS DISPLAY ADAFRUIT_CLUE"/>
-<junction x="193.294" y="191.77" grouprefs="CONNECTORS DISPLAY ADAFRUIT_CLUE"/>
-<wire x1="193.294" y1="201.93" x2="178.054" y2="201.93" width="0.1524" layer="91" grouprefs="CONNECTORS DISPLAY ADAFRUIT_CLUE"/>
-<wire x1="178.054" y1="201.93" x2="178.054" y2="199.39" width="0.1524" layer="91" grouprefs="CONNECTORS DISPLAY ADAFRUIT_CLUE"/>
+<wire x1="193.294" y1="191.77" x2="193.294" y2="189.23" width="0.1524" layer="91" grouprefs="ADAFRUIT_CLUE DISPLAY CONNECTORS"/>
+<junction x="193.294" y="191.77" grouprefs="ADAFRUIT_CLUE DISPLAY CONNECTORS"/>
+<wire x1="193.294" y1="201.93" x2="178.054" y2="201.93" width="0.1524" layer="91" grouprefs="ADAFRUIT_CLUE DISPLAY CONNECTORS"/>
+<wire x1="178.054" y1="201.93" x2="178.054" y2="199.39" width="0.1524" layer="91" grouprefs="ADAFRUIT_CLUE DISPLAY CONNECTORS"/>
 <pinref part="GND7" gate="1" pin="GND"/>
 </segment>
 <segment>
 <pinref part="GND8" gate="1" pin="GND"/>
 <pinref part="Q5_1" gate="G$1" pin="S"/>
-<wire x1="178.054" y1="153.67" x2="178.054" y2="156.21" width="0.1524" layer="91" grouprefs="CONNECTORS DISPLAY ADAFRUIT_CLUE"/>
+<wire x1="178.054" y1="153.67" x2="178.054" y2="156.21" width="0.1524" layer="91" grouprefs="ADAFRUIT_CLUE DISPLAY CONNECTORS"/>
 </segment>
 <segment>
 <pinref part="MDBT50Q-1MV2" gate="G$1" pin="GND@33"/>
@@ -8072,58 +8076,58 @@ Features:
 </segment>
 <segment>
 <pinref part="U$45" gate="G$1" pin="GND"/>
-<wire x1="50.8" y1="43.18" x2="50.8" y2="40.64" width="0.1524" layer="91" grouprefs="POWER_MANAGER ADAFRUIT_CLUE"/>
+<wire x1="50.8" y1="43.18" x2="50.8" y2="40.64" width="0.1524" layer="91" grouprefs="ADAFRUIT_CLUE POWER_MANAGER"/>
 <pinref part="C1_5" gate="G$1" pin="P$1"/>
 </segment>
 <segment>
 <pinref part="U$48" gate="G$1" pin="GND"/>
-<wire x1="35.56" y1="43.18" x2="35.56" y2="40.64" width="0.1524" layer="91" grouprefs="POWER_MANAGER ADAFRUIT_CLUE"/>
+<wire x1="35.56" y1="43.18" x2="35.56" y2="40.64" width="0.1524" layer="91" grouprefs="ADAFRUIT_CLUE POWER_MANAGER"/>
 <pinref part="C1_3" gate="G$1" pin="P$1"/>
 </segment>
 <segment>
 <pinref part="U$49" gate="G$1" pin="GND"/>
-<wire x1="20.32" y1="43.18" x2="20.32" y2="40.64" width="0.1524" layer="91" grouprefs="POWER_MANAGER ADAFRUIT_CLUE"/>
+<wire x1="20.32" y1="43.18" x2="20.32" y2="40.64" width="0.1524" layer="91" grouprefs="ADAFRUIT_CLUE POWER_MANAGER"/>
 <pinref part="C1_1" gate="G$1" pin="P$1"/>
 </segment>
 <segment>
 <pinref part="U$40" gate="G$1" pin="GND"/>
-<wire x1="27.94" y1="43.18" x2="27.94" y2="40.64" width="0.1524" layer="91" grouprefs="POWER_MANAGER ADAFRUIT_CLUE"/>
+<wire x1="27.94" y1="43.18" x2="27.94" y2="40.64" width="0.1524" layer="91" grouprefs="ADAFRUIT_CLUE POWER_MANAGER"/>
 <pinref part="C1_2" gate="G$1" pin="P$1"/>
 </segment>
 <segment>
 <pinref part="C1_6" gate="G$1" pin="P$1"/>
 <pinref part="U$59" gate="G$1" pin="GND"/>
-<wire x1="58.42" y1="40.64" x2="58.42" y2="43.18" width="0.1524" layer="91" grouprefs="POWER_MANAGER ADAFRUIT_CLUE"/>
+<wire x1="58.42" y1="40.64" x2="58.42" y2="43.18" width="0.1524" layer="91" grouprefs="ADAFRUIT_CLUE POWER_MANAGER"/>
 </segment>
 <segment>
 <pinref part="C1_4" gate="G$1" pin="P$1"/>
 <pinref part="U$61" gate="G$1" pin="GND"/>
-<wire x1="43.18" y1="40.64" x2="43.18" y2="43.18" width="0.1524" layer="91" grouprefs="POWER_MANAGER ADAFRUIT_CLUE"/>
+<wire x1="43.18" y1="40.64" x2="43.18" y2="43.18" width="0.1524" layer="91" grouprefs="ADAFRUIT_CLUE POWER_MANAGER"/>
 </segment>
 <segment>
 <pinref part="C1_7" gate="G$1" pin="P$1"/>
 <pinref part="U$73" gate="G$1" pin="GND"/>
-<wire x1="66.04" y1="43.18" x2="66.04" y2="40.64" width="0.1524" layer="91" grouprefs="POWER_MANAGER ADAFRUIT_CLUE"/>
+<wire x1="66.04" y1="43.18" x2="66.04" y2="40.64" width="0.1524" layer="91" grouprefs="ADAFRUIT_CLUE POWER_MANAGER"/>
 </segment>
 <segment>
 <pinref part="C4_3" gate="G$1" pin="P$2"/>
 <pinref part="C4_4" gate="G$1" pin="P$2"/>
-<wire x1="139.7" y1="93.98" x2="132.08" y2="93.98" width="0.1524" layer="91" grouprefs="SENSORS CONNECTORS NFC"/>
+<wire x1="139.7" y1="93.98" x2="132.08" y2="93.98" width="0.1524" layer="91" grouprefs="NFC CONNECTORS SENSORS"/>
 <pinref part="C4_2" gate="G$1" pin="P$2"/>
 <pinref part="C4_1" gate="G$1" pin="P$2"/>
-<wire x1="167.64" y1="93.98" x2="177.8" y2="93.98" width="0.1524" layer="91" grouprefs="SENSORS CONNECTORS NFC"/>
-<wire x1="139.7" y1="93.98" x2="154.94" y2="93.98" width="0.1524" layer="91" grouprefs="SENSORS CONNECTORS NFC"/>
-<junction x="139.7" y="93.98" grouprefs="SENSORS CONNECTORS NFC"/>
-<junction x="167.64" y="93.98" grouprefs="SENSORS CONNECTORS NFC"/>
+<wire x1="167.64" y1="93.98" x2="177.8" y2="93.98" width="0.1524" layer="91" grouprefs="NFC CONNECTORS SENSORS"/>
+<wire x1="139.7" y1="93.98" x2="154.94" y2="93.98" width="0.1524" layer="91" grouprefs="NFC CONNECTORS SENSORS"/>
+<junction x="139.7" y="93.98" grouprefs="NFC CONNECTORS SENSORS"/>
+<junction x="167.64" y="93.98" grouprefs="NFC CONNECTORS SENSORS"/>
 <pinref part="U$71" gate="G$1" pin="GND"/>
-<wire x1="154.94" y1="93.98" x2="167.64" y2="93.98" width="0.1524" layer="91" grouprefs="SENSORS CONNECTORS NFC"/>
-<wire x1="154.94" y1="91.44" x2="154.94" y2="93.98" width="0.1524" layer="91" grouprefs="SENSORS CONNECTORS NFC"/>
-<junction x="154.94" y="93.98" grouprefs="SENSORS CONNECTORS NFC"/>
+<wire x1="154.94" y1="93.98" x2="167.64" y2="93.98" width="0.1524" layer="91" grouprefs="NFC CONNECTORS SENSORS"/>
+<wire x1="154.94" y1="91.44" x2="154.94" y2="93.98" width="0.1524" layer="91" grouprefs="NFC CONNECTORS SENSORS"/>
+<junction x="154.94" y="93.98" grouprefs="NFC CONNECTORS SENSORS"/>
 </segment>
 <segment>
 <pinref part="Q2_1" gate="G$1" pin="E"/>
 <pinref part="U$9" gate="G$1" pin="GND"/>
-<wire x1="347.98" y1="187.96" x2="347.98" y2="185.42" width="0.1524" layer="91" grouprefs="CONNECTORS HAPTIC_MOTOR"/>
+<wire x1="347.98" y1="187.96" x2="347.98" y2="185.42" width="0.1524" layer="91" grouprefs="HAPTIC_MOTOR CONNECTORS"/>
 </segment>
 <segment>
 <pinref part="RG1_1" gate="G$1" pin="1"/>
@@ -8147,30 +8151,30 @@ Features:
 <net name="VBUS" class="1">
 <segment>
 <pinref part="U3" gate="G$1" pin="VDD"/>
-<wire x1="213.36" y1="45.72" x2="213.36" y2="43.18" width="0.1524" layer="91" grouprefs="POWER_MANAGER ADAFRUIT_FEATHER_NRF52840_SENSE"/>
-<wire x1="213.36" y1="43.18" x2="238.76" y2="43.18" width="0.1524" layer="91" grouprefs="POWER_MANAGER ADAFRUIT_FEATHER_NRF52840_SENSE"/>
+<wire x1="213.36" y1="45.72" x2="213.36" y2="43.18" width="0.1524" layer="91" grouprefs="ADAFRUIT_FEATHER_NRF52840_SENSE POWER_MANAGER"/>
+<wire x1="213.36" y1="43.18" x2="238.76" y2="43.18" width="0.1524" layer="91" grouprefs="ADAFRUIT_FEATHER_NRF52840_SENSE POWER_MANAGER"/>
 <pinref part="LED_C" gate="G$1" pin="A"/>
-<wire x1="215.9" y1="38.1" x2="213.36" y2="38.1" width="0.1524" layer="91" grouprefs="POWER_MANAGER ADAFRUIT_FEATHER_NRF52840_SENSE"/>
-<wire x1="213.36" y1="38.1" x2="213.36" y2="43.18" width="0.1524" layer="91" grouprefs="POWER_MANAGER ADAFRUIT_FEATHER_NRF52840_SENSE"/>
-<junction x="213.36" y="43.18" grouprefs="POWER_MANAGER ADAFRUIT_FEATHER_NRF52840_SENSE"/>
+<wire x1="215.9" y1="38.1" x2="213.36" y2="38.1" width="0.1524" layer="91" grouprefs="ADAFRUIT_FEATHER_NRF52840_SENSE POWER_MANAGER"/>
+<wire x1="213.36" y1="38.1" x2="213.36" y2="43.18" width="0.1524" layer="91" grouprefs="ADAFRUIT_FEATHER_NRF52840_SENSE POWER_MANAGER"/>
+<junction x="213.36" y="43.18" grouprefs="ADAFRUIT_FEATHER_NRF52840_SENSE POWER_MANAGER"/>
 <pinref part="U$38" gate="G$1" pin="VBUS"/>
 </segment>
 <segment>
 <pinref part="U$13" gate="G$1" pin="VBUS"/>
-<wire x1="81.28" y1="45.72" x2="81.28" y2="50.8" width="0.1524" layer="91" grouprefs="POWER_MANAGER ADAFRUIT_FEATHER_NRF52840_SENSE"/>
-<wire x1="81.28" y1="50.8" x2="81.28" y2="58.42" width="0.1524" layer="91" grouprefs="POWER_MANAGER ADAFRUIT_FEATHER_NRF52840_SENSE"/>
-<wire x1="83.82" y1="45.72" x2="81.28" y2="45.72" width="0.1524" layer="91" grouprefs="POWER_MANAGER ADAFRUIT_FEATHER_NRF52840_SENSE"/>
+<wire x1="81.28" y1="45.72" x2="81.28" y2="50.8" width="0.1524" layer="91" grouprefs="ADAFRUIT_FEATHER_NRF52840_SENSE POWER_MANAGER"/>
+<wire x1="81.28" y1="50.8" x2="81.28" y2="58.42" width="0.1524" layer="91" grouprefs="ADAFRUIT_FEATHER_NRF52840_SENSE POWER_MANAGER"/>
+<wire x1="83.82" y1="45.72" x2="81.28" y2="45.72" width="0.1524" layer="91" grouprefs="ADAFRUIT_FEATHER_NRF52840_SENSE POWER_MANAGER"/>
 <pinref part="Q1_1" gate="G$1" pin="G"/>
-<wire x1="86.36" y1="50.8" x2="81.28" y2="50.8" width="0.1524" layer="91" grouprefs="POWER_MANAGER ADAFRUIT_FEATHER_NRF52840_SENSE"/>
-<junction x="81.28" y="50.8" grouprefs="POWER_MANAGER ADAFRUIT_FEATHER_NRF52840_SENSE"/>
+<wire x1="86.36" y1="50.8" x2="81.28" y2="50.8" width="0.1524" layer="91" grouprefs="ADAFRUIT_FEATHER_NRF52840_SENSE POWER_MANAGER"/>
+<junction x="81.28" y="50.8" grouprefs="ADAFRUIT_FEATHER_NRF52840_SENSE POWER_MANAGER"/>
 <pinref part="DS1_1" gate="G$1" pin="A"/>
 <pinref part="RG1_1" gate="G$1" pin="2"/>
 <wire x1="81.28" y1="45.72" x2="81.28" y2="43.18" width="0.1524" layer="91"/>
 <junction x="81.28" y="45.72"/>
 </segment>
 <segment>
-<wire x1="50.8" y1="109.22" x2="43.18" y2="109.22" width="0.1524" layer="91" grouprefs="CONNECTORS ADAFRUIT_FEATHER_NRF52840_SENSE USB"/>
-<label x="43.18" y="109.22" size="1.778" layer="95" grouprefs="CONNECTORS ADAFRUIT_FEATHER_NRF52840_SENSE USB"/>
+<wire x1="50.8" y1="109.22" x2="43.18" y2="109.22" width="0.1524" layer="91" grouprefs="USB ADAFRUIT_FEATHER_NRF52840_SENSE CONNECTORS"/>
+<label x="43.18" y="109.22" size="1.778" layer="95" grouprefs="USB ADAFRUIT_FEATHER_NRF52840_SENSE CONNECTORS"/>
 <pinref part="U$21" gate="G$1" pin="VBUS"/>
 <pinref part="X1" gate="G$1" pin="VBUS"/>
 </segment>
@@ -8181,16 +8185,16 @@ Features:
 </segment>
 <segment>
 <pinref part="U$54" gate="G$1" pin="VBUS"/>
-<wire x1="27.94" y1="50.8" x2="27.94" y2="53.34" width="0.1524" layer="91" grouprefs="POWER_MANAGER ADAFRUIT_CLUE"/>
+<wire x1="27.94" y1="50.8" x2="27.94" y2="53.34" width="0.1524" layer="91" grouprefs="ADAFRUIT_CLUE POWER_MANAGER"/>
 <pinref part="C1_2" gate="G$1" pin="P$2"/>
 </segment>
 </net>
 <net name="3.3V" class="1">
 <segment>
-<wire x1="134.62" y1="45.72" x2="137.16" y2="45.72" width="0.1524" layer="91" grouprefs="POWER_MANAGER ADAFRUIT_FEATHER_NRF52840_SENSE"/>
-<wire x1="137.16" y1="45.72" x2="137.16" y2="48.26" width="0.1524" layer="91" grouprefs="POWER_MANAGER ADAFRUIT_FEATHER_NRF52840_SENSE"/>
-<wire x1="137.16" y1="38.1" x2="137.16" y2="45.72" width="0.1524" layer="91" grouprefs="POWER_MANAGER ADAFRUIT_FEATHER_NRF52840_SENSE"/>
-<junction x="137.16" y="45.72" grouprefs="POWER_MANAGER ADAFRUIT_FEATHER_NRF52840_SENSE"/>
+<wire x1="134.62" y1="45.72" x2="137.16" y2="45.72" width="0.1524" layer="91" grouprefs="ADAFRUIT_FEATHER_NRF52840_SENSE POWER_MANAGER"/>
+<wire x1="137.16" y1="45.72" x2="137.16" y2="48.26" width="0.1524" layer="91" grouprefs="ADAFRUIT_FEATHER_NRF52840_SENSE POWER_MANAGER"/>
+<wire x1="137.16" y1="38.1" x2="137.16" y2="45.72" width="0.1524" layer="91" grouprefs="ADAFRUIT_FEATHER_NRF52840_SENSE POWER_MANAGER"/>
+<junction x="137.16" y="45.72" grouprefs="ADAFRUIT_FEATHER_NRF52840_SENSE POWER_MANAGER"/>
 <pinref part="U2" gate="G$1" pin="OUT"/>
 <pinref part="U$11" gate="G$1" pin="3.3V"/>
 <pinref part="C1_9" gate="G$1" pin="P$2"/>
@@ -8198,8 +8202,8 @@ Features:
 <segment>
 <pinref part="IC2" gate="G$1" pin="VCC"/>
 <pinref part="U$55" gate="G$1" pin="3.3V"/>
-<wire x1="276.86" y1="114.3" x2="281.94" y2="114.3" width="0.1524" layer="91" grouprefs="ADAFRUIT_FEATHER_NRF52840_SENSE FLASH"/>
-<wire x1="281.94" y1="114.3" x2="281.94" y2="116.84" width="0.1524" layer="91" grouprefs="ADAFRUIT_FEATHER_NRF52840_SENSE FLASH"/>
+<wire x1="276.86" y1="114.3" x2="281.94" y2="114.3" width="0.1524" layer="91" grouprefs="FLASH ADAFRUIT_FEATHER_NRF52840_SENSE"/>
+<wire x1="281.94" y1="114.3" x2="281.94" y2="116.84" width="0.1524" layer="91" grouprefs="FLASH ADAFRUIT_FEATHER_NRF52840_SENSE"/>
 </segment>
 <segment>
 <pinref part="IC1" gate="G$1" pin="VDDIO"/>
@@ -8215,48 +8219,48 @@ Features:
 </segment>
 <segment>
 <pinref part="U$65" gate="G$1" pin="3.3V"/>
-<wire x1="241.3" y1="175.26" x2="241.3" y2="177.8" width="0.1524" layer="91" grouprefs="ACCEL/GYRO SENSORS ADAFRUIT_FEATHER_NRF52840_SENSE"/>
+<wire x1="241.3" y1="175.26" x2="241.3" y2="177.8" width="0.1524" layer="91" grouprefs="ADAFRUIT_FEATHER_NRF52840_SENSE SENSORS ACCEL/GYRO"/>
 <pinref part="R3_1" gate="G$1" pin="2"/>
 </segment>
 <segment>
 <pinref part="U$66" gate="G$1" pin="3.3V"/>
-<wire x1="236.22" y1="177.8" x2="236.22" y2="175.26" width="0.1524" layer="91" grouprefs="ACCEL/GYRO SENSORS ADAFRUIT_FEATHER_NRF52840_SENSE"/>
+<wire x1="236.22" y1="177.8" x2="236.22" y2="175.26" width="0.1524" layer="91" grouprefs="ADAFRUIT_FEATHER_NRF52840_SENSE SENSORS ACCEL/GYRO"/>
 <pinref part="R3_2" gate="G$1" pin="2"/>
 </segment>
 <segment>
 <pinref part="U1" gate="G$1" pin="VDD"/>
 <pinref part="U$62" gate="G$1" pin="3.3V"/>
-<wire x1="248.92" y1="215.9" x2="236.22" y2="215.9" width="0.1524" layer="91" grouprefs="ADAFRUIT_FEATHER_NRF52840_SENSE SENSORS LIGHT/COLOR/PROX/GESTURE"/>
-<wire x1="236.22" y1="215.9" x2="236.22" y2="218.44" width="0.1524" layer="91" grouprefs="ADAFRUIT_FEATHER_NRF52840_SENSE SENSORS LIGHT/COLOR/PROX/GESTURE"/>
+<wire x1="248.92" y1="215.9" x2="236.22" y2="215.9" width="0.1524" layer="91" grouprefs="LIGHT/COLOR/PROX/GESTURE SENSORS ADAFRUIT_FEATHER_NRF52840_SENSE"/>
+<wire x1="236.22" y1="215.9" x2="236.22" y2="218.44" width="0.1524" layer="91" grouprefs="LIGHT/COLOR/PROX/GESTURE SENSORS ADAFRUIT_FEATHER_NRF52840_SENSE"/>
 <pinref part="U1" gate="G$1" pin="LEDA"/>
-<wire x1="248.92" y1="205.74" x2="236.22" y2="205.74" width="0.1524" layer="91" grouprefs="ADAFRUIT_FEATHER_NRF52840_SENSE SENSORS LIGHT/COLOR/PROX/GESTURE"/>
-<wire x1="236.22" y1="205.74" x2="236.22" y2="215.9" width="0.1524" layer="91" grouprefs="ADAFRUIT_FEATHER_NRF52840_SENSE SENSORS LIGHT/COLOR/PROX/GESTURE"/>
-<junction x="236.22" y="215.9" grouprefs="ADAFRUIT_FEATHER_NRF52840_SENSE SENSORS LIGHT/COLOR/PROX/GESTURE"/>
+<wire x1="248.92" y1="205.74" x2="236.22" y2="205.74" width="0.1524" layer="91" grouprefs="LIGHT/COLOR/PROX/GESTURE SENSORS ADAFRUIT_FEATHER_NRF52840_SENSE"/>
+<wire x1="236.22" y1="205.74" x2="236.22" y2="215.9" width="0.1524" layer="91" grouprefs="LIGHT/COLOR/PROX/GESTURE SENSORS ADAFRUIT_FEATHER_NRF52840_SENSE"/>
+<junction x="236.22" y="215.9" grouprefs="LIGHT/COLOR/PROX/GESTURE SENSORS ADAFRUIT_FEATHER_NRF52840_SENSE"/>
 <pinref part="C3_1" gate="G$1" pin="P$2"/>
-<junction x="236.22" y="205.74" grouprefs="ADAFRUIT_FEATHER_NRF52840_SENSE SENSORS LIGHT/COLOR/PROX/GESTURE"/>
+<junction x="236.22" y="205.74" grouprefs="LIGHT/COLOR/PROX/GESTURE SENSORS ADAFRUIT_FEATHER_NRF52840_SENSE"/>
 </segment>
 <segment>
 <pinref part="DISPLAY1" gate="G$1" pin="LEDA"/>
-<wire x1="193.294" y1="237.49" x2="188.214" y2="237.49" width="0.1524" layer="91" grouprefs="CONNECTORS DISPLAY ADAFRUIT_CLUE"/>
-<wire x1="188.214" y1="237.49" x2="188.214" y2="240.03" width="0.1524" layer="91" grouprefs="CONNECTORS DISPLAY ADAFRUIT_CLUE"/>
+<wire x1="193.294" y1="237.49" x2="188.214" y2="237.49" width="0.1524" layer="91" grouprefs="ADAFRUIT_CLUE DISPLAY CONNECTORS"/>
+<wire x1="188.214" y1="237.49" x2="188.214" y2="240.03" width="0.1524" layer="91" grouprefs="ADAFRUIT_CLUE DISPLAY CONNECTORS"/>
 <pinref part="DISPLAY1" gate="G$1" pin="VDD"/>
-<wire x1="193.294" y1="229.87" x2="188.214" y2="229.87" width="0.1524" layer="91" grouprefs="CONNECTORS DISPLAY ADAFRUIT_CLUE"/>
-<wire x1="188.214" y1="229.87" x2="188.214" y2="237.49" width="0.1524" layer="91" grouprefs="CONNECTORS DISPLAY ADAFRUIT_CLUE"/>
-<junction x="188.214" y="237.49" grouprefs="CONNECTORS DISPLAY ADAFRUIT_CLUE"/>
+<wire x1="193.294" y1="229.87" x2="188.214" y2="229.87" width="0.1524" layer="91" grouprefs="ADAFRUIT_CLUE DISPLAY CONNECTORS"/>
+<wire x1="188.214" y1="229.87" x2="188.214" y2="237.49" width="0.1524" layer="91" grouprefs="ADAFRUIT_CLUE DISPLAY CONNECTORS"/>
+<junction x="188.214" y="237.49" grouprefs="ADAFRUIT_CLUE DISPLAY CONNECTORS"/>
 <pinref part="DISPLAY1" gate="G$1" pin="VDDIO"/>
-<wire x1="193.294" y1="227.33" x2="188.214" y2="227.33" width="0.1524" layer="91" grouprefs="CONNECTORS DISPLAY ADAFRUIT_CLUE"/>
-<wire x1="188.214" y1="227.33" x2="188.214" y2="229.87" width="0.1524" layer="91" grouprefs="CONNECTORS DISPLAY ADAFRUIT_CLUE"/>
-<junction x="188.214" y="229.87" grouprefs="CONNECTORS DISPLAY ADAFRUIT_CLUE"/>
+<wire x1="193.294" y1="227.33" x2="188.214" y2="227.33" width="0.1524" layer="91" grouprefs="ADAFRUIT_CLUE DISPLAY CONNECTORS"/>
+<wire x1="188.214" y1="227.33" x2="188.214" y2="229.87" width="0.1524" layer="91" grouprefs="ADAFRUIT_CLUE DISPLAY CONNECTORS"/>
+<junction x="188.214" y="229.87" grouprefs="ADAFRUIT_CLUE DISPLAY CONNECTORS"/>
 <pinref part="U$14" gate="G$1" pin="3.3V"/>
 </segment>
 <segment>
 <pinref part="DISPLAY1" gate="G$1" pin="IM1/2"/>
-<wire x1="193.294" y1="224.79" x2="178.054" y2="224.79" width="0.1524" layer="91" grouprefs="CONNECTORS DISPLAY ADAFRUIT_CLUE"/>
+<wire x1="193.294" y1="224.79" x2="178.054" y2="224.79" width="0.1524" layer="91" grouprefs="ADAFRUIT_CLUE DISPLAY CONNECTORS"/>
 <pinref part="U$68" gate="G$1" pin="3.3V"/>
 </segment>
 <segment>
 <pinref part="R5_1" gate="G$1" pin="2"/>
-<wire x1="185.674" y1="171.45" x2="185.674" y2="168.91" width="0.1524" layer="91" grouprefs="CONNECTORS DISPLAY ADAFRUIT_CLUE"/>
+<wire x1="185.674" y1="171.45" x2="185.674" y2="168.91" width="0.1524" layer="91" grouprefs="ADAFRUIT_CLUE DISPLAY CONNECTORS"/>
 <pinref part="U$70" gate="G$1" pin="3.3V"/>
 </segment>
 <segment>
@@ -8275,47 +8279,47 @@ Features:
 </segment>
 <segment>
 <pinref part="U$50" gate="G$1" pin="3.3V"/>
-<wire x1="20.32" y1="50.8" x2="20.32" y2="53.34" width="0.1524" layer="91" grouprefs="POWER_MANAGER ADAFRUIT_CLUE"/>
+<wire x1="20.32" y1="50.8" x2="20.32" y2="53.34" width="0.1524" layer="91" grouprefs="ADAFRUIT_CLUE POWER_MANAGER"/>
 <pinref part="C1_1" gate="G$1" pin="P$2"/>
 </segment>
 <segment>
-<wire x1="35.56" y1="50.8" x2="35.56" y2="53.34" width="0.1524" layer="91" grouprefs="POWER_MANAGER ADAFRUIT_CLUE"/>
+<wire x1="35.56" y1="50.8" x2="35.56" y2="53.34" width="0.1524" layer="91" grouprefs="ADAFRUIT_CLUE POWER_MANAGER"/>
 <pinref part="U$51" gate="G$1" pin="3.3V"/>
 <pinref part="C1_3" gate="G$1" pin="P$2"/>
 </segment>
 <segment>
-<wire x1="50.8" y1="50.8" x2="50.8" y2="53.34" width="0.1524" layer="91" grouprefs="POWER_MANAGER ADAFRUIT_CLUE"/>
+<wire x1="50.8" y1="50.8" x2="50.8" y2="53.34" width="0.1524" layer="91" grouprefs="ADAFRUIT_CLUE POWER_MANAGER"/>
 <pinref part="U$53" gate="G$1" pin="3.3V"/>
 <pinref part="C1_5" gate="G$1" pin="P$2"/>
 </segment>
 <segment>
 <pinref part="C1_4" gate="G$1" pin="P$2"/>
 <pinref part="U$60" gate="G$1" pin="3.3V"/>
-<wire x1="43.18" y1="53.34" x2="43.18" y2="50.8" width="0.1524" layer="91" grouprefs="POWER_MANAGER ADAFRUIT_CLUE"/>
+<wire x1="43.18" y1="53.34" x2="43.18" y2="50.8" width="0.1524" layer="91" grouprefs="ADAFRUIT_CLUE POWER_MANAGER"/>
 </segment>
 <segment>
 <pinref part="C1_6" gate="G$1" pin="P$2"/>
 <pinref part="U$69" gate="G$1" pin="3.3V"/>
-<wire x1="58.42" y1="53.34" x2="58.42" y2="50.8" width="0.1524" layer="91" grouprefs="POWER_MANAGER ADAFRUIT_CLUE"/>
+<wire x1="58.42" y1="53.34" x2="58.42" y2="50.8" width="0.1524" layer="91" grouprefs="ADAFRUIT_CLUE POWER_MANAGER"/>
 </segment>
 <segment>
 <pinref part="C1_7" gate="G$1" pin="P$2"/>
 <pinref part="U$72" gate="G$1" pin="3.3V"/>
-<wire x1="66.04" y1="53.34" x2="66.04" y2="50.8" width="0.1524" layer="91" grouprefs="POWER_MANAGER ADAFRUIT_CLUE"/>
+<wire x1="66.04" y1="53.34" x2="66.04" y2="50.8" width="0.1524" layer="91" grouprefs="ADAFRUIT_CLUE POWER_MANAGER"/>
 </segment>
 <segment>
 <pinref part="U$22" gate="G$1" pin="3.3V"/>
 <pinref part="X3" gate="G$1" pin="2"/>
-<wire x1="345.44" y1="213.36" x2="347.98" y2="213.36" width="0.1524" layer="91" grouprefs="CONNECTORS HAPTIC_MOTOR"/>
-<wire x1="347.98" y1="213.36" x2="355.6" y2="213.36" width="0.1524" layer="91" grouprefs="CONNECTORS HAPTIC_MOTOR"/>
-<wire x1="355.6" y1="213.36" x2="365.76" y2="213.36" width="0.1524" layer="91" grouprefs="CONNECTORS HAPTIC_MOTOR"/>
-<wire x1="365.76" y1="213.36" x2="365.76" y2="205.74" width="0.1524" layer="91" grouprefs="CONNECTORS HAPTIC_MOTOR"/>
+<wire x1="345.44" y1="213.36" x2="347.98" y2="213.36" width="0.1524" layer="91" grouprefs="HAPTIC_MOTOR CONNECTORS"/>
+<wire x1="347.98" y1="213.36" x2="355.6" y2="213.36" width="0.1524" layer="91" grouprefs="HAPTIC_MOTOR CONNECTORS"/>
+<wire x1="355.6" y1="213.36" x2="365.76" y2="213.36" width="0.1524" layer="91" grouprefs="HAPTIC_MOTOR CONNECTORS"/>
+<wire x1="365.76" y1="213.36" x2="365.76" y2="205.74" width="0.1524" layer="91" grouprefs="HAPTIC_MOTOR CONNECTORS"/>
 <pinref part="C2_1" gate="G$1" pin="P$2"/>
-<wire x1="355.6" y1="208.28" x2="355.6" y2="213.36" width="0.1524" layer="91" grouprefs="CONNECTORS HAPTIC_MOTOR"/>
-<junction x="355.6" y="213.36" grouprefs="CONNECTORS HAPTIC_MOTOR"/>
+<wire x1="355.6" y1="208.28" x2="355.6" y2="213.36" width="0.1524" layer="91" grouprefs="HAPTIC_MOTOR CONNECTORS"/>
+<junction x="355.6" y="213.36" grouprefs="HAPTIC_MOTOR CONNECTORS"/>
 <pinref part="DS2_1" gate="G$1" pin="C"/>
-<wire x1="347.98" y1="208.28" x2="347.98" y2="213.36" width="0.1524" layer="91" grouprefs="CONNECTORS HAPTIC_MOTOR"/>
-<junction x="347.98" y="213.36" grouprefs="CONNECTORS HAPTIC_MOTOR"/>
+<wire x1="347.98" y1="208.28" x2="347.98" y2="213.36" width="0.1524" layer="91" grouprefs="HAPTIC_MOTOR CONNECTORS"/>
+<junction x="347.98" y="213.36" grouprefs="HAPTIC_MOTOR CONNECTORS"/>
 </segment>
 <segment>
 <pinref part="U$15" gate="G$1" pin="3.3V"/>
@@ -8323,21 +8327,30 @@ Features:
 <pinref part="LED1" gate="G$1" pin="ANODE"/>
 <wire x1="330.2" y1="53.34" x2="335.28" y2="53.34" width="0.1524" layer="91"/>
 </segment>
+<segment>
+<pinref part="U$19" gate="G$1" pin="3.3V"/>
+<wire x1="87.376" y1="144.526" x2="87.376" y2="147.32" width="0.1524" layer="91"/>
+</segment>
+<segment>
+<pinref part="J2" gate="A" pin="2"/>
+<wire x1="88.9" y1="101.6" x2="104.14" y2="101.6" width="0.1524" layer="91"/>
+<label x="93.98" y="101.6" size="1.778" layer="95"/>
+</segment>
 </net>
 <net name="VBAT" class="1">
 <segment>
 <pinref part="U3" gate="G$1" pin="VBAT"/>
-<wire x1="284.48" y1="43.18" x2="264.16" y2="43.18" width="0.1524" layer="91" grouprefs="POWER_MANAGER ADAFRUIT_FEATHER_NRF52840_SENSE"/>
-<wire x1="284.48" y1="40.64" x2="284.48" y2="43.18" width="0.1524" layer="91" grouprefs="POWER_MANAGER ADAFRUIT_FEATHER_NRF52840_SENSE"/>
-<wire x1="284.48" y1="43.18" x2="292.1" y2="43.18" width="0.1524" layer="91" grouprefs="POWER_MANAGER ADAFRUIT_FEATHER_NRF52840_SENSE"/>
-<junction x="284.48" y="43.18" grouprefs="POWER_MANAGER ADAFRUIT_FEATHER_NRF52840_SENSE"/>
+<wire x1="284.48" y1="43.18" x2="264.16" y2="43.18" width="0.1524" layer="91" grouprefs="ADAFRUIT_FEATHER_NRF52840_SENSE POWER_MANAGER"/>
+<wire x1="284.48" y1="40.64" x2="284.48" y2="43.18" width="0.1524" layer="91" grouprefs="ADAFRUIT_FEATHER_NRF52840_SENSE POWER_MANAGER"/>
+<wire x1="284.48" y1="43.18" x2="292.1" y2="43.18" width="0.1524" layer="91" grouprefs="ADAFRUIT_FEATHER_NRF52840_SENSE POWER_MANAGER"/>
+<junction x="284.48" y="43.18" grouprefs="ADAFRUIT_FEATHER_NRF52840_SENSE POWER_MANAGER"/>
 <pinref part="U$3" gate="G$1" pin="VBAT"/>
-<wire x1="292.1" y1="48.26" x2="292.1" y2="43.18" width="0.1524" layer="91" grouprefs="POWER_MANAGER ADAFRUIT_FEATHER_NRF52840_SENSE"/>
+<wire x1="292.1" y1="48.26" x2="292.1" y2="43.18" width="0.1524" layer="91" grouprefs="ADAFRUIT_FEATHER_NRF52840_SENSE POWER_MANAGER"/>
 <pinref part="C1_10" gate="G$1" pin="P$2"/>
 </segment>
 <segment>
 <pinref part="U$6" gate="G$1" pin="VBAT"/>
-<wire x1="175.26" y1="50.8" x2="175.26" y2="40.64" width="0.1524" layer="91" grouprefs="POWER_MANAGER ADAFRUIT_FEATHER_NRF52840_SENSE"/>
+<wire x1="175.26" y1="50.8" x2="175.26" y2="40.64" width="0.1524" layer="91" grouprefs="ADAFRUIT_FEATHER_NRF52840_SENSE POWER_MANAGER"/>
 <pinref part="X2" gate="G$1" pin="2"/>
 </segment>
 <segment>
@@ -8353,46 +8366,46 @@ Features:
 <net name="N$1" class="0">
 <segment>
 <pinref part="LED_C" gate="G$1" pin="C"/>
-<wire x1="223.52" y1="38.1" x2="226.06" y2="38.1" width="0.1524" layer="91" grouprefs="POWER_MANAGER ADAFRUIT_FEATHER_NRF52840_SENSE"/>
+<wire x1="223.52" y1="38.1" x2="226.06" y2="38.1" width="0.1524" layer="91" grouprefs="ADAFRUIT_FEATHER_NRF52840_SENSE POWER_MANAGER"/>
 <pinref part="R1_1" gate="G$1" pin="1"/>
 </segment>
 </net>
 <net name="N$11" class="0">
 <segment>
 <pinref part="U3" gate="G$1" pin="STAT"/>
-<wire x1="236.22" y1="38.1" x2="238.76" y2="38.1" width="0.1524" layer="91" grouprefs="POWER_MANAGER ADAFRUIT_FEATHER_NRF52840_SENSE"/>
+<wire x1="236.22" y1="38.1" x2="238.76" y2="38.1" width="0.1524" layer="91" grouprefs="ADAFRUIT_FEATHER_NRF52840_SENSE POWER_MANAGER"/>
 <pinref part="R1_1" gate="G$1" pin="2"/>
 </segment>
 </net>
 <net name="N$12" class="0">
 <segment>
 <pinref part="U3" gate="G$1" pin="PROG"/>
-<wire x1="264.16" y1="40.64" x2="269.24" y2="40.64" width="0.1524" layer="91" grouprefs="POWER_MANAGER ADAFRUIT_FEATHER_NRF52840_SENSE"/>
+<wire x1="264.16" y1="40.64" x2="269.24" y2="40.64" width="0.1524" layer="91" grouprefs="ADAFRUIT_FEATHER_NRF52840_SENSE POWER_MANAGER"/>
 <pinref part="R1_2" gate="G$1" pin="1"/>
 </segment>
 </net>
 <net name="EN" class="0">
 <segment>
 <pinref part="U2" gate="G$1" pin="EN"/>
-<wire x1="114.3" y1="43.18" x2="109.22" y2="43.18" width="0.1524" layer="91" grouprefs="POWER_MANAGER ADAFRUIT_FEATHER_NRF52840_SENSE"/>
-<wire x1="109.22" y1="43.18" x2="109.22" y2="27.94" width="0.1524" layer="91" grouprefs="POWER_MANAGER ADAFRUIT_FEATHER_NRF52840_SENSE"/>
-<wire x1="109.22" y1="27.94" x2="104.14" y2="27.94" width="0.1524" layer="91" grouprefs="POWER_MANAGER ADAFRUIT_FEATHER_NRF52840_SENSE"/>
-<label x="109.22" y="43.18" size="1.778" layer="95" grouprefs="POWER_MANAGER ADAFRUIT_FEATHER_NRF52840_SENSE"/>
+<wire x1="114.3" y1="43.18" x2="109.22" y2="43.18" width="0.1524" layer="91" grouprefs="ADAFRUIT_FEATHER_NRF52840_SENSE POWER_MANAGER"/>
+<wire x1="109.22" y1="43.18" x2="109.22" y2="27.94" width="0.1524" layer="91" grouprefs="ADAFRUIT_FEATHER_NRF52840_SENSE POWER_MANAGER"/>
+<wire x1="109.22" y1="27.94" x2="104.14" y2="27.94" width="0.1524" layer="91" grouprefs="ADAFRUIT_FEATHER_NRF52840_SENSE POWER_MANAGER"/>
+<label x="109.22" y="43.18" size="1.778" layer="95" grouprefs="ADAFRUIT_FEATHER_NRF52840_SENSE POWER_MANAGER"/>
 <pinref part="RG1_1" gate="G$2" pin="1"/>
 <wire x1="104.14" y1="33.02" x2="104.14" y2="27.94" width="0.1524" layer="91"/>
 </segment>
 </net>
 <net name="VHI" class="1">
 <segment>
-<wire x1="88.9" y1="45.72" x2="91.44" y2="45.72" width="0.1524" layer="91" grouprefs="POWER_MANAGER ADAFRUIT_FEATHER_NRF52840_SENSE"/>
+<wire x1="88.9" y1="45.72" x2="91.44" y2="45.72" width="0.1524" layer="91" grouprefs="ADAFRUIT_FEATHER_NRF52840_SENSE POWER_MANAGER"/>
 <pinref part="Q1_1" gate="G$1" pin="S"/>
-<wire x1="91.44" y1="48.26" x2="91.44" y2="45.72" width="0.1524" layer="91" grouprefs="POWER_MANAGER ADAFRUIT_FEATHER_NRF52840_SENSE"/>
-<junction x="91.44" y="45.72" grouprefs="POWER_MANAGER ADAFRUIT_FEATHER_NRF52840_SENSE"/>
+<wire x1="91.44" y1="48.26" x2="91.44" y2="45.72" width="0.1524" layer="91" grouprefs="ADAFRUIT_FEATHER_NRF52840_SENSE POWER_MANAGER"/>
+<junction x="91.44" y="45.72" grouprefs="ADAFRUIT_FEATHER_NRF52840_SENSE POWER_MANAGER"/>
 <pinref part="U2" gate="G$1" pin="IN"/>
-<wire x1="91.44" y1="45.72" x2="104.14" y2="45.72" width="0.1524" layer="91" grouprefs="POWER_MANAGER ADAFRUIT_FEATHER_NRF52840_SENSE"/>
-<wire x1="104.14" y1="45.72" x2="114.3" y2="45.72" width="0.1524" layer="91" grouprefs="POWER_MANAGER ADAFRUIT_FEATHER_NRF52840_SENSE"/>
-<wire x1="91.44" y1="40.64" x2="91.44" y2="45.72" width="0.1524" layer="91" grouprefs="POWER_MANAGER ADAFRUIT_FEATHER_NRF52840_SENSE"/>
-<junction x="91.44" y="45.72" grouprefs="POWER_MANAGER ADAFRUIT_FEATHER_NRF52840_SENSE"/>
+<wire x1="91.44" y1="45.72" x2="104.14" y2="45.72" width="0.1524" layer="91" grouprefs="ADAFRUIT_FEATHER_NRF52840_SENSE POWER_MANAGER"/>
+<wire x1="104.14" y1="45.72" x2="114.3" y2="45.72" width="0.1524" layer="91" grouprefs="ADAFRUIT_FEATHER_NRF52840_SENSE POWER_MANAGER"/>
+<wire x1="91.44" y1="40.64" x2="91.44" y2="45.72" width="0.1524" layer="91" grouprefs="ADAFRUIT_FEATHER_NRF52840_SENSE POWER_MANAGER"/>
+<junction x="91.44" y="45.72" grouprefs="ADAFRUIT_FEATHER_NRF52840_SENSE POWER_MANAGER"/>
 <pinref part="C1_8" gate="G$1" pin="P$2"/>
 <pinref part="DS1_1" gate="G$1" pin="C"/>
 <pinref part="RG1_1" gate="G$2" pin="2"/>
@@ -8402,8 +8415,8 @@ Features:
 </net>
 <net name="VDIV" class="0">
 <segment>
-<wire x1="193.04" y1="38.1" x2="203.2" y2="38.1" width="0.1524" layer="91" grouprefs="POWER_MANAGER ADAFRUIT_FEATHER_NRF52840_SENSE"/>
-<label x="195.58" y="38.1" size="1.778" layer="95" grouprefs="POWER_MANAGER ADAFRUIT_FEATHER_NRF52840_SENSE"/>
+<wire x1="193.04" y1="38.1" x2="203.2" y2="38.1" width="0.1524" layer="91" grouprefs="ADAFRUIT_FEATHER_NRF52840_SENSE POWER_MANAGER"/>
+<label x="195.58" y="38.1" size="1.778" layer="95" grouprefs="ADAFRUIT_FEATHER_NRF52840_SENSE POWER_MANAGER"/>
 <pinref part="RG1_1" gate="G$3" pin="1"/>
 <wire x1="193.04" y1="35.56" x2="193.04" y2="38.1" width="0.1524" layer="91"/>
 <pinref part="RG1_1" gate="G$4" pin="1"/>
@@ -8418,8 +8431,8 @@ Features:
 </net>
 <net name="LED1" class="0">
 <segment>
-<label x="378.46" y="48.26" size="1.778" layer="95" grouprefs="ADAFRUIT_FEATHER_NRF52840_SENSE INDICATOR_LEDS"/>
-<wire x1="385.9276" y1="48.26" x2="375.92" y2="48.26" width="0.1524" layer="91" grouprefs="ADAFRUIT_FEATHER_NRF52840_SENSE INDICATOR_LEDS"/>
+<label x="378.46" y="48.26" size="1.778" layer="95" grouprefs="INDICATOR_LEDS ADAFRUIT_FEATHER_NRF52840_SENSE"/>
+<wire x1="385.9276" y1="48.26" x2="375.92" y2="48.26" width="0.1524" layer="91" grouprefs="INDICATOR_LEDS ADAFRUIT_FEATHER_NRF52840_SENSE"/>
 <pinref part="R2_1" gate="G$1" pin="2"/>
 </segment>
 <segment>
@@ -8431,8 +8444,8 @@ Features:
 <net name="QSPI_SCK" class="0">
 <segment>
 <pinref part="IC2" gate="G$1" pin="SCK"/>
-<wire x1="246.38" y1="114.3" x2="228.6" y2="114.3" width="0.1524" layer="91" grouprefs="ADAFRUIT_FEATHER_NRF52840_SENSE FLASH"/>
-<label x="231.14" y="114.3" size="1.778" layer="95" grouprefs="ADAFRUIT_FEATHER_NRF52840_SENSE FLASH"/>
+<wire x1="246.38" y1="114.3" x2="228.6" y2="114.3" width="0.1524" layer="91" grouprefs="FLASH ADAFRUIT_FEATHER_NRF52840_SENSE"/>
+<label x="231.14" y="114.3" size="1.778" layer="95" grouprefs="FLASH ADAFRUIT_FEATHER_NRF52840_SENSE"/>
 </segment>
 <segment>
 <pinref part="MDBT50Q-1MV2" gate="G$1" pin="P0.19"/>
@@ -8443,8 +8456,8 @@ Features:
 <net name="QSPI_DATA1" class="0">
 <segment>
 <pinref part="IC2" gate="G$1" pin="MISO"/>
-<wire x1="228.6" y1="109.22" x2="246.38" y2="109.22" width="0.1524" layer="91" grouprefs="ADAFRUIT_FEATHER_NRF52840_SENSE FLASH"/>
-<label x="231.14" y="109.22" size="1.778" layer="95" grouprefs="ADAFRUIT_FEATHER_NRF52840_SENSE FLASH"/>
+<wire x1="228.6" y1="109.22" x2="246.38" y2="109.22" width="0.1524" layer="91" grouprefs="FLASH ADAFRUIT_FEATHER_NRF52840_SENSE"/>
+<label x="231.14" y="109.22" size="1.778" layer="95" grouprefs="FLASH ADAFRUIT_FEATHER_NRF52840_SENSE"/>
 </segment>
 <segment>
 <pinref part="MDBT50Q-1MV2" gate="G$1" pin="P0.22"/>
@@ -8455,8 +8468,8 @@ Features:
 <net name="QSPI_DATA2" class="0">
 <segment>
 <pinref part="IC2" gate="G$1" pin="WP#/IO2"/>
-<wire x1="228.6" y1="104.14" x2="246.38" y2="104.14" width="0.1524" layer="91" grouprefs="ADAFRUIT_FEATHER_NRF52840_SENSE FLASH"/>
-<label x="231.14" y="104.14" size="1.778" layer="95" grouprefs="ADAFRUIT_FEATHER_NRF52840_SENSE FLASH"/>
+<wire x1="228.6" y1="104.14" x2="246.38" y2="104.14" width="0.1524" layer="91" grouprefs="FLASH ADAFRUIT_FEATHER_NRF52840_SENSE"/>
+<label x="231.14" y="104.14" size="1.778" layer="95" grouprefs="FLASH ADAFRUIT_FEATHER_NRF52840_SENSE"/>
 </segment>
 <segment>
 <pinref part="MDBT50Q-1MV2" gate="G$1" pin="P0.23"/>
@@ -8467,8 +8480,8 @@ Features:
 <net name="QSPI_DATA3" class="0">
 <segment>
 <pinref part="IC2" gate="G$1" pin="HOLD#/IO3"/>
-<wire x1="228.6" y1="101.6" x2="246.38" y2="101.6" width="0.1524" layer="91" grouprefs="ADAFRUIT_FEATHER_NRF52840_SENSE FLASH"/>
-<label x="231.14" y="101.6" size="1.778" layer="95" grouprefs="ADAFRUIT_FEATHER_NRF52840_SENSE FLASH"/>
+<wire x1="228.6" y1="101.6" x2="246.38" y2="101.6" width="0.1524" layer="91" grouprefs="FLASH ADAFRUIT_FEATHER_NRF52840_SENSE"/>
+<label x="231.14" y="101.6" size="1.778" layer="95" grouprefs="FLASH ADAFRUIT_FEATHER_NRF52840_SENSE"/>
 </segment>
 <segment>
 <pinref part="MDBT50Q-1MV2" gate="G$1" pin="P0.21"/>
@@ -8479,8 +8492,8 @@ Features:
 <net name="QSPI_CS" class="0">
 <segment>
 <pinref part="IC2" gate="G$1" pin="SSEL"/>
-<wire x1="228.6" y1="106.68" x2="246.38" y2="106.68" width="0.1524" layer="91" grouprefs="ADAFRUIT_FEATHER_NRF52840_SENSE FLASH"/>
-<label x="231.14" y="106.68" size="1.778" layer="95" grouprefs="ADAFRUIT_FEATHER_NRF52840_SENSE FLASH"/>
+<wire x1="228.6" y1="106.68" x2="246.38" y2="106.68" width="0.1524" layer="91" grouprefs="FLASH ADAFRUIT_FEATHER_NRF52840_SENSE"/>
+<label x="231.14" y="106.68" size="1.778" layer="95" grouprefs="FLASH ADAFRUIT_FEATHER_NRF52840_SENSE"/>
 </segment>
 <segment>
 <pinref part="MDBT50Q-1MV2" gate="G$1" pin="P0.20"/>
@@ -8491,8 +8504,8 @@ Features:
 <net name="QSPI_DATA0" class="0">
 <segment>
 <pinref part="IC2" gate="G$1" pin="MOSI"/>
-<wire x1="246.38" y1="111.76" x2="228.6" y2="111.76" width="0.1524" layer="91" grouprefs="ADAFRUIT_FEATHER_NRF52840_SENSE FLASH"/>
-<label x="231.14" y="111.76" size="1.778" layer="95" grouprefs="ADAFRUIT_FEATHER_NRF52840_SENSE FLASH"/>
+<wire x1="246.38" y1="111.76" x2="228.6" y2="111.76" width="0.1524" layer="91" grouprefs="FLASH ADAFRUIT_FEATHER_NRF52840_SENSE"/>
+<label x="231.14" y="111.76" size="1.778" layer="95" grouprefs="FLASH ADAFRUIT_FEATHER_NRF52840_SENSE"/>
 </segment>
 <segment>
 <pinref part="MDBT50Q-1MV2" gate="G$1" pin="P0.17"/>
@@ -8502,34 +8515,34 @@ Features:
 </net>
 <net name="D+" class="0">
 <segment>
-<wire x1="43.18" y1="106.68" x2="53.34" y2="106.68" width="0.1524" layer="91" grouprefs="CONNECTORS ADAFRUIT_FEATHER_NRF52840_SENSE USB"/>
-<wire x1="53.34" y1="106.68" x2="53.34" y2="109.22" width="0.1524" layer="91" grouprefs="CONNECTORS ADAFRUIT_FEATHER_NRF52840_SENSE USB"/>
-<wire x1="53.34" y1="109.22" x2="55.88" y2="109.22" width="0.1524" layer="91" grouprefs="CONNECTORS ADAFRUIT_FEATHER_NRF52840_SENSE USB"/>
+<wire x1="43.18" y1="106.68" x2="53.34" y2="106.68" width="0.1524" layer="91" grouprefs="USB ADAFRUIT_FEATHER_NRF52840_SENSE CONNECTORS"/>
+<wire x1="53.34" y1="106.68" x2="53.34" y2="109.22" width="0.1524" layer="91" grouprefs="USB ADAFRUIT_FEATHER_NRF52840_SENSE CONNECTORS"/>
+<wire x1="53.34" y1="109.22" x2="55.88" y2="109.22" width="0.1524" layer="91" grouprefs="USB ADAFRUIT_FEATHER_NRF52840_SENSE CONNECTORS"/>
 <pinref part="R4_2" gate="G$1" pin="1"/>
 <pinref part="D+" gate="G$1" pin="TP"/>
-<junction x="55.88" y="109.22" grouprefs="CONNECTORS ADAFRUIT_FEATHER_NRF52840_SENSE USB"/>
+<junction x="55.88" y="109.22" grouprefs="USB ADAFRUIT_FEATHER_NRF52840_SENSE CONNECTORS"/>
 <pinref part="X1" gate="G$1" pin="D+"/>
 </segment>
 </net>
 <net name="D-" class="0">
 <segment>
-<wire x1="43.18" y1="104.14" x2="55.88" y2="104.14" width="0.1524" layer="91" grouprefs="CONNECTORS ADAFRUIT_FEATHER_NRF52840_SENSE USB"/>
+<wire x1="43.18" y1="104.14" x2="55.88" y2="104.14" width="0.1524" layer="91" grouprefs="USB ADAFRUIT_FEATHER_NRF52840_SENSE CONNECTORS"/>
 <pinref part="R4_1" gate="G$1" pin="1"/>
 <pinref part="D-" gate="G$1" pin="TP"/>
-<junction x="55.88" y="104.14" grouprefs="CONNECTORS ADAFRUIT_FEATHER_NRF52840_SENSE USB"/>
+<junction x="55.88" y="104.14" grouprefs="USB ADAFRUIT_FEATHER_NRF52840_SENSE CONNECTORS"/>
 <pinref part="X1" gate="G$1" pin="D-"/>
 </segment>
 </net>
 <net name="SDA" class="0">
 <segment>
 <pinref part="IC1" gate="G$1" pin="SDA"/>
-<wire x1="251.46" y1="165.1" x2="241.3" y2="165.1" width="0.1524" layer="91" grouprefs="ACCEL/GYRO SENSORS ADAFRUIT_FEATHER_NRF52840_SENSE"/>
-<label x="246.38" y="165.1" size="1.778" layer="95" grouprefs="ACCEL/GYRO SENSORS ADAFRUIT_FEATHER_NRF52840_SENSE"/>
+<wire x1="251.46" y1="165.1" x2="241.3" y2="165.1" width="0.1524" layer="91" grouprefs="ADAFRUIT_FEATHER_NRF52840_SENSE SENSORS ACCEL/GYRO"/>
+<label x="246.38" y="165.1" size="1.778" layer="95" grouprefs="ADAFRUIT_FEATHER_NRF52840_SENSE SENSORS ACCEL/GYRO"/>
 <pinref part="R3_1" gate="G$1" pin="1"/>
 </segment>
 <segment>
 <pinref part="U1" gate="G$1" pin="SDA"/>
-<wire x1="274.32" y1="205.74" x2="279.4" y2="205.74" width="0.1524" layer="91" grouprefs="SENSORS LIGHT/COLOR/PROX/GESTURE"/>
+<wire x1="274.32" y1="205.74" x2="279.4" y2="205.74" width="0.1524" layer="91" grouprefs="LIGHT/COLOR/PROX/GESTURE SENSORS"/>
 </segment>
 <segment>
 <pinref part="MDBT50Q-1MV2" gate="G$1" pin="P1.03"/>
@@ -8540,14 +8553,14 @@ Features:
 <net name="SCL" class="0">
 <segment>
 <pinref part="IC1" gate="G$1" pin="SCL"/>
-<label x="246.38" y="162.56" size="1.778" layer="95" grouprefs="ACCEL/GYRO SENSORS ADAFRUIT_FEATHER_NRF52840_SENSE"/>
-<wire x1="236.22" y1="165.1" x2="236.22" y2="162.56" width="0.1524" layer="91" grouprefs="ACCEL/GYRO SENSORS ADAFRUIT_FEATHER_NRF52840_SENSE"/>
-<wire x1="236.22" y1="162.56" x2="251.46" y2="162.56" width="0.1524" layer="91" grouprefs="ACCEL/GYRO SENSORS ADAFRUIT_FEATHER_NRF52840_SENSE"/>
+<label x="246.38" y="162.56" size="1.778" layer="95" grouprefs="ADAFRUIT_FEATHER_NRF52840_SENSE SENSORS ACCEL/GYRO"/>
+<wire x1="236.22" y1="165.1" x2="236.22" y2="162.56" width="0.1524" layer="91" grouprefs="ADAFRUIT_FEATHER_NRF52840_SENSE SENSORS ACCEL/GYRO"/>
+<wire x1="236.22" y1="162.56" x2="251.46" y2="162.56" width="0.1524" layer="91" grouprefs="ADAFRUIT_FEATHER_NRF52840_SENSE SENSORS ACCEL/GYRO"/>
 <pinref part="R3_2" gate="G$1" pin="1"/>
 </segment>
 <segment>
 <pinref part="U1" gate="G$1" pin="SCL"/>
-<wire x1="274.32" y1="208.28" x2="279.4" y2="208.28" width="0.1524" layer="91" grouprefs="SENSORS LIGHT/COLOR/PROX/GESTURE"/>
+<wire x1="274.32" y1="208.28" x2="279.4" y2="208.28" width="0.1524" layer="91" grouprefs="LIGHT/COLOR/PROX/GESTURE SENSORS"/>
 </segment>
 <segment>
 <pinref part="MDBT50Q-1MV2" gate="G$1" pin="P1.01"/>
@@ -8558,17 +8571,17 @@ Features:
 <net name="N$2" class="0">
 <segment>
 <pinref part="U1" gate="G$1" pin="LEDK"/>
-<wire x1="274.32" y1="215.9" x2="276.86" y2="215.9" width="0.1524" layer="91" grouprefs="ADAFRUIT_FEATHER_NRF52840_SENSE SENSORS LIGHT/COLOR/PROX/GESTURE"/>
-<wire x1="276.86" y1="215.9" x2="276.86" y2="213.36" width="0.1524" layer="91" grouprefs="ADAFRUIT_FEATHER_NRF52840_SENSE SENSORS LIGHT/COLOR/PROX/GESTURE"/>
+<wire x1="274.32" y1="215.9" x2="276.86" y2="215.9" width="0.1524" layer="91" grouprefs="LIGHT/COLOR/PROX/GESTURE SENSORS ADAFRUIT_FEATHER_NRF52840_SENSE"/>
+<wire x1="276.86" y1="215.9" x2="276.86" y2="213.36" width="0.1524" layer="91" grouprefs="LIGHT/COLOR/PROX/GESTURE SENSORS ADAFRUIT_FEATHER_NRF52840_SENSE"/>
 <pinref part="U1" gate="G$1" pin="LDR"/>
-<wire x1="276.86" y1="213.36" x2="274.32" y2="213.36" width="0.1524" layer="91" grouprefs="ADAFRUIT_FEATHER_NRF52840_SENSE SENSORS LIGHT/COLOR/PROX/GESTURE"/>
+<wire x1="276.86" y1="213.36" x2="274.32" y2="213.36" width="0.1524" layer="91" grouprefs="LIGHT/COLOR/PROX/GESTURE SENSORS ADAFRUIT_FEATHER_NRF52840_SENSE"/>
 </segment>
 </net>
 <net name="APDS_IRQ" class="0">
 <segment>
 <pinref part="U1" gate="G$1" pin="INT"/>
-<wire x1="274.32" y1="210.82" x2="287.02" y2="210.82" width="0.1524" layer="91" grouprefs="ADAFRUIT_FEATHER_NRF52840_SENSE SENSORS LIGHT/COLOR/PROX/GESTURE"/>
-<label x="276.86" y="210.82" size="1.778" layer="95" grouprefs="ADAFRUIT_FEATHER_NRF52840_SENSE SENSORS LIGHT/COLOR/PROX/GESTURE"/>
+<wire x1="274.32" y1="210.82" x2="287.02" y2="210.82" width="0.1524" layer="91" grouprefs="LIGHT/COLOR/PROX/GESTURE SENSORS ADAFRUIT_FEATHER_NRF52840_SENSE"/>
+<label x="276.86" y="210.82" size="1.778" layer="95" grouprefs="LIGHT/COLOR/PROX/GESTURE SENSORS ADAFRUIT_FEATHER_NRF52840_SENSE"/>
 </segment>
 <segment>
 <pinref part="MDBT50Q-1MV2" gate="G$1" pin="P1.04"/>
@@ -8579,16 +8592,16 @@ Features:
 <net name="RESET" class="0">
 <segment>
 <pinref part="SW_R" gate="G$1" pin="S1"/>
-<wire x1="355.6" y1="144.78" x2="355.6" y2="142.24" width="0.1524" layer="91" grouprefs="SWITCHES SENSORS"/>
+<wire x1="355.6" y1="144.78" x2="355.6" y2="142.24" width="0.1524" layer="91" grouprefs="SENSORS SWITCHES"/>
 <pinref part="SW_R" gate="G$1" pin="S"/>
-<junction x="355.6" y="144.78" grouprefs="SWITCHES SENSORS"/>
-<label x="358.14" y="144.78" size="1.778" layer="95" grouprefs="SWITCHES SENSORS"/>
-<wire x1="355.6" y1="144.78" x2="368.3" y2="144.78" width="0.1524" layer="91" grouprefs="SWITCHES SENSORS"/>
+<junction x="355.6" y="144.78" grouprefs="SENSORS SWITCHES"/>
+<label x="358.14" y="144.78" size="1.778" layer="95" grouprefs="SENSORS SWITCHES"/>
+<wire x1="355.6" y1="144.78" x2="368.3" y2="144.78" width="0.1524" layer="91" grouprefs="SENSORS SWITCHES"/>
 </segment>
 <segment>
 <pinref part="J2" gate="A" pin="3"/>
-<wire x1="88.9" y1="104.14" x2="104.14" y2="104.14" width="0.1524" layer="91" grouprefs="CONNECTORS SWD_DEBUDDER"/>
-<label x="93.98" y="104.14" size="1.778" layer="95" grouprefs="CONNECTORS SWD_DEBUDDER"/>
+<wire x1="88.9" y1="104.14" x2="104.14" y2="104.14" width="0.1524" layer="91" grouprefs="SWD_DEBUDDER CONNECTORS"/>
+<label x="93.98" y="104.14" size="1.778" layer="95" grouprefs="SWD_DEBUDDER CONNECTORS"/>
 </segment>
 <segment>
 <pinref part="MDBT50Q-1MV2" gate="G$1" pin="P0.18/RESET"/>
@@ -8599,11 +8612,11 @@ Features:
 <net name="SWITCH_A" class="0">
 <segment>
 <pinref part="SW_1" gate="G$1" pin="S1"/>
-<wire x1="337.82" y1="124.46" x2="337.82" y2="121.92" width="0.1524" layer="91" grouprefs="SWITCHES SENSORS"/>
+<wire x1="337.82" y1="124.46" x2="337.82" y2="121.92" width="0.1524" layer="91" grouprefs="SENSORS SWITCHES"/>
 <pinref part="SW_1" gate="G$1" pin="S"/>
-<junction x="337.82" y="124.46" grouprefs="SWITCHES SENSORS"/>
-<label x="340.36" y="124.46" size="1.778" layer="95" grouprefs="SWITCHES SENSORS"/>
-<wire x1="337.82" y1="124.46" x2="353.06" y2="124.46" width="0.1524" layer="91" grouprefs="SWITCHES SENSORS"/>
+<junction x="337.82" y="124.46" grouprefs="SENSORS SWITCHES"/>
+<label x="340.36" y="124.46" size="1.778" layer="95" grouprefs="SENSORS SWITCHES"/>
+<wire x1="337.82" y1="124.46" x2="353.06" y2="124.46" width="0.1524" layer="91" grouprefs="SENSORS SWITCHES"/>
 </segment>
 <segment>
 <pinref part="MDBT50Q-1MV2" gate="G$1" pin="P1.11"/>
@@ -8615,10 +8628,10 @@ Features:
 <segment>
 <pinref part="SW_2" gate="G$1" pin="S1"/>
 <pinref part="SW_2" gate="G$1" pin="S"/>
-<wire x1="370.84" y1="121.92" x2="370.84" y2="124.46" width="0.1524" layer="91" grouprefs="SWITCHES SENSORS"/>
-<wire x1="370.84" y1="124.46" x2="386.08" y2="124.46" width="0.1524" layer="91" grouprefs="SWITCHES SENSORS"/>
-<junction x="370.84" y="124.46" grouprefs="SWITCHES SENSORS"/>
-<label x="373.38" y="124.46" size="1.778" layer="95" grouprefs="SWITCHES SENSORS"/>
+<wire x1="370.84" y1="121.92" x2="370.84" y2="124.46" width="0.1524" layer="91" grouprefs="SENSORS SWITCHES"/>
+<wire x1="370.84" y1="124.46" x2="386.08" y2="124.46" width="0.1524" layer="91" grouprefs="SENSORS SWITCHES"/>
+<junction x="370.84" y="124.46" grouprefs="SENSORS SWITCHES"/>
+<label x="373.38" y="124.46" size="1.778" layer="95" grouprefs="SENSORS SWITCHES"/>
 </segment>
 <segment>
 <pinref part="MDBT50Q-1MV2" gate="G$1" pin="P1.12"/>
@@ -8630,10 +8643,10 @@ Features:
 <segment>
 <pinref part="SW_4" gate="G$1" pin="S1"/>
 <pinref part="SW_4" gate="G$1" pin="S"/>
-<wire x1="370.84" y1="101.6" x2="370.84" y2="104.14" width="0.1524" layer="91" grouprefs="SWITCHES SENSORS"/>
-<junction x="370.84" y="104.14" grouprefs="SWITCHES SENSORS"/>
-<wire x1="386.08" y1="104.14" x2="370.84" y2="104.14" width="0.1524" layer="91" grouprefs="SWITCHES SENSORS"/>
-<label x="373.38" y="104.14" size="1.778" layer="95" grouprefs="SWITCHES SENSORS"/>
+<wire x1="370.84" y1="101.6" x2="370.84" y2="104.14" width="0.1524" layer="91" grouprefs="SENSORS SWITCHES"/>
+<junction x="370.84" y="104.14" grouprefs="SENSORS SWITCHES"/>
+<wire x1="386.08" y1="104.14" x2="370.84" y2="104.14" width="0.1524" layer="91" grouprefs="SENSORS SWITCHES"/>
+<label x="373.38" y="104.14" size="1.778" layer="95" grouprefs="SENSORS SWITCHES"/>
 </segment>
 <segment>
 <pinref part="MDBT50Q-1MV2" gate="G$1" pin="P1.14"/>
@@ -8645,10 +8658,10 @@ Features:
 <segment>
 <pinref part="SW_3" gate="G$1" pin="S1"/>
 <pinref part="SW_3" gate="G$1" pin="S"/>
-<wire x1="337.82" y1="101.6" x2="337.82" y2="104.14" width="0.1524" layer="91" grouprefs="SWITCHES SENSORS"/>
-<wire x1="337.82" y1="104.14" x2="353.06" y2="104.14" width="0.1524" layer="91" grouprefs="SWITCHES SENSORS"/>
-<junction x="337.82" y="104.14" grouprefs="SWITCHES SENSORS"/>
-<label x="340.36" y="104.14" size="1.778" layer="95" grouprefs="SWITCHES SENSORS"/>
+<wire x1="337.82" y1="101.6" x2="337.82" y2="104.14" width="0.1524" layer="91" grouprefs="SENSORS SWITCHES"/>
+<wire x1="337.82" y1="104.14" x2="353.06" y2="104.14" width="0.1524" layer="91" grouprefs="SENSORS SWITCHES"/>
+<junction x="337.82" y="104.14" grouprefs="SENSORS SWITCHES"/>
+<label x="340.36" y="104.14" size="1.778" layer="95" grouprefs="SENSORS SWITCHES"/>
 </segment>
 <segment>
 <pinref part="MDBT50Q-1MV2" gate="G$1" pin="P1.13"/>
@@ -8659,8 +8672,8 @@ Features:
 <net name="TFT_SCK" class="0">
 <segment>
 <pinref part="DISPLAY1" gate="G$1" pin="D/!C"/>
-<label x="188.214" y="217.17" size="1.778" layer="95" rot="MR0" grouprefs="CONNECTORS DISPLAY ADAFRUIT_CLUE"/>
-<wire x1="193.294" y1="217.17" x2="172.974" y2="217.17" width="0.1524" layer="91" grouprefs="CONNECTORS DISPLAY ADAFRUIT_CLUE"/>
+<label x="188.214" y="217.17" size="1.778" layer="95" rot="MR0" grouprefs="ADAFRUIT_CLUE DISPLAY CONNECTORS"/>
+<wire x1="193.294" y1="217.17" x2="172.974" y2="217.17" width="0.1524" layer="91" grouprefs="ADAFRUIT_CLUE DISPLAY CONNECTORS"/>
 </segment>
 <segment>
 <pinref part="MDBT50Q-1MV2" gate="G$1" pin="P0.26"/>
@@ -8670,8 +8683,8 @@ Features:
 <net name="TFT_MOSI" class="0">
 <segment>
 <pinref part="DISPLAY1" gate="G$1" pin="SDI"/>
-<label x="188.214" y="209.55" size="1.778" layer="95" rot="MR0" grouprefs="CONNECTORS DISPLAY ADAFRUIT_CLUE"/>
-<wire x1="193.294" y1="209.55" x2="172.974" y2="209.55" width="0.1524" layer="91" grouprefs="CONNECTORS DISPLAY ADAFRUIT_CLUE"/>
+<label x="188.214" y="209.55" size="1.778" layer="95" rot="MR0" grouprefs="ADAFRUIT_CLUE DISPLAY CONNECTORS"/>
+<wire x1="193.294" y1="209.55" x2="172.974" y2="209.55" width="0.1524" layer="91" grouprefs="ADAFRUIT_CLUE DISPLAY CONNECTORS"/>
 </segment>
 <segment>
 <pinref part="MDBT50Q-1MV2" gate="G$1" pin="P0.06"/>
@@ -8681,20 +8694,20 @@ Features:
 <net name="LEDK" class="0">
 <segment>
 <pinref part="DISPLAY1" gate="G$1" pin="LEDK"/>
-<wire x1="193.294" y1="234.95" x2="165.354" y2="234.95" width="0.1524" layer="91" grouprefs="CONNECTORS DISPLAY ADAFRUIT_CLUE"/>
-<label x="178.054" y="234.95" size="1.778" layer="95" rot="MR0" grouprefs="CONNECTORS DISPLAY ADAFRUIT_CLUE"/>
-<wire x1="165.354" y1="234.95" x2="165.354" y2="186.69" width="0.1524" layer="91" grouprefs="CONNECTORS DISPLAY ADAFRUIT_CLUE"/>
-<wire x1="165.354" y1="186.69" x2="178.054" y2="186.69" width="0.1524" layer="91" grouprefs="CONNECTORS DISPLAY ADAFRUIT_CLUE"/>
+<wire x1="193.294" y1="234.95" x2="165.354" y2="234.95" width="0.1524" layer="91" grouprefs="ADAFRUIT_CLUE DISPLAY CONNECTORS"/>
+<label x="178.054" y="234.95" size="1.778" layer="95" rot="MR0" grouprefs="ADAFRUIT_CLUE DISPLAY CONNECTORS"/>
+<wire x1="165.354" y1="234.95" x2="165.354" y2="186.69" width="0.1524" layer="91" grouprefs="ADAFRUIT_CLUE DISPLAY CONNECTORS"/>
+<wire x1="165.354" y1="186.69" x2="178.054" y2="186.69" width="0.1524" layer="91" grouprefs="ADAFRUIT_CLUE DISPLAY CONNECTORS"/>
 <pinref part="R5_2" gate="G$1" pin="2"/>
-<wire x1="178.054" y1="176.53" x2="178.054" y2="186.69" width="0.1524" layer="91" grouprefs="CONNECTORS DISPLAY ADAFRUIT_CLUE"/>
-<label x="172.974" y="189.23" size="1.778" layer="95" rot="R180" grouprefs="CONNECTORS DISPLAY ADAFRUIT_CLUE"/>
+<wire x1="178.054" y1="176.53" x2="178.054" y2="186.69" width="0.1524" layer="91" grouprefs="ADAFRUIT_CLUE DISPLAY CONNECTORS"/>
+<label x="172.974" y="189.23" size="1.778" layer="95" rot="R180" grouprefs="ADAFRUIT_CLUE DISPLAY CONNECTORS"/>
 </segment>
 </net>
 <net name="TFT_DC" class="0">
 <segment>
 <pinref part="DISPLAY1" gate="G$1" pin="WR"/>
-<label x="188.214" y="214.63" size="1.778" layer="95" rot="MR0" grouprefs="CONNECTORS DISPLAY ADAFRUIT_CLUE"/>
-<wire x1="193.294" y1="214.63" x2="172.974" y2="214.63" width="0.1524" layer="91" grouprefs="CONNECTORS DISPLAY ADAFRUIT_CLUE"/>
+<label x="188.214" y="214.63" size="1.778" layer="95" rot="MR0" grouprefs="ADAFRUIT_CLUE DISPLAY CONNECTORS"/>
+<wire x1="193.294" y1="214.63" x2="172.974" y2="214.63" width="0.1524" layer="91" grouprefs="ADAFRUIT_CLUE DISPLAY CONNECTORS"/>
 </segment>
 <segment>
 <pinref part="MDBT50Q-1MV2" gate="G$1" pin="P0.04/AIN2"/>
@@ -8704,8 +8717,8 @@ Features:
 <net name="TFT_CS" class="0">
 <segment>
 <pinref part="DISPLAY1" gate="G$1" pin="!CS"/>
-<label x="188.214" y="219.71" size="1.778" layer="95" rot="MR0" grouprefs="CONNECTORS DISPLAY ADAFRUIT_CLUE"/>
-<wire x1="193.294" y1="219.71" x2="172.974" y2="219.71" width="0.1524" layer="91" grouprefs="CONNECTORS DISPLAY ADAFRUIT_CLUE"/>
+<label x="188.214" y="219.71" size="1.778" layer="95" rot="MR0" grouprefs="ADAFRUIT_CLUE DISPLAY CONNECTORS"/>
+<wire x1="193.294" y1="219.71" x2="172.974" y2="219.71" width="0.1524" layer="91" grouprefs="ADAFRUIT_CLUE DISPLAY CONNECTORS"/>
 </segment>
 <segment>
 <pinref part="MDBT50Q-1MV2" gate="G$1" pin="P0.01/XL2"/>
@@ -8715,8 +8728,8 @@ Features:
 <net name="TFT_RESET" class="0">
 <segment>
 <pinref part="DISPLAY1" gate="G$1" pin="!RESET"/>
-<label x="188.214" y="222.25" size="1.778" layer="95" rot="MR0" grouprefs="CONNECTORS DISPLAY ADAFRUIT_CLUE"/>
-<wire x1="193.294" y1="222.25" x2="172.974" y2="222.25" width="0.1524" layer="91" grouprefs="CONNECTORS DISPLAY ADAFRUIT_CLUE"/>
+<label x="188.214" y="222.25" size="1.778" layer="95" rot="MR0" grouprefs="ADAFRUIT_CLUE DISPLAY CONNECTORS"/>
+<wire x1="193.294" y1="222.25" x2="172.974" y2="222.25" width="0.1524" layer="91" grouprefs="ADAFRUIT_CLUE DISPLAY CONNECTORS"/>
 </segment>
 <segment>
 <pinref part="MDBT50Q-1MV2" gate="G$1" pin="P0.00/XL1"/>
@@ -8725,16 +8738,16 @@ Features:
 </net>
 <net name="TFT_BACKLIGHT" class="0">
 <segment>
-<wire x1="185.674" y1="158.75" x2="188.214" y2="158.75" width="0.1524" layer="91" grouprefs="CONNECTORS DISPLAY ADAFRUIT_CLUE"/>
-<label x="190.754" y="179.324" size="1.778" layer="95" rot="R270" grouprefs="CONNECTORS DISPLAY ADAFRUIT_CLUE"/>
-<wire x1="183.134" y1="158.75" x2="185.674" y2="158.75" width="0.1524" layer="91" grouprefs="CONNECTORS DISPLAY ADAFRUIT_CLUE"/>
+<wire x1="185.674" y1="158.75" x2="188.214" y2="158.75" width="0.1524" layer="91" grouprefs="ADAFRUIT_CLUE DISPLAY CONNECTORS"/>
+<label x="190.754" y="179.324" size="1.778" layer="95" rot="R270" grouprefs="ADAFRUIT_CLUE DISPLAY CONNECTORS"/>
+<wire x1="183.134" y1="158.75" x2="185.674" y2="158.75" width="0.1524" layer="91" grouprefs="ADAFRUIT_CLUE DISPLAY CONNECTORS"/>
 <pinref part="R5_1" gate="G$1" pin="1"/>
-<junction x="185.674" y="158.75" grouprefs="CONNECTORS DISPLAY ADAFRUIT_CLUE"/>
+<junction x="185.674" y="158.75" grouprefs="ADAFRUIT_CLUE DISPLAY CONNECTORS"/>
 <pinref part="Q5_1" gate="G$1" pin="G"/>
-<wire x1="188.214" y1="158.75" x2="188.214" y2="191.77" width="0.1524" layer="91" grouprefs="CONNECTORS DISPLAY ADAFRUIT_CLUE"/>
-<wire x1="188.214" y1="191.77" x2="170.434" y2="191.77" width="0.1524" layer="91" grouprefs="CONNECTORS DISPLAY ADAFRUIT_CLUE"/>
-<wire x1="170.434" y1="191.77" x2="170.434" y2="207.01" width="0.1524" layer="91" grouprefs="CONNECTORS DISPLAY ADAFRUIT_CLUE"/>
-<wire x1="170.434" y1="207.01" x2="172.974" y2="207.01" width="0.1524" layer="91" grouprefs="CONNECTORS DISPLAY ADAFRUIT_CLUE"/>
+<wire x1="188.214" y1="158.75" x2="188.214" y2="191.77" width="0.1524" layer="91" grouprefs="ADAFRUIT_CLUE DISPLAY CONNECTORS"/>
+<wire x1="188.214" y1="191.77" x2="170.434" y2="191.77" width="0.1524" layer="91" grouprefs="ADAFRUIT_CLUE DISPLAY CONNECTORS"/>
+<wire x1="170.434" y1="191.77" x2="170.434" y2="207.01" width="0.1524" layer="91" grouprefs="ADAFRUIT_CLUE DISPLAY CONNECTORS"/>
+<wire x1="170.434" y1="207.01" x2="172.974" y2="207.01" width="0.1524" layer="91" grouprefs="ADAFRUIT_CLUE DISPLAY CONNECTORS"/>
 </segment>
 <segment>
 <pinref part="MDBT50Q-1MV2" gate="G$1" pin="P0.27"/>
@@ -8750,8 +8763,8 @@ Features:
 <net name="SWIO" class="0">
 <segment>
 <pinref part="J2" gate="A" pin="6"/>
-<wire x1="88.9" y1="111.76" x2="104.14" y2="111.76" width="0.1524" layer="91" grouprefs="CONNECTORS SWD_DEBUDDER"/>
-<label x="93.98" y="111.76" size="1.778" layer="95" grouprefs="CONNECTORS SWD_DEBUDDER"/>
+<wire x1="88.9" y1="111.76" x2="104.14" y2="111.76" width="0.1524" layer="91" grouprefs="SWD_DEBUDDER CONNECTORS"/>
+<label x="93.98" y="111.76" size="1.778" layer="95" grouprefs="SWD_DEBUDDER CONNECTORS"/>
 </segment>
 <segment>
 <pinref part="MDBT50Q-1MV2" gate="G$1" pin="SWDIO"/>
@@ -8762,8 +8775,8 @@ Features:
 <net name="SWCLK" class="0">
 <segment>
 <pinref part="J2" gate="A" pin="5"/>
-<wire x1="88.9" y1="109.22" x2="104.14" y2="109.22" width="0.1524" layer="91" grouprefs="CONNECTORS SWD_DEBUDDER"/>
-<label x="93.98" y="109.22" size="1.778" layer="95" grouprefs="CONNECTORS SWD_DEBUDDER"/>
+<wire x1="88.9" y1="109.22" x2="104.14" y2="109.22" width="0.1524" layer="91" grouprefs="SWD_DEBUDDER CONNECTORS"/>
+<label x="93.98" y="109.22" size="1.778" layer="95" grouprefs="SWD_DEBUDDER CONNECTORS"/>
 </segment>
 <segment>
 <pinref part="MDBT50Q-1MV2" gate="G$1" pin="SWDCLK"/>
@@ -8774,8 +8787,8 @@ Features:
 <net name="SWO" class="0">
 <segment>
 <pinref part="J2" gate="A" pin="4"/>
-<wire x1="88.9" y1="106.68" x2="104.14" y2="106.68" width="0.1524" layer="91" grouprefs="CONNECTORS SWD_DEBUDDER"/>
-<label x="93.98" y="106.68" size="1.778" layer="95" grouprefs="CONNECTORS SWD_DEBUDDER"/>
+<wire x1="88.9" y1="106.68" x2="104.14" y2="106.68" width="0.1524" layer="91" grouprefs="SWD_DEBUDDER CONNECTORS"/>
+<label x="93.98" y="106.68" size="1.778" layer="95" grouprefs="SWD_DEBUDDER CONNECTORS"/>
 </segment>
 <segment>
 <pinref part="MDBT50Q-1MV2" gate="G$1" pin="P1.00"/>
@@ -8794,7 +8807,7 @@ Features:
 <net name="USBD+" class="0">
 <segment>
 <pinref part="R4_2" gate="G$1" pin="2"/>
-<wire x1="66.04" y1="109.22" x2="68.58" y2="109.22" width="0.1524" layer="91" grouprefs="CONNECTORS USB"/>
+<wire x1="66.04" y1="109.22" x2="68.58" y2="109.22" width="0.1524" layer="91" grouprefs="USB CONNECTORS"/>
 </segment>
 <segment>
 <pinref part="MDBT50Q-1MV2" gate="G$1" pin="D+"/>
@@ -8804,7 +8817,7 @@ Features:
 <net name="USBD-" class="0">
 <segment>
 <pinref part="R4_1" gate="G$1" pin="2"/>
-<wire x1="66.04" y1="104.14" x2="68.58" y2="104.14" width="0.1524" layer="91" grouprefs="CONNECTORS USB"/>
+<wire x1="66.04" y1="104.14" x2="68.58" y2="104.14" width="0.1524" layer="91" grouprefs="USB CONNECTORS"/>
 </segment>
 <segment>
 <pinref part="MDBT50Q-1MV2" gate="G$1" pin="D-"/>
@@ -8819,9 +8832,9 @@ Features:
 </segment>
 <segment>
 <pinref part="R4_4" gate="G$1" pin="1"/>
-<wire x1="129.54" y1="111.76" x2="129.54" y2="119.38" width="0.1524" layer="91" grouprefs="SENSORS CONNECTORS NFC"/>
-<wire x1="129.54" y1="119.38" x2="190.5" y2="119.38" width="0.1524" layer="91" grouprefs="SENSORS CONNECTORS NFC"/>
-<label x="182.88" y="119.38" size="1.778" layer="95" grouprefs="SENSORS CONNECTORS NFC"/>
+<wire x1="129.54" y1="111.76" x2="129.54" y2="119.38" width="0.1524" layer="91" grouprefs="NFC CONNECTORS SENSORS"/>
+<wire x1="129.54" y1="119.38" x2="190.5" y2="119.38" width="0.1524" layer="91" grouprefs="NFC CONNECTORS SENSORS"/>
+<label x="182.88" y="119.38" size="1.778" layer="95" grouprefs="NFC CONNECTORS SENSORS"/>
 </segment>
 </net>
 <net name="NFC2" class="0">
@@ -8832,38 +8845,38 @@ Features:
 </segment>
 <segment>
 <pinref part="R4_3" gate="G$1" pin="2"/>
-<wire x1="182.88" y1="111.76" x2="182.88" y2="116.84" width="0.1524" layer="91" grouprefs="SENSORS CONNECTORS NFC"/>
-<label x="182.88" y="116.84" size="1.778" layer="95" grouprefs="SENSORS CONNECTORS NFC"/>
-<wire x1="182.88" y1="116.84" x2="190.5" y2="116.84" width="0.1524" layer="91" grouprefs="SENSORS CONNECTORS NFC"/>
+<wire x1="182.88" y1="111.76" x2="182.88" y2="116.84" width="0.1524" layer="91" grouprefs="NFC CONNECTORS SENSORS"/>
+<label x="182.88" y="116.84" size="1.778" layer="95" grouprefs="NFC CONNECTORS SENSORS"/>
+<wire x1="182.88" y1="116.84" x2="190.5" y2="116.84" width="0.1524" layer="91" grouprefs="NFC CONNECTORS SENSORS"/>
 </segment>
 </net>
 <net name="N$6" class="0">
 <segment>
 <pinref part="J1" gate="G$1" pin="3"/>
 <pinref part="J1" gate="G$1" pin="2"/>
-<wire x1="152.4" y1="101.6" x2="157.48" y2="101.6" width="0.1524" layer="91" grouprefs="SENSORS CONNECTORS NFC"/>
-<wire x1="157.48" y1="101.6" x2="167.64" y2="101.6" width="0.1524" layer="91" grouprefs="SENSORS CONNECTORS NFC"/>
-<junction x="157.48" y="101.6" grouprefs="SENSORS CONNECTORS NFC"/>
+<wire x1="152.4" y1="101.6" x2="157.48" y2="101.6" width="0.1524" layer="91" grouprefs="NFC CONNECTORS SENSORS"/>
+<wire x1="157.48" y1="101.6" x2="167.64" y2="101.6" width="0.1524" layer="91" grouprefs="NFC CONNECTORS SENSORS"/>
+<junction x="157.48" y="101.6" grouprefs="NFC CONNECTORS SENSORS"/>
 <pinref part="C4_1" gate="G$1" pin="P$1"/>
-<wire x1="167.64" y1="101.6" x2="177.8" y2="101.6" width="0.1524" layer="91" grouprefs="SENSORS CONNECTORS NFC"/>
-<junction x="167.64" y="101.6" grouprefs="SENSORS CONNECTORS NFC"/>
+<wire x1="167.64" y1="101.6" x2="177.8" y2="101.6" width="0.1524" layer="91" grouprefs="NFC CONNECTORS SENSORS"/>
+<junction x="167.64" y="101.6" grouprefs="NFC CONNECTORS SENSORS"/>
 <pinref part="C4_2" gate="G$1" pin="P$1"/>
-<wire x1="177.8" y1="101.6" x2="182.88" y2="101.6" width="0.1524" layer="91" grouprefs="SENSORS CONNECTORS NFC"/>
-<junction x="177.8" y="101.6" grouprefs="SENSORS CONNECTORS NFC"/>
+<wire x1="177.8" y1="101.6" x2="182.88" y2="101.6" width="0.1524" layer="91" grouprefs="NFC CONNECTORS SENSORS"/>
+<junction x="177.8" y="101.6" grouprefs="NFC CONNECTORS SENSORS"/>
 <pinref part="R4_3" gate="G$1" pin="1"/>
 </segment>
 </net>
 <net name="N$8" class="0">
 <segment>
 <pinref part="J1" gate="G$1" pin="1"/>
-<wire x1="144.78" y1="106.68" x2="144.78" y2="101.6" width="0.1524" layer="91" grouprefs="SENSORS CONNECTORS NFC"/>
-<wire x1="144.78" y1="101.6" x2="139.7" y2="101.6" width="0.1524" layer="91" grouprefs="SENSORS CONNECTORS NFC"/>
+<wire x1="144.78" y1="106.68" x2="144.78" y2="101.6" width="0.1524" layer="91" grouprefs="NFC CONNECTORS SENSORS"/>
+<wire x1="144.78" y1="101.6" x2="139.7" y2="101.6" width="0.1524" layer="91" grouprefs="NFC CONNECTORS SENSORS"/>
 <pinref part="C4_3" gate="G$1" pin="P$1"/>
-<wire x1="139.7" y1="101.6" x2="132.08" y2="101.6" width="0.1524" layer="91" grouprefs="SENSORS CONNECTORS NFC"/>
-<junction x="139.7" y="101.6" grouprefs="SENSORS CONNECTORS NFC"/>
+<wire x1="139.7" y1="101.6" x2="132.08" y2="101.6" width="0.1524" layer="91" grouprefs="NFC CONNECTORS SENSORS"/>
+<junction x="139.7" y="101.6" grouprefs="NFC CONNECTORS SENSORS"/>
 <pinref part="C4_4" gate="G$1" pin="P$1"/>
-<wire x1="132.08" y1="101.6" x2="129.54" y2="101.6" width="0.1524" layer="91" grouprefs="SENSORS CONNECTORS NFC"/>
-<junction x="132.08" y="101.6" grouprefs="SENSORS CONNECTORS NFC"/>
+<wire x1="132.08" y1="101.6" x2="129.54" y2="101.6" width="0.1524" layer="91" grouprefs="NFC CONNECTORS SENSORS"/>
+<junction x="132.08" y="101.6" grouprefs="NFC CONNECTORS SENSORS"/>
 <pinref part="R4_4" gate="G$1" pin="2"/>
 </segment>
 </net>
@@ -8871,29 +8884,29 @@ Features:
 <segment>
 <pinref part="X3" gate="G$1" pin="1"/>
 <pinref part="Q2_1" gate="G$1" pin="C"/>
-<wire x1="365.76" y1="203.2" x2="365.76" y2="198.12" width="0.1524" layer="91" grouprefs="CONNECTORS HAPTIC_MOTOR"/>
-<wire x1="365.76" y1="198.12" x2="355.6" y2="198.12" width="0.1524" layer="91" grouprefs="CONNECTORS HAPTIC_MOTOR"/>
+<wire x1="365.76" y1="203.2" x2="365.76" y2="198.12" width="0.1524" layer="91" grouprefs="HAPTIC_MOTOR CONNECTORS"/>
+<wire x1="365.76" y1="198.12" x2="355.6" y2="198.12" width="0.1524" layer="91" grouprefs="HAPTIC_MOTOR CONNECTORS"/>
 <pinref part="C2_1" gate="G$1" pin="P$1"/>
-<wire x1="355.6" y1="198.12" x2="347.98" y2="198.12" width="0.1524" layer="91" grouprefs="CONNECTORS HAPTIC_MOTOR"/>
-<wire x1="355.6" y1="200.66" x2="355.6" y2="198.12" width="0.1524" layer="91" grouprefs="CONNECTORS HAPTIC_MOTOR"/>
-<junction x="355.6" y="198.12" grouprefs="CONNECTORS HAPTIC_MOTOR"/>
+<wire x1="355.6" y1="198.12" x2="347.98" y2="198.12" width="0.1524" layer="91" grouprefs="HAPTIC_MOTOR CONNECTORS"/>
+<wire x1="355.6" y1="200.66" x2="355.6" y2="198.12" width="0.1524" layer="91" grouprefs="HAPTIC_MOTOR CONNECTORS"/>
+<junction x="355.6" y="198.12" grouprefs="HAPTIC_MOTOR CONNECTORS"/>
 <pinref part="DS2_1" gate="G$1" pin="A"/>
-<wire x1="347.98" y1="203.2" x2="347.98" y2="198.12" width="0.1524" layer="91" grouprefs="CONNECTORS HAPTIC_MOTOR"/>
-<junction x="347.98" y="198.12" grouprefs="CONNECTORS HAPTIC_MOTOR"/>
+<wire x1="347.98" y1="203.2" x2="347.98" y2="198.12" width="0.1524" layer="91" grouprefs="HAPTIC_MOTOR CONNECTORS"/>
+<junction x="347.98" y="198.12" grouprefs="HAPTIC_MOTOR CONNECTORS"/>
 </segment>
 </net>
 <net name="N$9" class="0">
 <segment>
 <pinref part="Q2_1" gate="G$1" pin="B"/>
 <pinref part="R2_4" gate="G$1" pin="2"/>
-<wire x1="342.9" y1="193.04" x2="340.36" y2="193.04" width="0.1524" layer="91" grouprefs="CONNECTORS HAPTIC_MOTOR"/>
+<wire x1="342.9" y1="193.04" x2="340.36" y2="193.04" width="0.1524" layer="91" grouprefs="HAPTIC_MOTOR CONNECTORS"/>
 </segment>
 </net>
 <net name="HAPTIC" class="0">
 <segment>
 <pinref part="R2_4" gate="G$1" pin="1"/>
-<wire x1="330.2" y1="193.04" x2="330.2" y2="203.2" width="0.1524" layer="91" grouprefs="CONNECTORS HAPTIC_MOTOR"/>
-<label x="327.66" y="203.2" size="1.778" layer="95" rot="R270" grouprefs="CONNECTORS HAPTIC_MOTOR"/>
+<wire x1="330.2" y1="193.04" x2="330.2" y2="203.2" width="0.1524" layer="91" grouprefs="HAPTIC_MOTOR CONNECTORS"/>
+<label x="327.66" y="203.2" size="1.778" layer="95" rot="R270" grouprefs="HAPTIC_MOTOR CONNECTORS"/>
 </segment>
 <segment>
 <pinref part="MDBT50Q-1MV2" gate="G$1" pin="P0.13"/>
@@ -8933,8 +8946,8 @@ Features:
 </segment>
 <segment>
 <pinref part="IC1" gate="G$1" pin="INT1"/>
-<wire x1="287.02" y1="162.56" x2="297.18" y2="162.56" width="0.1524" layer="91" grouprefs="ACCEL/GYRO SENSORS ADAFRUIT_FEATHER_NRF52840_SENSE"/>
-<label x="287.02" y="162.56" size="1.778" layer="95" grouprefs="ACCEL/GYRO SENSORS ADAFRUIT_FEATHER_NRF52840_SENSE"/>
+<wire x1="287.02" y1="162.56" x2="297.18" y2="162.56" width="0.1524" layer="91" grouprefs="ADAFRUIT_FEATHER_NRF52840_SENSE SENSORS ACCEL/GYRO"/>
+<label x="287.02" y="162.56" size="1.778" layer="95" grouprefs="ADAFRUIT_FEATHER_NRF52840_SENSE SENSORS ACCEL/GYRO"/>
 </segment>
 </net>
 <net name="N$3" class="0">
@@ -8958,18 +8971,6 @@ Features:
 <pinref part="R2_1" gate="G$1" pin="1"/>
 <wire x1="363.22" y1="50.8" x2="363.22" y2="48.26" width="0.1524" layer="91"/>
 <wire x1="363.22" y1="48.26" x2="365.76" y2="48.26" width="0.1524" layer="91"/>
-</segment>
-</net>
-<net name="AREF" class="0">
-<segment>
-<pinref part="MDBT50Q-1MV2" gate="G$1" pin="P0.31/AIN7"/>
-<wire x1="83.82" y1="236.22" x2="83.82" y2="248.92" width="0.1524" layer="91"/>
-<label x="83.82" y="236.22" size="1.778" layer="95" rot="R90"/>
-</segment>
-<segment>
-<pinref part="J2" gate="A" pin="2"/>
-<wire x1="88.9" y1="101.6" x2="104.14" y2="101.6" width="0.1524" layer="91"/>
-<label x="93.98" y="101.6" size="1.778" layer="95"/>
 </segment>
 </net>
 </nets>
