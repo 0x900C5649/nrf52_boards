@@ -1,24 +1,99 @@
-.DS_Store/*
 
-nrf_sdks/*
-!nrf_sdks/README.md
+# Created by https://www.toptal.com/developers/gitignore/api/c,vim,c++
+# Edit at https://www.toptal.com/developers/gitignore?templates=c,vim,c++
 
-_build/
-build/
-.ipynb_checkpoints/
+### C ###
+# Prerequisites
+*.d
 
-certs/*
-!certs/keys.c
-!certs/README.md
+# Object files
+*.o
+*.ko
+*.obj
+*.elf
 
-open_bootloader/*.pem
+# Linker output
+*.ilk
+*.map
+*.exp
 
-mkdocs-material/*
-material/*
-site
+# Precompiled Headers
+*.gch
+*.pch
 
-.idea
-.build
-.mbed
-projectfiles
-.ls_root
+# Libraries
+*.lib
+*.a
+*.la
+*.lo
+
+# Shared objects (inc. Windows DLLs)
+*.dll
+*.so
+*.so.*
+*.dylib
+
+# Executables
+*.exe
+*.out
+*.app
+*.i*86
+*.x86_64
+*.hex
+
+# Debug files
+*.dSYM/
+*.su
+*.idb
+*.pdb
+
+# Kernel Module Compile Results
+*.mod*
+*.cmd
+.tmp_versions/
+modules.order
+Module.symvers
+Mkfile.old
+dkms.conf
+
+### C++ ###
+# Prerequisites
+
+# Compiled Object files
+*.slo
+
+# Precompiled Headers
+
+# Compiled Dynamic libraries
+
+# Fortran module files
+*.mod
+*.smod
+
+# Compiled Static libraries
+*.lai
+
+# Executables
+
+### Vim ###
+# Swap
+[._]*.s[a-v][a-z]
+!*.svg  # comment out if you don't need vector files
+[._]*.sw[a-p]
+[._]s[a-rt-v][a-z]
+[._]ss[a-gi-z]
+[._]sw[a-p]
+
+# Session
+Session.vim
+Sessionx.vim
+
+# Temporary
+.netrwhist
+*~
+# Auto-generated tag files
+tags
+# Persistent undo
+[._]*.un~
+
+# End of https://www.toptal.com/developers/gitignore/api/c,vim,c++
