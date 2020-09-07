@@ -138,7 +138,7 @@ extern "C"
 #define BSP_QSPI_IO3_PIN    QSPI_DATA3
 
 
-#ifdef USE_BOARD_APP_CONFIG
+#ifdef USE_APP_BOARDCONFIG
 #include STRINGIFY(BOARD/app_board_config.h)
 #endif
 
