@@ -21,11 +21,11 @@ BOARD_DIRECTORY ?= $(ROOT_DIR)/boards/$(BOARD)
 
 $(mkdir -p $(PROJ_DIR))	
 
-SRC_DIR := $(ROOT_DIR)/src
-INCL_DIR := $(SRC_DIR)
+SRC_DIR ?= $(ROOT_DIR)/src
+INCL_DIR ?= $(SRC_DIR)
 
 #directory for dependencies
-LIBDIR := $(ROOT_DIR)/lib
+LIB_DIR ?= $(ROOT_DIR)/lib
 
 LD_SCRIPT ?= $(BOARD_DIRECTORY)/armgcc/nrf52_gcc.ld
 
