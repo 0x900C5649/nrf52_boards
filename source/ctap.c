@@ -1,5 +1,3 @@
-// Copyright 2019 SoloKeys Developers
-//
 // Licensed under the Apache License, Version 2.0, <LICENSE-APACHE or
 // http://apache.org/licenses/LICENSE-2.0> or the MIT license <LICENSE-MIT or
 // http://opensource.org/licenses/MIT>, at your option. This file may not be
@@ -58,52 +56,72 @@ struct _getAssertionState getAssertionState;
 *						prototypes
 *****************************************************************************/
 
-static void         ctap_state_init();
-static void         ctap_increment_rk_store();
-static int          is_matching_rk(CTAP_residentKey *rk, CTAP_residentKey *rk2);
+static void ctap_state_init();
+
+static void ctap_increment_rk_store();
+
+static int is_matching_rk(CTAP_residentKey *rk, CTAP_residentKey *rk2);
+
 static unsigned int get_credential_id_size(CTAP_credentialDescriptor *cred);
-static uint8_t      ctap_add_credential_descriptor(
-         CborEncoder *              map,
-         CTAP_credentialDescriptor *cred);
+
+static uint8_t ctap_add_credential_descriptor(
+    CborEncoder *              map,
+    CTAP_credentialDescriptor *cred);
+
 static void save_credential_list(
     CTAP_authDataHeader *      head,
     uint8_t *                  clientDataHash,
     CTAP_credentialDescriptor *creds,
     uint32_t                   count);
+
 static CTAP_credentialDescriptor *pop_credential();
-static int                        cred_cmp_func(const void *_a, const void *_b);
-static int                        ctap_add_cose_key(
-                           CborEncoder *cose_key,
-                           uint8_t *    x,
-                           uint8_t *    y,
-                           uint8_t      credtype,
-                           int32_t      algtype);
+
+static int cred_cmp_func(const void *_a, const void *_b);
+
+static int ctap_add_cose_key(
+    CborEncoder *cose_key,
+    uint8_t *    x,
+    uint8_t *    y,
+    uint8_t      credtype,
+    int32_t      algtype);
+
 static int ctap_generate_cose_key(
     CborEncoder *cose_key,
     uint8_t *    hmac_input,
     int          len,
     uint8_t      credtype,
     int32_t      algtype);
+
 static uint16_t key_addr_offset(int index);
-static void     add_existing_user_info(CTAP_credentialDescriptor *cred);
+
+static void add_existing_user_info(CTAP_credentialDescriptor *cred);
+
 static uint32_t auth_data_update_count(CTAP_authDataHeader *authData);
-static int      ctap_make_auth_data(
-         struct rpId *  rp,
-         CborEncoder *  map,
-         uint8_t *      auth_data_buf,
-         uint32_t *     len,
-         CTAP_credInfo *credInfo);
+
+static int ctap_make_auth_data(
+    struct rpId *  rp,
+    CborEncoder *  map,
+    uint8_t *      auth_data_buf,
+    uint32_t *     len,
+    CTAP_credInfo *credInfo);
+
 static int ctap2_user_presence_test();
+
 static int ctap_make_extensions(
     CTAP_extensions *ext,
     uint8_t *        ext_encoder_buf,
     unsigned int *   ext_encoder_buf_size);
-static int  trailing_zeros(uint8_t *buf, int indx);
+
+static int trailing_zeros(uint8_t *buf, int indx);
+
 static void ctap_reset_key_agreement();
-uint8_t     verify_pin_auth(uint8_t *pinAuth, uint8_t *clientDataHash);
-int         ctap_authenticate_credential(
-            struct rpId *              rp,
-            CTAP_credentialDescriptor *desc);
+
+uint8_t verify_pin_auth(uint8_t *pinAuth, uint8_t *clientDataHash);
+
+int ctap_authenticate_credential(
+    struct rpId *              rp,
+    CTAP_credentialDescriptor *desc);
+
 int ctap_calculate_signature(
     uint8_t *data,
     int      datalen,
@@ -111,20 +129,25 @@ int ctap_calculate_signature(
     uint8_t *hashbuf,
     uint8_t *sigbuf,
     uint8_t *sigder);
+
 uint8_t ctap_add_attest_statement(CborEncoder *map, uint8_t *sigder, int len);
-int     ctap_filter_invalid_credentials(CTAP_getAssertion *GA);
+
+int ctap_filter_invalid_credentials(CTAP_getAssertion *GA);
+
 uint8_t ctap_end_get_assertion(
     CborEncoder *              map,
     CTAP_credentialDescriptor *cred,
     uint8_t *                  auth_data_buf,
     unsigned int               auth_data_buf_sz,
     uint8_t *                  clientDataHash);
+
 uint8_t ctap_add_user_entity(CborEncoder *map, CTAP_userEntity *user);
-void    make_auth_tag(
-       uint8_t *rpIdHash,
-       uint8_t *nonce,
-       uint32_t count,
-       uint8_t *tag);
+
+void make_auth_tag(
+    uint8_t *rpIdHash,
+    uint8_t *nonce,
+    uint32_t count,
+    uint8_t *tag);
 
 
 /***************************************************************************** 
@@ -242,7 +265,7 @@ uint8_t ctap_make_credential(CborEncoder *encoder, uint8_t *request, int length)
     if (MC.up == 1 || MC.up == 0)  ///user presence?
     {
         printf1(TAG_GREEN, "up problem");
-        return CTAP2_ERR_INVALID_OPTION;
+        return CTAP2_ERR_INVALID_OPTION; //WHY?
     }
 
     // crypto_aes256_init(CRYPTO_TRANSPORT_KEY, NULL);
@@ -813,10 +836,10 @@ uint8_t ctap_client_pin(CborEncoder *encoder, uint8_t *request, int length)
             ret = cbor_encode_int(&map, RESP_keyAgreement);
             check_ret(ret);
 
-/**#if APP_MODULE_ENABLED(NFC)*/
+            /**#if APP_MODULE_ENABLED(NFC)*/
             /**if (device_is_nfc() == NFC_IS_ACTIVE)*/
-                /**device_set_clock_rate(DEVICE_LOW_POWER_FAST);*/
-/**#endif*/
+            /**device_set_clock_rate(DEVICE_LOW_POWER_FAST);*/
+            /**#endif*/
 
             size_t pub_output_len = ECC_PUBLIC_KEY_SIZE;
             crypto_ecc256_compute_public_key(
@@ -826,10 +849,10 @@ uint8_t ctap_client_pin(CborEncoder *encoder, uint8_t *request, int length)
                 &pub_output_len);
             assert(pub_output_len == ECC_PUBLIC_KEY_SIZE);
 
-/**#if APP_MODULE_ENABLED(NFC)*/
+            /**#if APP_MODULE_ENABLED(NFC)*/
             /**if (device_is_nfc() == NFC_IS_ACTIVE)*/
-                /**device_set_clock_rate(DEVICE_LOW_POWER_IDLE);*/
-/**#endif*/
+            /**device_set_clock_rate(DEVICE_LOW_POWER_IDLE);*/
+            /**#endif*/
 
             ret = ctap_add_cose_key(
                 &map,
@@ -1758,17 +1781,17 @@ static int ctap_generate_cose_key(
     switch (algtype)
     {
         case COSE_ALG_ES256:
-/**#if APP_MODULE_ENABLED(NFC)*/
+            /**#if APP_MODULE_ENABLED(NFC)*/
             /**if (device_is_nfc() == NFC_IS_ACTIVE)*/
-                /**device_set_clock_rate(DEVICE_LOW_POWER_FAST);*/
-/**#endif*/
+            /**device_set_clock_rate(DEVICE_LOW_POWER_FAST);*/
+            /**#endif*/
 
             crypto_ecc256_derive_public_key(hmac_input, len, x, y);
 
-/**#if APP_MODULE_ENABLED(NFC)*/
+            /**#if APP_MODULE_ENABLED(NFC)*/
             /**if (device_is_nfc() == NFC_IS_ACTIVE)*/
-                /**device_set_clock_rate(DEVICE_LOW_POWER_IDLE);*/
-/**#endif*/
+            /**device_set_clock_rate(DEVICE_LOW_POWER_IDLE);*/
+            /**#endif*/
             break;
         default:
             printf2(TAG_ERR, "Error, COSE alg %d not supported\n", algtype);
