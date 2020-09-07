@@ -44,6 +44,7 @@ INC_FOLDERS += 	$(BOARD_DIRECTORY)/board_config \
 			   	$(SDK_ROOT)/config/nrf52840/config \
 			   	$(SDK_ROOT)/components/boards \
   				$(SDK_ROOT)/modules/nrfx/mdk \
+				$(INCL_DIR)/ \
 
 # Libraries common to all targets
 LIB_FILES += \
