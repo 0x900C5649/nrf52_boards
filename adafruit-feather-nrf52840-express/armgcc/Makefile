@@ -6,11 +6,11 @@ CONFIG_DIR := $(ROOT_DIR)/config
 include $(CONFIG_DIR)/Makefile.common
 
 #SET PROJECT VARIABLES
-PROJECT_NAME	 ?= nrf52840
-TARGETS		  ?= nrf52840_xxaa
-OUTPUT_DIRECTORY ?= $(PROJ_DIR)
-VERSION		  ?= 1
-BOARD			 := adafruit-feather-nrf52840-express
+PROJECT_NAME		?= nrf52840
+TARGETS				?= nrf52840_xxaa
+OUTPUT_DIRECTORY 	?= $(PROJ_DIR)
+VERSION				?= 1
+BOARD				:= adafruit-feather-nrf52840-express
 
 #SETUP OTHER DIRS
 SDK_ROOT ?= $(ROOT_DIR)/nrf_sdks/nRF5_SDK_16.0.0_98a08e2
@@ -43,13 +43,14 @@ INC_FOLDERS +=	 $(BOARD_DIRECTORY)/board_config \
 LIB_FILES += \
 
 # DEFINITIONS
-DEFINES += -DBOARD_CUSTOM \
+DEFINES += -DCUSTOM_BOARD_INC=$(BOARD).h \
 		   -DFLOAT_ABI_HARD \
 		   -DNRF52840_XXAA \
-		   -DADAFRUIT-FEATHER-NRF52840-EXPRESS
+		   -DADAFRUIT-FEATHER-NRF52840-EXPRESS \
+		   -DBOARD=$(BOARD) \
 
 # Optimization flags
-OPT += -O0 -g3
+OPT ?= -O0 -g3
 #-O3 -g3
 # Uncomment the line below to enable link time optimization
 #OPT += -flto
