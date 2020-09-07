@@ -105,8 +105,8 @@ extern "C"
 
 #define LEDS_INV_MASK LEDS_MASK
 
-#define BSP_LED_0 LED_0
-#define BSP_LED_1 LED_1
+#define BSP_LED_0 LED_1
+#define BSP_LED_1 LED_2
 
 
 #define BUTTONS_NUMBER 1

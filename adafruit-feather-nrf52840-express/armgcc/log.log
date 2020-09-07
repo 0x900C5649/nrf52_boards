@@ -1,0 +1,51 @@
+2020-Aug-13 10:35:20  --------------------------------------------------------------------------------
+2020-Aug-13 10:35:20  nrfjprog -f NRF52 --reset --log 
+2020-Aug-13 10:35:20  nrfjprog version 10.9.0 
+2020-Aug-13 10:35:20  --------------------------------------------------------------------------------
+2020-Aug-13 10:35:20  nRF_logger_open
+2020-Aug-13 10:35:20  nRF_logger_open:	nRFJProg logger opened to callback at address 0X564076BF7C60
+2020-Aug-13 10:35:20  nRF_open_dll
+2020-Aug-13 10:35:20  nRF_open_dll:	Load library at "/opt/nrfjprog/libjlinkarm_nrf52_nrfjprogdll.so".
+
+2020-Aug-13 10:35:20  . nRF52_logger_open
+2020-Aug-13 10:35:20  . nRF52_logger_open:	nRFJProg logger opened to callback at address 0X7F0B0B98F190
+2020-Aug-13 10:35:20  . nRF52_open
+2020-Aug-13 10:35:20  . . Segger_logger_open
+2020-Aug-13 10:35:20  . . Segger_logger_open:	nRFJProg logger opened to callback at address 0X7F0B0B5DF850
+2020-Aug-13 10:35:20  . . Segger_open_dll
+2020-Aug-13 10:35:20  . . Segger_open_dll:	No J-Link DLL path was provided. Attempting to auto detect.
+
+2020-Aug-13 10:35:20  . . Segger_open_dll:	Load library at "/opt/SEGGER/JLink/libjlinkarm.so.6.82.3".
+
+2020-Aug-13 10:35:20  . . . Segger_dll_version
+2020-Aug-13 10:35:20  nRF_enum_emu_snr
+2020-Aug-13 10:35:20  . nRF52_enum_emu_snr
+2020-Aug-13 10:35:20  . . Segger_is_connected_to_emu
+2020-Aug-13 10:35:20  . . Segger_enum_emu_snr
+2020-Aug-13 10:35:20  . . . Segger_enum_emu_snr
+2020-Aug-13 10:35:20  . . . . Segger_get_num_emus
+2020-Aug-13 10:35:20  . . Segger_is_connected_to_emu
+2020-Aug-13 10:35:20  nRF_connect_to_emu_with_snr
+2020-Aug-13 10:35:20  . nRF52_connect_to_emu_with_snr
+2020-Aug-13 10:35:20  . . Segger_is_connected_to_emu
+2020-Aug-13 10:35:20  . . Segger_connect_to_emu_with_snr
+2020-Aug-13 10:35:20  . . . Segger_is_connected_to_emu
+2020-Aug-13 10:35:20  . . . Segger_enum_emu_snr
+2020-Aug-13 10:35:20  . . . . Segger_get_num_emus
+2020-Aug-13 10:35:20  . . . Segger_connect_to_emu_with_snr
+2020-Aug-13 10:35:21  . . . . Segger_connect_to_emu_without_snr
+2020-Aug-13 10:35:21  . . . . Segger_connect_to_emu_without_snr:	Segger logging enabled with callback at 0x139685412299104.
+
+2020-Aug-13 10:35:33  . . . . Segger_connect_to_emu_without_snr:	JLinkARM.dll Open returned error 'Cannot connect to J-Link'.
+
+2020-Aug-13 10:35:33  . . Segger_is_connected_to_emu
+2020-Aug-13 10:35:33  nRF_close_dll
+2020-Aug-13 10:35:33  . nRF52_close
+2020-Aug-13 10:35:33  . . Segger_is_connected_to_emu
+2020-Aug-13 10:35:33  . . Segger_close
+2020-Aug-13 10:35:33  . . . Segger_disconnect_from_emu
+2020-Aug-13 10:35:33  . . . . Segger_is_connected_to_emu
+2020-Aug-13 10:35:33  . . Segger_close:	Freeing Library.
+
+2020-Aug-13 10:35:33  nRF_close_dll:	Freeing Library.
+

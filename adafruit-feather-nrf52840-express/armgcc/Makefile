@@ -6,11 +6,13 @@ CONFIG_DIR := $(ROOT_DIR)/config
 include $(CONFIG_DIR)/Makefile.common
 
 #SET PROJECT VARIABLES
-PROJECT_NAME		?= nrf52840
-TARGETS				?= nrf52840_xxaa
+PROJECT_NAME	 	?= nrf52840
+TARGETS		  		?= nrf52840_xxaa
 OUTPUT_DIRECTORY 	?= $(PROJ_DIR)
-VERSION				?= 1
-BOARD				:= adafruit-feather-nrf52840-express
+VERSION		  		?= 1
+BOARD			 	:= adafruit-feather-nrf52840-express
+SD_REQ				?= 0x00
+APPLICATION_NAME    ?= $(PROJECT_NAME)_$(VERSION)
 
 #SETUP OTHER DIRS
 SDK_ROOT ?= $(ROOT_DIR)/nrf_sdks/nRF5_SDK_16.0.0_98a08e2
@@ -25,7 +27,7 @@ INCL_DIR := $(SRC_DIR)
 #directory for dependencies
 LIBDIR := $(ROOT_DIR)/lib
 
-LD_SCRIPT ?= $(BOARD_DIRECTORY)/nrf52_gcc.ld
+LD_SCRIPT ?= $(BOARD_DIRECTORY)/armgcc/nrf52_gcc.ld
 
 $(OUTPUT_DIRECTORY)/nrf52840_xxaa.out: \
   LINKER_SCRIPT  := $(LD_SCRIPT)
@@ -34,10 +36,14 @@ $(OUTPUT_DIRECTORY)/nrf52840_xxaa.out: \
 SRC_FILES += \
   $(SDK_ROOT)/modules/nrfx/mdk/gcc_startup_nrf52840.S \
   $(SDK_ROOT)/components/boards/boards.c \
+  $(SDK_ROOT)/modules/nrfx/mdk/system_nrf52.c \
 
 
 # Include folders common to all targets
-INC_FOLDERS +=	 $(BOARD_DIRECTORY)/board_config \
+INC_FOLDERS += 	$(BOARD_DIRECTORY)/board_config \
+			   	$(SDK_ROOT)/config/nrf52840/config \
+			   	$(SDK_ROOT)/components/boards \
+  				$(SDK_ROOT)/modules/nrfx/mdk \
 
 # Libraries common to all targets
 LIB_FILES += \
@@ -46,8 +52,10 @@ LIB_FILES += \
 DEFINES += -DCUSTOM_BOARD_INC=$(BOARD).h \
 		   -DFLOAT_ABI_HARD \
 		   -DNRF52840_XXAA \
+		   -DCONFIG_GPIO_AS_PINRESET \
 		   -DADAFRUIT-FEATHER-NRF52840-EXPRESS \
 		   -DBOARD=$(BOARD) \
+
 
 # Optimization flags
 OPT ?= -O0 -g3
@@ -118,20 +126,15 @@ include $(TEMPLATE_PATH)/Makefile.common
 
 $(foreach target, $(TARGETS), $(call define_target, $(target)))
 
-.PHONY: erase tinycbor pkg flash
-
-merge: default
-	@echo "Merging program and softdevice"
-	mergehex -m $(OUTPUT_DIRECTORY)/nrf52840_xxaa.hex $(SDK_ROOT)/components/softdevice/s140/hex/s140_nrf52_7.0.1_softdevice.hex -o $(OUTPUT_DIRECTORY)/nrf52-fido2_softdevice.hex
+.PHONY: erase pkg flash
 
 pkg: default
 	@echo "creating dfu package"
-	echo "`pwd`"
-	nrfutil pkg generate --hw-version 52 --application-version $(VERSION) --application $(OUTPUT_DIRECTORY)/nrf52840_xxaa.hex --sd-req 0xCA _build/nrf52-fido2_app_$(VERSION).zip
+	nrfutil pkg generate --hw-version 52 --application-version $(VERSION) --application $(OUTPUT_DIRECTORY)/nrf52840_xxaa.hex --sd-req $(SD_REQ) $(OUTPUT_DIRECTORY)/$(APPLICATION_NAME).zip
 
 flash: pkg
 	@echo "flashing application"
-	nrfutil dfu usb-serial -p /dev/ttyACM0 -pkg $(OUTPUT_DIRECTORY)/nrf52-fido2_app_$(VERSION).zip
+	nrfutil dfu usb-serial -p /dev/ttyACM0 -pkg $(OUTPUT_DIRECTORY)/$(APPLICATION_NAME).zip
 
 
 
