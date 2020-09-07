@@ -11,6 +11,8 @@ TARGETS		  		?= nrf52840_xxaa
 OUTPUT_DIRECTORY 	?= $(PROJ_DIR)
 VERSION		  		?= 1
 BOARD			 	:= adafruit-feather-nrf52840-express
+SD_REQ				?= 0x00
+APPLICATION_NAME    ?= $(PROJECT_NAME)_$(VERSION)
 
 #SETUP OTHER DIRS
 SDK_ROOT ?= $(ROOT_DIR)/nrf_sdks/nRF5_SDK_16.0.0_98a08e2
@@ -19,11 +21,11 @@ BOARD_DIRECTORY ?= $(ROOT_DIR)/boards/$(BOARD)
 
 $(mkdir -p $(PROJ_DIR))	
 
-SRC_DIR := $(ROOT_DIR)/src
-INCL_DIR := $(SRC_DIR)
+SRC_DIR ?= $(ROOT_DIR)/src
+INCL_DIR ?= $(SRC_DIR)
 
 #directory for dependencies
-LIBDIR := $(ROOT_DIR)/lib
+LIB_DIR ?= $(ROOT_DIR)/lib
 
 LD_SCRIPT ?= $(BOARD_DIRECTORY)/armgcc/nrf52_gcc.ld
 
@@ -47,13 +49,16 @@ INC_FOLDERS += 	$(BOARD_DIRECTORY)/board_config \
 LIB_FILES += \
 
 # DEFINITIONS
-DEFINES += -DBOARD_CUSTOM \
+DEFINES += -DCUSTOM_BOARD_INC=$(BOARD).h \
 		   -DFLOAT_ABI_HARD \
 		   -DNRF52840_XXAA \
-		   -DADAFRUIT_FEATHER_NRF52840_EXPRESS \
+		   -DCONFIG_GPIO_AS_PINRESET \
+		   -DADAFRUIT-FEATHER-NRF52840-EXPRESS \
+		   -DBOARD=$(BOARD) \
+
 
 # Optimization flags
-OPT += -O0 -g3
+OPT ?= -O0 -g3
 #-O3 -g3
 # Uncomment the line below to enable link time optimization
 #OPT += -flto
@@ -121,20 +126,15 @@ include $(TEMPLATE_PATH)/Makefile.common
 
 $(foreach target, $(TARGETS), $(call define_target, $(target)))
 
-.PHONY: erase tinycbor pkg flash
-
-merge: default
-	@echo "Merging program and softdevice"
-	mergehex -m $(OUTPUT_DIRECTORY)/nrf52840_xxaa.hex $(SDK_ROOT)/components/softdevice/s140/hex/s140_nrf52_7.0.1_softdevice.hex -o $(OUTPUT_DIRECTORY)/nrf52-fido2_softdevice.hex
+.PHONY: erase pkg flash
 
 pkg: default
 	@echo "creating dfu package"
-	echo "`pwd`"
-	nrfutil pkg generate --hw-version 52 --application-version $(VERSION) --application $(OUTPUT_DIRECTORY)/nrf52840_xxaa.hex --sd-req 0xCA _build/nrf52-fido2_app_$(VERSION).zip
+	nrfutil pkg generate --hw-version 52 --application-version $(VERSION) --application $(OUTPUT_DIRECTORY)/nrf52840_xxaa.hex --sd-req $(SD_REQ) $(OUTPUT_DIRECTORY)/$(APPLICATION_NAME).zip
 
 flash: pkg
 	@echo "flashing application"
-	nrfutil dfu usb-serial -p /dev/ttyACM0 -pkg $(OUTPUT_DIRECTORY)/nrf52-fido2_app_$(VERSION).zip
+	nrfutil dfu usb-serial -p /dev/ttyACM0 -pkg $(OUTPUT_DIRECTORY)/$(APPLICATION_NAME).zip
 
 
 
