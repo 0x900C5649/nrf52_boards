@@ -1,6 +1,7 @@
-#SETUP MAIN DIR
-ROOT_DIR := ../../..
-CONFIG_DIR := $(ROOT_DIR)/config
+#SETUP MAIN DIR AND BOARD NAME
+ROOT_DIR 	:= ../../..
+CONFIG_DIR 	:= $(ROOT_DIR)/config
+BOARD		:= adafruit-feather-nrf52840-express
 
 #INCLUDE common make
 include $(CONFIG_DIR)/Makefile.common
@@ -10,7 +11,6 @@ PROJECT_NAME	 	?= nrf52840
 TARGETS		  		?= nrf52840_xxaa
 OUTPUT_DIRECTORY 	?= $(PROJ_DIR)
 VERSION		  		?= 1
-BOARD			 	:= adafruit-feather-nrf52840-express
 SD_REQ				?= 0x00
 APPLICATION_NAME    ?= $(PROJECT_NAME)_$(VERSION)
 
