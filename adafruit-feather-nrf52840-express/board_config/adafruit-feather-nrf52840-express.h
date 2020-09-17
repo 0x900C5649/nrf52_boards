@@ -91,19 +91,22 @@ extern "C"
 // LEDs definitions for nRF52840-MDK
 #define LEDS_NUMBER 2
 
-#define LED_1     NRF_GPIO_PIN_MAP(1, 15)
-#define LED_2     NRF_GPIO_PIN_MAP(1, 10)
 #define LED_START LED_1
+#define LED_1     NRF_GPIO_PIN_MAP(1, 15)
+#define LED_RED   LED1
+#define LED_2     NRF_GPIO_PIN_MAP(1, 10)
+#define LED_BLUE  LED_2
 #define LED_STOP  LED_2
 
-#define LEDS_ACTIVE_STATE 0
+#define LEDS_ACTIVE_STATE 1
+#define LEDS_ACTIVE_HIGH true
 
 #define LEDS_LIST           \
     {                       \
         LED_1, LED_2        \
     }
 
-#define LEDS_INV_MASK LEDS_MASK
+#define LEDS_INV_MASK 0
 
 #define BSP_LED_0 LED_1
 #define BSP_LED_1 LED_2
